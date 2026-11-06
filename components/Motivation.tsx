@@ -25,7 +25,7 @@ export function MotivationHub() {
   const vids = videos.filter((v) => v.category === "motivation");
   return (
     <div className="flex flex-col gap-6">
-      <header className="rounded-3xl bg-gradient-to-br from-orange-500 via-rose-500 to-fuchsia-600 text-white p-6 shadow-xl">
+      <header className="rounded-3xl bg-linear-to-br from-orange-500 via-rose-500 to-fuchsia-600 text-white p-6 shadow-xl">
         <p className="text-5xl">💪</p>
         <h1 className="text-3xl font-black">Motivation</h1>
         <p className="opacity-90">
@@ -92,8 +92,8 @@ export function SpeechView({ speech }: { speech: Speech }) {
         ← All motivation
       </Link>
       <div className="relative">
-        <Scene scene={sceneFor(speech)} label={speech.title} photoKey={`speech:${speech.id}`} className="aspect-[21/9] max-h-[22rem]" />
-        <div className="absolute inset-x-0 bottom-0 rounded-b-3xl bg-gradient-to-t from-black/80 to-transparent p-5 text-white pointer-events-none">
+        <Scene scene={sceneFor(speech)} label={speech.title} photoKey={`speech:${speech.id}`} className="aspect-21/9 max-h-88" />
+        <div className="absolute inset-x-0 bottom-0 rounded-b-3xl bg-linear-to-t from-black/80 to-transparent p-5 text-white pointer-events-none">
           <p className="text-sm font-semibold opacity-90">
             Speech {speech.n} · {speech.speaker}
           </p>

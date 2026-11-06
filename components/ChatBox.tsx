@@ -229,7 +229,7 @@ export function ChatBox({ robot, opener, topic, vocab = [], questions = [], sess
                 {stage.name} <span className="font-normal text-sm opacity-70">— {stage.hint}</span>
               </div>
               <div className="h-2 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden mt-1">
-                <div className="h-full bg-gradient-to-r from-sky-500 to-fuchsia-500 transition-all" style={{ width: `${Math.min(100, frac * 100)}%` }} />
+                <div className="h-full bg-linear-to-r from-sky-500 to-fuchsia-500 transition-all" style={{ width: `${Math.min(100, frac * 100)}%` }} />
               </div>
             </div>
             <span className="font-mono text-lg tabular-nums">{fmt(Math.max(0, total - elapsed))}</span>
@@ -242,7 +242,7 @@ export function ChatBox({ robot, opener, topic, vocab = [], questions = [], sess
         </div>
       )}
 
-      <div ref={scroller} className="flex flex-col gap-3 h-[26rem] overflow-y-auto px-4 py-3">
+      <div ref={scroller} className="flex flex-col gap-3 h-104 overflow-y-auto px-4 py-3">
         {messages.map((m, i) => {
           const isBot = m.role === "assistant";
           const lines = m.content.split("\n");
@@ -351,7 +351,7 @@ export function ChatBox({ robot, opener, topic, vocab = [], questions = [], sess
         </label>
         <span>Level: {settings.level}</span>
         <span className="flex-1" />
-        <CameraButton className="btn-ghost !min-h-0 !py-1 text-xs" />
+        <CameraButton className="btn-ghost min-h-0! py-1! text-xs" />
       </div>
     </div>
   );

@@ -116,7 +116,7 @@ export function PicturesTab({ photos, pexels, run }: { photos: Record<string, Ph
 
       {open && (
         <div className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-4" onClick={() => setOpen(null)}>
-          <div className="card w-full max-w-4xl max-h-[85vh] overflow-y-auto flex flex-col gap-3 bg-[var(--background)]" onClick={(e) => e.stopPropagation()}>
+          <div className="card w-full max-w-4xl max-h-[85vh] overflow-y-auto flex flex-col gap-3 bg-background" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center gap-2">
               <h3 className="font-bold flex-1">Choose a photo: {labelFor(open)}</h3>
               <button className="btn-ghost" onClick={() => setOpen(null)}>

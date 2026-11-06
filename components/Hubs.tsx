@@ -78,7 +78,7 @@ export function SpeakingHub() {
         <h2 className="font-bold text-lg">🎯 Speaking sessions (10 sessions · 4 steps each)</h2>
         <SessionGrid kind="speaking" />
       </section>
-      <Link href="/twisters" className="rounded-3xl bg-gradient-to-r from-pink-500 to-purple-600 text-white p-4 flex items-center gap-3 hover:-translate-y-0.5 transition">
+      <Link href="/twisters" className="rounded-3xl bg-linear-to-r from-pink-500 to-purple-600 text-white p-4 flex items-center gap-3 hover:-translate-y-0.5 transition">
         <span className="text-4xl">👅</span>
         <span>
           <b className="text-lg">Tongue Twister Karaoke</b>
@@ -149,7 +149,7 @@ export function ChatHub() {
         <p className="opacity-70">Talk with an AI robot. Choose who it plays. Speak with 🎤 or type. It corrects your mistakes gently.</p>
       </header>
       <div className="grid md:grid-cols-[18rem_1fr] gap-4">
-        <aside className="card p-2 max-h-[32rem] overflow-y-auto flex flex-col gap-1">
+        <aside className="card p-2 max-h-128 overflow-y-auto flex flex-col gap-1">
           {options.map((x) => (
             <button
               key={x.id}

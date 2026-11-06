@@ -64,7 +64,7 @@ function SessionRunner({ kind, n, steps }: { kind: SessionKind; n: number; steps
       <Link href={`/${kind}`} className="text-sm opacity-60 hover:opacity-100">
         ← All {kind === "pte" ? "PTE" : kind === "twisters" ? "tongue twister" : kind} sessions
       </Link>
-      <div className={`rounded-3xl bg-gradient-to-r ${meta.color} text-white p-5`}>
+      <div className={`rounded-3xl bg-linear-to-r ${meta.color} text-white p-5`}>
         <p className="text-sm opacity-90">
           Session {n} of {total}
         </p>
@@ -310,7 +310,7 @@ export function SessionGrid({ kind }: { kind: SessionKind }) {
         const chs = kind === "listening" || kind === "speaking" ? sessionChapters(n) : null;
         return (
           <Link key={n} href={`/${kind}/session/${n}`} className="card p-3 flex flex-col gap-1 hover:-translate-y-1 transition">
-            <div className={`rounded-2xl bg-gradient-to-br ${meta.color} text-white px-3 py-2 flex items-center justify-between`}>
+            <div className={`rounded-2xl bg-linear-to-br ${meta.color} text-white px-3 py-2 flex items-center justify-between`}>
               <span className="font-black text-lg">
                 {meta.emoji} {n}
               </span>

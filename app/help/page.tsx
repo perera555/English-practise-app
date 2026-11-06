@@ -6,7 +6,7 @@ export const metadata = { title: "User Guide · SpeakUp English" };
 function Step({ n, title, children }: { n: number; title: string; children: ReactNode }) {
   return (
     <div className="flex gap-3">
-      <span className="shrink-0 grid place-items-center h-8 w-8 rounded-full bg-gradient-to-br from-sky-400 to-fuchsia-500 text-white font-black shadow-[0_3px_0_rgba(0,0,0,0.25)]">
+      <span className="shrink-0 grid place-items-center h-8 w-8 rounded-full bg-linear-to-br from-sky-400 to-fuchsia-500 text-white font-black shadow-[0_3px_0_rgba(0,0,0,0.25)]">
         {n}
       </span>
       <div>
@@ -46,7 +46,7 @@ const TOC = [
 export default function HelpPage() {
   return (
     <div className="flex flex-col gap-5 max-w-3xl mx-auto">
-      <header className="rounded-3xl bg-gradient-to-br from-sky-500 via-indigo-500 to-fuchsia-500 text-white p-6 shadow-xl">
+      <header className="rounded-3xl bg-linear-to-br from-sky-500 via-indigo-500 to-fuchsia-500 text-white p-6 shadow-xl">
         <p className="text-5xl">📖</p>
         <h1 className="text-3xl font-black mt-1">User Guide</h1>
         <p className="opacity-90">Everything you need to learn English with SpeakUp. Practise 15–20 minutes every day for the best results.</p>

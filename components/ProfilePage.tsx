@@ -76,7 +76,7 @@ export function ProfilePage() {
   if (!editing && profile) {
     return (
       <div className="max-w-md mx-auto flex flex-col gap-4">
-        <div className="card flex flex-col items-center text-center gap-3 py-8 bg-gradient-to-b from-sky-500/10 to-fuchsia-500/10">
+        <div className="card flex flex-col items-center text-center gap-3 py-8 bg-linear-to-b from-sky-500/10 to-fuchsia-500/10">
           <Avatar name={profile.name} photo={profile.photo} online={online} size={112} />
           <h1 className="text-2xl font-black">{profile.name}</h1>
           <p className={`text-sm font-semibold ${online ? "text-emerald-600" : "text-slate-500"}`}>{online ? "● Online" : "● Offline: practice still works"}</p>

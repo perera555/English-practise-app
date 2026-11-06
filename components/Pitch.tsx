@@ -132,7 +132,7 @@ export function Pitch({ sport, action, tick }: { sport: Sport; action?: SportAct
   const pos = (action && map[action]) || map.start || { x: 200, y: 112 };
   const cheering = action === "cheer" || !!pos.flash;
   return (
-    <div className="relative overflow-hidden rounded-3xl shadow-lg bg-slate-900 aspect-[16/9]">
+    <div className="relative overflow-hidden rounded-3xl shadow-lg bg-slate-900 aspect-video">
       <svg viewBox="0 0 400 225" className="w-full h-full" aria-label={`${sport} field animation`}>
         <Field sport={sport} />
         {PLAYERS[sport].map((p, i) => (

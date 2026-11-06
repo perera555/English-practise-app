@@ -127,7 +127,7 @@ export function VideoPlayer({ video, compact = false, local = false }: { video: 
         )}
       </div>
       {subs.length > 0 && (
-        <div className="card flex flex-col gap-2 max-h-[30rem] overflow-y-auto">
+        <div className="card flex flex-col gap-2 max-h-120 overflow-y-auto">
           <h3 className="font-bold">📜 Subtitles: tap a line to jump there</h3>
           {subs.map((s, i) => (
             <div key={i} className={`rounded-xl px-3 py-2 ${i === idx ? "bg-sky-100 dark:bg-sky-500/20" : "hover:bg-black/5 dark:hover:bg-white/10"}`}>

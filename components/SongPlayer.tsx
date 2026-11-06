@@ -227,7 +227,7 @@ export function SongPlayer({ song }: { song: Song }) {
           </ul>
         </div>
       </div>
-      <div className="rounded-3xl bg-gradient-to-b from-indigo-950 to-purple-950 text-white p-5 max-h-[38rem] overflow-y-auto shadow-xl">
+      <div className="rounded-3xl bg-linear-to-b from-indigo-950 to-purple-950 text-white p-5 max-h-152 overflow-y-auto shadow-xl">
         <div className="flex flex-col gap-3">
           {song.lines.map((l, i) => {
             const ws = splitWords(l.text);

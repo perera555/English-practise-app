@@ -38,7 +38,7 @@ export function DailyHub() {
       {today && (
         <Link
           href={`/daily/${today.id}`}
-          className="rounded-3xl bg-gradient-to-r from-orange-400 to-pink-500 text-white p-5 grid sm:grid-cols-[1fr_14rem] gap-4 items-center hover:-translate-y-0.5 transition shadow-lg"
+          className="rounded-3xl bg-linear-to-r from-orange-400 to-pink-500 text-white p-5 grid sm:grid-cols-[1fr_14rem] gap-4 items-center hover:-translate-y-0.5 transition shadow-lg"
         >
           <div>
             <p className="text-sm font-semibold opacity-90">⭐ Today&apos;s conversation</p>

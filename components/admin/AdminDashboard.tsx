@@ -135,7 +135,7 @@ export function AdminDashboard({ grants, codes, content, storage, photos, pexels
   return (
     <div className="grid md:grid-cols-[15rem_1fr] gap-5 items-start">
       {/* Sidebar */}
-      <aside className="md:sticky md:top-20 rounded-3xl bg-gradient-to-b from-slate-900 to-indigo-950 text-white p-3 shadow-xl flex md:flex-col gap-1 overflow-x-auto no-scrollbar">
+      <aside className="md:sticky md:top-20 rounded-3xl bg-linear-to-b from-slate-900 to-indigo-950 text-white p-3 shadow-xl flex md:flex-col gap-1 overflow-x-auto no-scrollbar">
         <div className="hidden md:flex items-center gap-2 px-2 py-2 mb-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="" width={36} height={36} className="rounded-xl" />
@@ -485,7 +485,7 @@ function ChaptersTab({ content, run }: { content: CustomContent; run: Run }) {
         <p className="text-xs opacity-60">
           👁️ View opens it like a customer sees it · ✏️ Edit changes it for everyone · 🗑️ Remove hides it (built-in chapters can be restored).
         </p>
-        <div className="flex flex-col gap-1 max-h-[38rem] overflow-y-auto pr-1">
+        <div className="flex flex-col gap-1 max-h-152 overflow-y-auto pr-1">
           {[...chapters, ...content.chapters].map((base) => {
             const builtIn = chapters.includes(base);
             const c = (builtIn && content.overrides?.[base.id]) || base;

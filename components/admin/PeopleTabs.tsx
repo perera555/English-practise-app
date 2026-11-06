@@ -24,7 +24,7 @@ function StatCard({ emoji, value, label, color, onClick }: { emoji: string; valu
   return (
     <button
       onClick={onClick}
-      className={`relative overflow-hidden rounded-3xl p-4 text-left text-white bg-gradient-to-br ${color} shadow-[0_6px_0_rgba(0,0,0,0.18),0_14px_24px_-10px_rgba(0,0,0,0.4)] hover:-translate-y-0.5 transition`}
+      className={`relative overflow-hidden rounded-3xl p-4 text-left text-white bg-linear-to-br ${color} shadow-[0_6px_0_rgba(0,0,0,0.18),0_14px_24px_-10px_rgba(0,0,0,0.4)] hover:-translate-y-0.5 transition`}
     >
       <span className="absolute -right-3 -top-3 text-6xl opacity-25">{emoji}</span>
       <div className="text-3xl font-black">{value}</div>
@@ -161,7 +161,7 @@ function CustomerModal({
   const input = "rounded-xl border border-black/10 dark:border-white/15 bg-white dark:bg-slate-800 px-3 py-2 w-full";
   return (
     <div className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-4" onClick={onClose}>
-      <div className="card w-full max-w-md max-h-[90vh] overflow-y-auto flex flex-col gap-3 bg-[var(--background)]" onClick={(e) => e.stopPropagation()}>
+      <div className="card w-full max-w-md max-h-[90vh] overflow-y-auto flex flex-col gap-3 bg-background" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start gap-4">
           <Avatar name={c.name} photo={removePhoto ? "" : c.photo} online={on} size={88} />
           <div className="flex-1 min-w-0">
@@ -180,7 +180,7 @@ function CustomerModal({
               )}
             </p>
           </div>
-          <button className="btn-ghost !min-h-0 !py-1" onClick={onClose} aria-label="Close">
+          <button className="btn-ghost min-h-0! py-1!" onClick={onClose} aria-label="Close">
             ✕
           </button>
         </div>
@@ -287,10 +287,10 @@ export function CustomersTab({
                 {prem && <span className="rounded-full bg-amber-400 text-black font-bold px-2 py-0.5">⭐ Premium</span>}
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <button className="btn-primary text-xs !min-h-0 !py-1.5" onClick={() => setSel(id)}>
+                <button className="btn-primary text-xs min-h-0! py-1.5!" onClick={() => setSel(id)}>
                   👁️ View / ✏️ Edit
                 </button>
-                <button className="btn-ghost text-xs !min-h-0 !py-1.5" onClick={() => onPremium(id)}>
+                <button className="btn-ghost text-xs min-h-0! py-1.5!" onClick={() => onPremium(id)}>
                   ⭐ Premium
                 </button>
                 <button

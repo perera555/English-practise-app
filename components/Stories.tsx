@@ -97,8 +97,8 @@ function StoryViewInner({ story }: { story: Story }) {
         ← All stories
       </Link>
       <div className="relative">
-        <Scene scene={story.scene} label={story.title} photoKey={`story:${story.id}`} className="max-h-[22rem] aspect-[21/9]" />
-        <div className="absolute inset-x-0 bottom-0 rounded-b-3xl bg-gradient-to-t from-black/80 to-transparent p-5 text-white pointer-events-none">
+        <Scene scene={story.scene} label={story.title} photoKey={`story:${story.id}`} className="max-h-88 aspect-21/9" />
+        <div className="absolute inset-x-0 bottom-0 rounded-b-3xl bg-linear-to-t from-black/80 to-transparent p-5 text-white pointer-events-none">
           <p className="text-sm font-semibold opacity-90">
             Story {story.n} of 30 · {story.length} · {story.level} · {story.genre}
           </p>

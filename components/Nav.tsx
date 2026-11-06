@@ -41,15 +41,15 @@ export function Nav() {
 
   return (
     <>
-    <header className="app-top sticky top-0 z-30 backdrop-blur-md bg-[var(--background)]/80 border-b border-black/5 dark:border-white/10">
+    <header className="app-top sticky top-0 z-30 backdrop-blur-md bg-(--background)/80 border-b border-black/5 dark:border-white/10">
       <div className="mx-auto max-w-6xl px-4 h-14 flex items-center gap-3">
         <Link href="/" className="font-black text-base sm:text-lg flex items-center gap-2 min-w-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="" width={34} height={34} className="rounded-xl shadow-md shrink-0" />
-          <span className="truncate bg-gradient-to-r from-sky-500 to-fuchsia-500 bg-clip-text text-transparent">SpeakUp English</span>
+          <span className="truncate bg-linear-to-r from-sky-500 to-fuchsia-500 bg-clip-text text-transparent">SpeakUp English</span>
         </Link>
         <span className="flex-1 md:hidden" />
-        <Link href="/premium" className="md:hidden shrink-0 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1.5 shadow">
+        <Link href="/premium" className="md:hidden shrink-0 rounded-full bg-linear-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1.5 shadow">
           ⭐ Premium
         </Link>
         <nav className="hidden md:flex gap-1 overflow-x-auto flex-1 no-scrollbar">
@@ -163,7 +163,7 @@ function BottomTabs({ path }: { path: string }) {
       {more && (
         <div className="md:hidden fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" onClick={() => setMore(false)}>
           <div
-            className="absolute inset-x-0 bottom-0 rounded-t-3xl bg-[var(--background)] p-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] grid grid-cols-3 gap-3 animate-sheet"
+            className="absolute inset-x-0 bottom-0 rounded-t-3xl bg-background p-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] grid grid-cols-3 gap-3 animate-sheet"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="col-span-3 mx-auto h-1.5 w-12 rounded-full bg-black/15 dark:bg-white/20 mb-1" />
@@ -181,7 +181,7 @@ function BottomTabs({ path }: { path: string }) {
           </div>
         </div>
       )}
-      <nav className="app-tabs md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-black/5 dark:border-white/10 bg-[var(--background)]/90 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
+      <nav className="app-tabs md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-black/5 dark:border-white/10 bg-(--background)/90 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
         <div className="grid grid-cols-5 h-16">
           {TABS.map((t) => {
             const active = t.match(path);

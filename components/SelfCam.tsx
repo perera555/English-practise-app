@@ -314,16 +314,16 @@ function CameraWindow() {
   return (
     <>
       <div
-        className={`fixed z-[60] right-3 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] md:bottom-6 ${big ? "w-72 sm:w-96" : "w-36 sm:w-48"} transition-all`}
+        className={`fixed z-60 right-3 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] md:bottom-6 ${big ? "w-72 sm:w-96" : "w-36 sm:w-48"} transition-all`}
         style={{ perspective: "900px" }}
       >
         {/* 3D frame */}
         <div
-          className="rounded-[1.75rem] p-1.5 bg-gradient-to-br from-sky-400 via-indigo-500 to-fuchsia-500 shadow-[0_18px_40px_-10px_rgba(79,70,229,0.7)]"
+          className="rounded-[1.75rem] p-1.5 bg-linear-to-br from-sky-400 via-indigo-500 to-fuchsia-500 shadow-[0_18px_40px_-10px_rgba(79,70,229,0.7)]"
           style={{ transform: "rotateY(-6deg) rotateX(3deg)" }}
         >
           <div className="rounded-3xl overflow-hidden bg-black">
-            <div className="relative aspect-[3/4]">
+            <div className="relative aspect-3/4">
               {error && <p className="absolute inset-x-0 top-8 z-10 mx-2 rounded-lg bg-black/70 p-2 text-center text-[11px] text-white">{error}</p>}
               <video
                 ref={videoRef}
@@ -341,7 +341,7 @@ function CameraWindow() {
                 <span className="absolute top-2 right-2 rounded-full bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 animate-pulse">● {seconds}s</span>
               )}
             </div>
-            <div className="flex justify-around bg-gradient-to-b from-slate-800 to-black text-white text-lg py-1.5">
+            <div className="flex justify-around bg-linear-to-b from-slate-800 to-black text-white text-lg py-1.5">
               {!recording ? (
                 <button onClick={startRec} title="Record yourself" aria-label="Record">
                   ⏺️
@@ -365,7 +365,7 @@ function CameraWindow() {
         </div>
 
         {picker && (
-          <div className="absolute bottom-full right-0 mb-3 w-72 card bg-[var(--background)] flex flex-col gap-2">
+          <div className="absolute bottom-full right-0 mb-3 w-72 card bg-background flex flex-col gap-2">
             <p className="text-sm font-bold">🖼️ Put yourself in a real place</p>
             <div className="grid grid-cols-3 gap-2">
               <BgTile active={bg.kind === "none"} label="Real" onClick={() => setBg({ kind: "none" })}>
@@ -400,8 +400,8 @@ function CameraWindow() {
       </div>
 
       {clip && (
-        <div className="fixed inset-0 z-[70] bg-black/70 grid place-items-center p-4" onClick={() => setClip(null)}>
-          <div className="card w-full max-w-md flex flex-col gap-3 bg-[var(--background)]" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-70 bg-black/70 grid place-items-center p-4" onClick={() => setClip(null)}>
+          <div className="card w-full max-w-md flex flex-col gap-3 bg-background" onClick={(e) => e.stopPropagation()}>
             <h3 className="font-bold text-lg">🎬 Watch yourself</h3>
             <p className="text-sm opacity-70">Look at your mouth, your face and your confidence. Try again and compare!</p>
             <video src={clip.url} controls playsInline className="w-full rounded-2xl bg-black" />
@@ -438,7 +438,7 @@ function BgTile({
   return (
     <button
       onClick={onClick}
-      className={`relative aspect-[4/3] rounded-xl overflow-hidden grid place-items-center text-xl bg-slate-200 dark:bg-slate-700 shadow-[0_4px_0_rgba(0,0,0,0.25)] active:translate-y-0.5 ${active ? "ring-4 ring-sky-400" : ""}`}
+      className={`relative aspect-4/3 rounded-xl overflow-hidden grid place-items-center text-xl bg-slate-200 dark:bg-slate-700 shadow-[0_4px_0_rgba(0,0,0,0.25)] active:translate-y-0.5 ${active ? "ring-4 ring-sky-400" : ""}`}
       style={image ? { backgroundImage: `url(${image})`, backgroundSize: "cover", backgroundPosition: "center" } : gradient ? { background: gradient } : undefined}
     >
       {!image && <span>{children}</span>}

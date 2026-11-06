@@ -68,7 +68,7 @@ export function TwisterKaraoke({ text, tip, big = false, onScore }: { text: stri
   }
 
   return (
-    <div className={`rounded-3xl ${big ? "bg-gradient-to-b from-indigo-950 to-purple-950 text-white p-6" : "border border-black/5 dark:border-white/10 bg-white/70 dark:bg-white/5 p-4"} flex flex-col gap-3`}>
+    <div className={`rounded-3xl ${big ? "bg-linear-to-b from-indigo-950 to-purple-950 text-white p-6" : "border border-black/5 dark:border-white/10 bg-white/70 dark:bg-white/5 p-4"} flex flex-col gap-3`}>
       {speed >= 0 && (
         <span className="self-start rounded-full bg-yellow-300 text-black text-xs font-bold px-2.5 py-0.5">
           {SPEEDS[speed].label} · round {speed + 1}/3
@@ -111,13 +111,13 @@ export function TwisterKaraoke({ text, tip, big = false, onScore }: { text: stri
             ■ Stop
           </button>
         )}
-        <button className={big ? "btn-ghost !bg-white/15 !text-white" : "btn-ghost"} onClick={() => { halt(); void speak(text, { rate: 0.6, onWord: setWord }).then(() => setWord(-1)); setSpeed(0); }}>
+        <button className={big ? "btn-ghost bg-white/15! text-white!" : "btn-ghost"} onClick={() => { halt(); void speak(text, { rate: 0.6, onWord: setWord }).then(() => setWord(-1)); setSpeed(0); }}>
           🐢 Extra slow
         </button>
-        <button className={recording ? "btn-danger animate-pulse" : "btn-primary !bg-fuchsia-500 hover:!bg-fuchsia-600"} onClick={myTurn}>
+        <button className={recording ? "btn-danger animate-pulse" : "btn-primary bg-fuchsia-500! hover:bg-fuchsia-600!"} onClick={myTurn}>
           {recording ? "■ Done" : "🗣️ My turn"}
         </button>
-        {big && <CameraButton className="btn-ghost !bg-white/15 !text-white" />}
+        {big && <CameraButton className="btn-ghost bg-white/15! text-white!" />}
         {result && (
           <span className={`font-bold ${scoreLabel(result.score).color}`}>
             {result.score}% · {result.wps} words/sec {result.wps >= 3 && result.score >= 80 ? "🔥 Speed master!" : ""}

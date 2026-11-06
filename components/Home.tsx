@@ -39,8 +39,8 @@ function PhotoTile({ s }: { s: (typeof SECTIONS)[number] }) {
         // eslint-disable-next-line @next/next/no-img-element
         <img src={photo.url} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition duration-500" />
       )}
-      <div className={`absolute inset-0 bg-gradient-to-br ${s.color} ${photo ? "mix-blend-multiply" : ""}`} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-white/10" />
+      <div className={`absolute inset-0 bg-linear-to-br ${s.color} ${photo ? "mix-blend-multiply" : ""}`} />
+      <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-white/10" />
       <div className="relative h-full p-4 flex flex-col justify-end">
         <span className="text-3xl drop-shadow-lg">{s.emoji}</span>
         <span className="font-black text-lg leading-tight drop-shadow">{s.title}</span>
@@ -53,21 +53,21 @@ function PhotoTile({ s }: { s: (typeof SECTIONS)[number] }) {
 function Hero({ nextUp, started, children }: { nextUp: (typeof chapters)[number]; started: boolean; children: React.ReactNode }) {
   const photo = usePhoto("home:hero");
   return (
-    <section className="relative overflow-hidden rounded-[2rem] text-white shadow-[0_24px_50px_-18px_rgba(79,70,229,0.65)] min-h-[26rem] flex">
+    <section className="relative overflow-hidden rounded-4xl text-white shadow-[0_24px_50px_-18px_rgba(79,70,229,0.65)] min-h-104 flex">
       {photo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={photo.url} alt="" className="absolute inset-0 h-full w-full object-cover" />
       ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-sky-500 via-indigo-600 to-fuchsia-600" />
+        <div className="absolute inset-0 bg-linear-to-br from-sky-500 via-indigo-600 to-fuchsia-600" />
       )}
-      <div className="absolute inset-0 bg-gradient-to-r from-indigo-950/90 via-indigo-900/60 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-r from-indigo-950/90 via-indigo-900/60 to-transparent" />
       <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-fuchsia-500/30 blur-3xl" />
       <div className="relative flex flex-col justify-center gap-4 p-6 sm:p-10 max-w-2xl">
         <span className="self-start rounded-full bg-white/15 backdrop-blur px-3 py-1 text-xs font-bold ring-1 ring-white/30">🌱 Beginner → 🌳 Intermediate</span>
         <h1 className="text-4xl sm:text-6xl font-black leading-[1.05] drop-shadow-lg">
           Speak English
           <br />
-          with <span className="bg-gradient-to-r from-sky-300 via-cyan-200 to-fuchsia-300 bg-clip-text text-transparent">confidence</span>
+          with <span className="bg-linear-to-r from-sky-300 via-cyan-200 to-fuchsia-300 bg-clip-text text-transparent">confidence</span>
         </h1>
         <p className="text-base sm:text-lg text-white/90 drop-shadow">
           Real conversations for the airport, hotel, city and sports, plus stories, music, motivation, PTE and an AI robot that talks with you.
@@ -148,7 +148,7 @@ export function Home() {
         if (!list.length) return null;
         return (
           <section key={u.id} id={`unit-${u.id}`} className="flex flex-col gap-3 scroll-mt-20">
-            <div className={`rounded-3xl bg-gradient-to-r ${u.color} text-white px-5 py-3 flex items-center gap-3`}>
+            <div className={`rounded-3xl bg-linear-to-r ${u.color} text-white px-5 py-3 flex items-center gap-3`}>
               <span className="text-3xl">{u.emoji}</span>
               <div>
                 <h3 className="font-extrabold text-xl">{u.title}</h3>
@@ -174,7 +174,7 @@ export function Home() {
                       <LockBadge free={c.chapter <= FREE.chapters} />
                     </div>
                     <div className="h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-sky-500 to-emerald-500" style={{ width: `${(n / PARTS.length) * 100}%` }} />
+                      <div className="h-full bg-linear-to-r from-sky-500 to-emerald-500" style={{ width: `${(n / PARTS.length) * 100}%` }} />
                     </div>
                   </Link>
                 );

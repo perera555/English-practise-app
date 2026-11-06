@@ -15,7 +15,7 @@ export function Avatar({ name, photo, online, size = 36 }: { name?: string; phot
         <img src={photo} alt={name ?? ""} className="h-full w-full rounded-full object-cover ring-2 ring-white shadow-md" />
       ) : (
         <span
-          className="grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-sky-400 to-fuchsia-500 text-white font-black ring-2 ring-white shadow-md"
+          className="grid h-full w-full place-items-center rounded-full bg-linear-to-br from-sky-400 to-fuchsia-500 text-white font-black ring-2 ring-white shadow-md"
           style={{ fontSize: size * 0.38 }}
         >
           {initials}

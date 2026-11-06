@@ -67,7 +67,7 @@ export function PremiumPage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-3xl mx-auto">
-      <div className="rounded-3xl bg-gradient-to-br from-amber-400 via-orange-500 to-fuchsia-600 text-white p-6 sm:p-8 shadow-xl">
+      <div className="rounded-3xl bg-linear-to-br from-amber-400 via-orange-500 to-fuchsia-600 text-white p-6 sm:p-8 shadow-xl">
         <div className="text-5xl">⭐</div>
         <h1 className="text-3xl sm:text-4xl font-black mt-2">SpeakUp Premium</h1>
         <p className="opacity-90 mt-1">Everything you need to speak English with confidence.</p>

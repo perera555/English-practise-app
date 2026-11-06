@@ -20,7 +20,7 @@ export function Scene({ scene, label, className = "", photoKey }: { scene: Scene
 
   if (photo && !broken) {
     return (
-      <figure className={`relative overflow-hidden rounded-3xl shadow-lg aspect-[16/9] bg-slate-200 dark:bg-slate-800 ${className}`}>
+      <figure className={`relative overflow-hidden rounded-3xl shadow-lg aspect-video bg-slate-200 dark:bg-slate-800 ${className}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={photo.url}
@@ -45,7 +45,7 @@ export function Scene({ scene, label, className = "", photoKey }: { scene: Scene
     <div
       role="img"
       aria-label={label ?? "Picture scene"}
-      className={`relative overflow-hidden rounded-3xl shadow-lg aspect-[16/9] select-none ${className}`}
+      className={`relative overflow-hidden rounded-3xl shadow-lg aspect-video select-none ${className}`}
       style={{ background: `linear-gradient(180deg, ${scene.sky[0]}, ${scene.sky[1]})` }}
     >
       <div

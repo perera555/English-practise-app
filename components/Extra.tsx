@@ -79,7 +79,7 @@ export function NewChapters() {
   if (!c.chapters.length) return null;
   return (
     <section className="flex flex-col gap-3">
-      <div className="rounded-3xl bg-gradient-to-r from-amber-500 to-rose-500 text-white px-5 py-3 flex items-center gap-3">
+      <div className="rounded-3xl bg-linear-to-r from-amber-500 to-rose-500 text-white px-5 py-3 flex items-center gap-3">
         <span className="text-3xl">✨</span>
         <div>
           <h3 className="font-extrabold text-xl">New Chapters</h3>

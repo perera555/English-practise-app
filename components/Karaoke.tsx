@@ -170,7 +170,7 @@ export function Karaoke({
         </p>
       )}
 
-      <div className="flex flex-col gap-2 max-h-[28rem] overflow-y-auto pr-1">
+      <div className="flex flex-col gap-2 max-h-112 overflow-y-auto pr-1">
         {lines.map((line, i) => {
           const active = i === current;
           const words = splitWords(line.text);

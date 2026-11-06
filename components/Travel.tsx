@@ -50,14 +50,14 @@ const PHRASES: { group: string; items: string[] }[] = [
 function TravelHero() {
   const photo = usePhoto("ch:at-the-gate");
   return (
-    <section className="relative overflow-hidden rounded-[2rem] text-white min-h-[18rem] flex shadow-[0_24px_50px_-18px_rgba(14,165,233,0.7)]">
+    <section className="relative overflow-hidden rounded-4xl text-white min-h-72 flex shadow-[0_24px_50px_-18px_rgba(14,165,233,0.7)]">
       {photo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={photo.url} alt="" className="absolute inset-0 h-full w-full object-cover" />
       ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-sky-500 to-indigo-700" />
+        <div className="absolute inset-0 bg-linear-to-br from-sky-500 to-indigo-700" />
       )}
-      <div className="absolute inset-0 bg-gradient-to-r from-sky-950/90 via-sky-900/60 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-r from-sky-950/90 via-sky-900/60 to-transparent" />
       <div className="relative p-6 sm:p-10 flex flex-col justify-center gap-3 max-w-xl">
         <span className="self-start rounded-full bg-white/15 backdrop-blur px-3 py-1 text-xs font-bold ring-1 ring-white/30">✈️ Travel English</span>
         <h1 className="text-4xl sm:text-5xl font-black leading-tight drop-shadow-lg">Your trip, step by step</h1>
@@ -92,7 +92,7 @@ export function TravelHub() {
         <ol className="relative flex flex-col gap-6 border-l-4 border-dashed border-sky-300 dark:border-sky-700 pl-5 ml-3">
           {JOURNEY.map((s) => (
             <li key={s.stage} className="relative">
-              <span className="absolute -left-[2.15rem] top-0 grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-600 text-white shadow-[0_3px_0_rgba(0,0,0,0.25)]">
+              <span className="absolute -left-[2.15rem] top-0 grid h-8 w-8 place-items-center rounded-full bg-linear-to-br from-sky-400 to-indigo-600 text-white shadow-[0_3px_0_rgba(0,0,0,0.25)]">
                 ●
               </span>
               <h3 className="font-bold text-lg mb-2">{s.stage}</h3>
@@ -104,7 +104,7 @@ export function TravelHub() {
                   return (
                     <Link key={id} href={`/chapter/${id}`} className="group relative overflow-hidden rounded-3xl shadow-lg hover:-translate-y-1 transition">
                       <Scene scene={c.scene} label={c.title} photoKey={`ch:${c.id}`} className="rounded-3xl shadow-none" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+                      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                       <div className="absolute inset-x-0 bottom-0 p-3 text-white flex items-end gap-2">
                         <div className="flex-1">
                           <div className="text-[11px] font-semibold opacity-80">Chapter {c.chapter}</div>
@@ -163,7 +163,7 @@ export function TravelHub() {
                     <button className="flex-1 text-left rounded-xl bg-black/5 dark:bg-white/10 px-3 py-2 hover:bg-sky-100 dark:hover:bg-sky-500/20" onClick={() => speak(p)}>
                       🔊 {p}
                     </button>
-                    <button className="btn-ghost !min-h-0 !py-2" onClick={() => setOpen(open === p ? null : p)} aria-label="Practise">
+                    <button className="btn-ghost min-h-0! py-2!" onClick={() => setOpen(open === p ? null : p)} aria-label="Practise">
                       🎤
                     </button>
                   </div>
