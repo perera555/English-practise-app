@@ -1,0 +1,74 @@
+﻿export type Sport = "cricket" | "football" | "rugby" | "tennis";
+
+export type SportAction =
+  | "start"
+  | "bowl"
+  | "hit"
+  | "four"
+  | "six"
+  | "wicket"
+  | "pass"
+  | "run"
+  | "shot"
+  | "goal"
+  | "save"
+  | "tackle"
+  | "try"
+  | "kick"
+  | "serve"
+  | "ace"
+  | "rally"
+  | "point"
+  | "cheer";
+
+export type Line = { speaker: string; text: string; action?: SportAction };
+
+export type Vocab = { word: string; emoji: string; meaning: string };
+
+export type Question = { q: string; options: string[]; answer: number };
+
+export type SceneItem = { e: string; x: number; y: number; s?: number };
+
+export type Scene = { sky: [string, string]; ground: string; items: SceneItem[] };
+
+export type Level = "Beginner" | "Intermediate";
+
+export type UnitId = "airport" | "hotel" | "city" | "sports";
+
+export type Lesson = {
+  id: string;
+  chapter: number;
+  unit: UnitId;
+  title: string;
+  subtitle: string;
+  emoji: string;
+  level: Level;
+  scene: Scene;
+  sport?: Sport;
+  /** The speaker the learner plays in role-play mode. */
+  learnerRole: string;
+  lines: Line[];
+  vocab: Vocab[];
+  quiz: Question[];
+  /** YouTube search phrase for real videos on this topic. */
+  watch: string;
+  /** Who the robot plays in chat, e.g. "a hotel receptionist". */
+  robot: string;
+  /** The robot's first chat message. */
+  opener: string;
+};
+
+export type SongLine = { text: string };
+
+export type Song = {
+  id: string;
+  title: string;
+  emoji: string;
+  mood: string;
+  bpm: number;
+  /** One chord (root note frequencies, Hz) per bar, cycled. */
+  chords: number[][];
+  scene: Scene;
+  lines: SongLine[];
+  vocab: Vocab[];
+};

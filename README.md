@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SpeakUp English 🗣️
 
-## Getting Started
+An English practice app for Beginner to Intermediate learners, built with Next.js.
 
-First, run the development server:
+## What's inside
+
+- **30 chapters** in 4 units: Airport ✈️, Hotel 🏨, City life 🏙️ and Sports commentary 🏏⚽🏉🎾
+- Every chapter is a full session:
+  1. **Watch & Read**: a picture scene (or an animated live pitch for sports), with karaoke subtitles that highlight each word as it is spoken
+  2. **Words**: vocabulary picture cards with audio and pronunciation check
+  3. **Listening**: listen without subtitles, then answer questions and do a dictation
+  4. **Speaking**: repeat-after-me scoring, a role-play where you speak one part, and describe-the-picture
+  5. **Conversation**: chat with the robot, either a **20-minute session** (warm-up → role-play → free talk → feedback) or a quick chat
+- **Listening** and **Speaking** hubs: random dictation, tongue twisters, sound pairs
+- **Robot Chat**: an AI partner for all 30 chapter roles plus a general tutor. You can speak or type, and it corrects mistakes ✏️
+- **Music Karaoke**: original songs with a built-in backing track and lyrics that light up on the beat
+- **PTE Practice**: Read Aloud, Repeat Sentence, Describe Image, Answer Short Question, Write from Dictation and Highlight Incorrect Words, with timers and practice scores (these are not official PTE scores)
+- **Settings** (⚙️): your level, accent (UK / US / AU / IN), voice and speed
+- **Progress**: completed chapters, day streak and talk minutes, saved in your browser
+
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 in **Google Chrome or Microsoft Edge**. The microphone features need their speech recognition. Allow microphone access when the browser asks.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Turn on the smart AI robot
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Without a key, the robot runs in a simple offline mode. For full AI conversation powered by Claude:
 
-## Learn More
+1. Get an API key from https://console.anthropic.com
+2. Create a file called `.env.local` in the project folder:
 
-To learn more about Next.js, take a look at the following resources:
+   ```
+   ANTHROPIC_API_KEY=your-key-here
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Restart `npm run dev`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`.env.local` is ignored by git, so your key never goes to GitHub.
 
-## Deploy on Vercel
+## Add more chapters
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Chapters live in `lib/chapters/*.ts`. Copy one chapter object, change the text, and give it a new `id` and `chapter` number. The pages are generated automatically.
