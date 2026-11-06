@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/listening", label: "Listening", emoji: "🎧" },
   { href: "/speaking", label: "Speaking", emoji: "🎤" },
   { href: "/chat", label: "Robot Chat", emoji: "🤖" },
+  { href: "/twisters", label: "Twisters", emoji: "👅" },
   { href: "/music", label: "Music", emoji: "🎵" },
   { href: "/pte", label: "PTE", emoji: "🎓" },
 ];

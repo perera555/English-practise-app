@@ -224,7 +224,7 @@ export function Quiz({ questions, onDone }: { questions: Question[]; onDone?: (s
 
 /* ---------- Dictation: listen and type ---------- */
 
-export function Dictation({ sentences, onDone }: { sentences: string[]; onDone?: () => void }) {
+export function Dictation({ sentences, onDone }: { sentences: string[]; onDone?: (average: number) => void }) {
   const [i, setI] = useState(0);
   const [typed, setTyped] = useState("");
   const [checked, setChecked] = useState<null | { score: number; flags: boolean[] }>(null);
@@ -294,7 +294,7 @@ export function Dictation({ sentences, onDone }: { sentences: string[]; onDone?:
             onClick={() => {
               setChecked(null);
               setTyped("");
-              if (i + 1 >= sentences.length) onDone?.();
+              if (i + 1 >= sentences.length) onDone?.(Math.round(total / sentences.length));
               setI(i + 1);
             }}
           >
@@ -313,11 +313,13 @@ export function DescribePicture({
   vocab,
   prompt = "Describe this picture. What can you see? What are the people doing?",
   seconds = 40,
+  onScore,
 }: {
   scene: SceneT;
   vocab: Vocab[];
   prompt?: string;
   seconds?: number;
+  onScore?: (pct: number) => void;
 }) {
   const { recording, interim, record, stop } = useRecorder();
   const [said, setSaid] = useState("");
@@ -359,7 +361,11 @@ export function DescribePicture({
           onClick={async () => {
             if (recording) return stop();
             setLeft(seconds);
-            setSaid(await record(true));
+            const s = await record(true);
+            setSaid(s);
+            const ws = new Set(normalize(s));
+            const usedN = vocab.filter((v) => normalize(v.word).every((w) => ws.has(w))).length;
+            onScore?.(Math.round(Math.min(100, normalize(s).length * 2 + (usedN / Math.max(1, vocab.length)) * 40)));
           }}
         >
           {recording ? `■ Stop (${left}s)` : "🎤 Start speaking"}

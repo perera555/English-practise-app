@@ -1,18 +1,18 @@
-"use client";
+﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { describeImage, highlightIncorrect, readAloud, repeatSentence, shortQuestions, writeFromDictation, type Chart } from "@/lib/pte";
 import { listen, normalize, scoreLabel, scoreSpeech, speak, splitWords, stopSpeaking } from "@/lib/speech";
 import { Scene } from "./Scene";
 import { MicWarning } from "./Practice";
 
-const TASKS = [
-  { id: "ra", name: "Read Aloud", emoji: "📖", skill: "Speaking & Reading" },
-  { id: "rs", name: "Repeat Sentence", emoji: "🔁", skill: "Speaking & Listening" },
-  { id: "di", name: "Describe Image", emoji: "📊", skill: "Speaking" },
-  { id: "asq", name: "Answer Short Question", emoji: "❓", skill: "Speaking & Listening" },
-  { id: "wfd", name: "Write from Dictation", emoji: "✍️", skill: "Listening & Writing" },
-  { id: "hiw", name: "Highlight Incorrect Words", emoji: "🖍️", skill: "Listening & Reading" },
+export const TASKS = [
+  { id: "ra", name: "Read Aloud", emoji: "ðŸ“–", skill: "Speaking & Reading" },
+  { id: "rs", name: "Repeat Sentence", emoji: "ðŸ”", skill: "Speaking & Listening" },
+  { id: "di", name: "Describe Image", emoji: "ðŸ“Š", skill: "Speaking" },
+  { id: "asq", name: "Answer Short Question", emoji: "â“", skill: "Speaking & Listening" },
+  { id: "wfd", name: "Write from Dictation", emoji: "âœï¸", skill: "Listening & Writing" },
+  { id: "hiw", name: "Highlight Incorrect Words", emoji: "ðŸ–ï¸", skill: "Listening & Reading" },
 ] as const;
 
 type TaskId = (typeof TASKS)[number]["id"];
@@ -22,7 +22,7 @@ function pteScale(pct: number) {
   return Math.round(10 + (Math.max(0, Math.min(100, pct)) / 100) * 80);
 }
 
-/* ---------- Timed speaking: prep countdown → recording countdown ---------- */
+/* ---------- Timed speaking: prep countdown â†’ recording countdown ---------- */
 
 function TimedSpeak({
   prep,
@@ -97,29 +97,29 @@ function TimedSpeak({
       <div className="flex flex-wrap items-center gap-2">
         {phase === "idle" || phase === "done" ? (
           <button className="btn-primary" onClick={begin}>
-            {phase === "done" ? "🔁 Try again" : "▶ Start"}
+            {phase === "done" ? "ðŸ” Try again" : "â–¶ Start"}
           </button>
         ) : phase === "prep" ? (
           <>
             <span className="rounded-full bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-200 px-3 py-1 font-mono">
-              Prepare… {left}s
+              Prepareâ€¦ {left}s
             </span>
             <button className="btn-ghost" onClick={() => void record()}>
-              Skip — start recording
+              Skip â€” start recording
             </button>
           </>
         ) : phase === "audio" ? (
-          <span className="rounded-full bg-sky-100 text-sky-900 dark:bg-sky-500/20 dark:text-sky-200 px-3 py-1">🔊 Playing audio…</span>
+          <span className="rounded-full bg-sky-100 text-sky-900 dark:bg-sky-500/20 dark:text-sky-200 px-3 py-1">ðŸ”Š Playing audioâ€¦</span>
         ) : (
           <>
-            <span className="rounded-full bg-red-500 text-white px-3 py-1 font-mono animate-pulse">● Recording {left}s</span>
+            <span className="rounded-full bg-red-500 text-white px-3 py-1 font-mono animate-pulse">â— Recording {left}s</span>
             <button className="btn-danger" onClick={() => stopRef.current()}>
-              ■ Finish
+              â–  Finish
             </button>
           </>
         )}
       </div>
-      {phase === "rec" && interim && <p className="text-sm italic opacity-80">“{interim}”</p>}
+      {phase === "rec" && interim && <p className="text-sm italic opacity-80">â€œ{interim}â€</p>}
     </div>
   );
 }
@@ -133,22 +133,24 @@ function ScoreBox({ pct, said, extra }: { pct: number; said: string; extra?: Rea
         <span className={`ml-auto font-bold ${scoreLabel(pct).color}`}>{scoreLabel(pct).text}</span>
       </div>
       {extra}
-      <p className="text-xs opacity-70">You said: “{said || "(nothing heard)"}”</p>
+      <p className="text-xs opacity-70">You said: â€œ{said || "(nothing heard)"}â€</p>
     </div>
   );
 }
 
 function Pager({ i, n, set }: { i: number; n: number; set: (i: number) => void }) {
+  const ctx = useContext(SessionCtx);
+  if (ctx.fixed !== undefined) return null;
   return (
     <div className="flex items-center gap-2 text-sm">
       <button className="btn-ghost" disabled={i === 0} onClick={() => set(i - 1)}>
-        ←
+        â†
       </button>
       <span>
         Question {i + 1} / {n}
       </span>
       <button className="btn-ghost" disabled={i === n - 1} onClick={() => set(i + 1)}>
-        →
+        â†’
       </button>
     </div>
   );
@@ -188,8 +190,12 @@ function BarChart({ chart }: { chart: Chart }) {
 
 /* ---------- Tasks ---------- */
 
-function ReadAloud() {
-  const [i, setI] = useState(0);
+/** When set, a task shows one fixed item (index) and reports its 0-100 score. */
+export const SessionCtx = createContext<{ fixed?: number; onScore?: (pct: number) => void }>({});
+
+export function ReadAloud() {
+  const ctx = useContext(SessionCtx);
+  const [i, setI] = useState(ctx.fixed ?? 0);
   const [res, setRes] = useState<{ pct: number; said: string; flags: boolean[]; wpm: number } | null>(null);
   const text = readAloud[i];
   return (
@@ -210,24 +216,26 @@ function ReadAloud() {
         onResult={(said, secs) => {
           const r = scoreSpeech(text, said);
           setRes({ pct: r.score, said, flags: r.flags, wpm: Math.round((normalize(said).length / secs) * 60) });
+          ctx.onScore?.(r.score);
         }}
       />
       {res && (
         <ScoreBox
           pct={res.pct}
           said={res.said}
-          extra={<p className="text-sm">Content: {res.pct}% · Speed: {res.wpm} words/min {res.wpm < 90 ? "(try a little faster)" : res.wpm > 170 ? "(slow down a little)" : "(good pace 👍)"}</p>}
+          extra={<p className="text-sm">Content: {res.pct}% Â· Speed: {res.wpm} words/min {res.wpm < 90 ? "(try a little faster)" : res.wpm > 170 ? "(slow down a little)" : "(good pace ðŸ‘)"}</p>}
         />
       )}
       <button className="btn-ghost self-start" onClick={() => speak(text)}>
-        🔊 Hear a model answer
+        ðŸ”Š Hear a model answer
       </button>
     </div>
   );
 }
 
-function RepeatSentence() {
-  const [i, setI] = useState(0);
+export function RepeatSentence() {
+  const ctx = useContext(SessionCtx);
+  const [i, setI] = useState(ctx.fixed ?? 0);
   const [res, setRes] = useState<{ pct: number; said: string } | null>(null);
   const [reveal, setReveal] = useState(false);
   const s = repeatSentence[i];
@@ -235,11 +243,15 @@ function RepeatSentence() {
     <div className="flex flex-col gap-3">
       <p className="text-sm opacity-70">You will hear a sentence once. Repeat it exactly. Recording starts right after the audio.</p>
       <Pager i={i} n={repeatSentence.length} set={(n) => { setI(n); setRes(null); setReveal(false); }} />
-      <TimedSpeak prep={0} speakFor={15} resetKey={i} beforeRecord={() => speak(s)} onResult={(said) => setRes({ pct: scoreSpeech(s, said).score, said })} />
+      <TimedSpeak prep={0} speakFor={15} resetKey={i} beforeRecord={() => speak(s)} onResult={(said) => {
+          const pct = scoreSpeech(s, said).score;
+          setRes({ pct, said });
+          ctx.onScore?.(pct);
+        }} />
       {res && <ScoreBox pct={res.pct} said={res.said} />}
       {res && (
         <button className="btn-ghost self-start" onClick={() => setReveal(true)}>
-          👀 Show the sentence
+          ðŸ‘€ Show the sentence
         </button>
       )}
       {reveal && <p className="card text-lg">{s}</p>}
@@ -247,8 +259,13 @@ function RepeatSentence() {
   );
 }
 
-function DescribeImage() {
-  const [i, setI] = useState(0);
+function diScore(used: number, total: number, words: number) {
+  return Math.round(Math.min(100, (used / total) * 60 + Math.min(40, words)));
+}
+
+export function DescribeImage() {
+  const ctx = useContext(SessionCtx);
+  const [i, setI] = useState(ctx.fixed ?? 0);
   const [res, setRes] = useState<{ said: string; used: string[]; words: number } | null>(null);
   const item = describeImage[i];
   return (
@@ -257,9 +274,9 @@ function DescribeImage() {
       <Pager i={i} n={describeImage.length} set={(n) => { setI(n); setRes(null); }} />
       <div className="max-w-xl">{item.kind === "chart" ? <BarChart chart={item.chart} /> : <Scene scene={item.scene} label={item.title} />}</div>
       <details className="text-sm">
-        <summary className="cursor-pointer opacity-80">💡 Useful template</summary>
+        <summary className="cursor-pointer opacity-80">ðŸ’¡ Useful template</summary>
         <p className="mt-2 opacity-80">
-          “This {item.kind === "chart" ? "bar chart shows…" : "picture shows…"} The highest / most important part is… The lowest is… Overall, it is clear that…”
+          â€œThis {item.kind === "chart" ? "bar chart showsâ€¦" : "picture showsâ€¦"} The highest / most important part isâ€¦ The lowest isâ€¦ Overall, it is clear thatâ€¦â€
         </p>
       </details>
       <TimedSpeak
@@ -268,16 +285,18 @@ function DescribeImage() {
         resetKey={i}
         onResult={(said) => {
           const ws = new Set(normalize(said));
-          setRes({ said, used: item.keywords.filter((k) => ws.has(k.toLowerCase())), words: normalize(said).length });
+          const r = { said, used: item.keywords.filter((k) => ws.has(k.toLowerCase())), words: normalize(said).length };
+          setRes(r);
+          ctx.onScore?.(diScore(r.used.length, item.keywords.length, r.words));
         }}
       />
       {res && (
         <ScoreBox
-          pct={Math.min(100, (res.used.length / item.keywords.length) * 60 + Math.min(40, res.words))}
+          pct={diScore(res.used.length, item.keywords.length, res.words)}
           said={res.said}
           extra={
             <p className="text-sm">
-              {res.words} words · key words used: {res.used.join(", ") || "none"} (try: {item.keywords.filter((k) => !res.used.includes(k)).join(", ")})
+              {res.words} words Â· key words used: {res.used.join(", ") || "none"} (try: {item.keywords.filter((k) => !res.used.includes(k)).join(", ")})
             </p>
           }
         />
@@ -286,8 +305,9 @@ function DescribeImage() {
   );
 }
 
-function ShortQuestion() {
-  const [i, setI] = useState(0);
+export function ShortQuestion() {
+  const ctx = useContext(SessionCtx);
+  const [i, setI] = useState(ctx.fixed ?? 0);
   const [res, setRes] = useState<{ said: string; ok: boolean } | null>(null);
   const item = shortQuestions[i];
   return (
@@ -301,22 +321,25 @@ function ShortQuestion() {
         beforeRecord={() => speak(item.q)}
         onResult={(said) => {
           const n = normalize(said).join(" ");
-          setRes({ said, ok: item.answers.some((a) => n.includes(normalize(a).join(" "))) });
+          const ok = item.answers.some((a) => n.includes(normalize(a).join(" ")));
+          setRes({ said, ok });
+          ctx.onScore?.(ok ? 100 : 0);
         }}
       />
       {res && (
         <div className={`rounded-2xl p-3 ${res.ok ? "bg-emerald-100 dark:bg-emerald-500/20" : "bg-rose-100 dark:bg-rose-500/20"}`}>
-          <p className="font-bold">{res.ok ? "✅ Correct!" : `❌ The answer is: ${item.answers[0]}`}</p>
+          <p className="font-bold">{res.ok ? "âœ… Correct!" : `âŒ The answer is: ${item.answers[0]}`}</p>
           <p className="text-sm opacity-80">Question: {item.q}</p>
-          <p className="text-xs opacity-70">You said: “{res.said || "(nothing heard)"}”</p>
+          <p className="text-xs opacity-70">You said: â€œ{res.said || "(nothing heard)"}â€</p>
         </div>
       )}
     </div>
   );
 }
 
-function WriteDictation() {
-  const [i, setI] = useState(0);
+export function WriteDictation() {
+  const ctx = useContext(SessionCtx);
+  const [i, setI] = useState(ctx.fixed ?? 0);
   const [typed, setTyped] = useState("");
   const [res, setRes] = useState<{ pct: number; flags: boolean[] } | null>(null);
   const s = writeFromDictation[i];
@@ -325,20 +348,21 @@ function WriteDictation() {
       <p className="text-sm opacity-70">Listen to the sentence and type it exactly. In the real test you hear it only once!</p>
       <Pager i={i} n={writeFromDictation.length} set={(n) => { setI(n); setRes(null); setTyped(""); }} />
       <button className="btn-primary self-start" onClick={() => speak(s)}>
-        🔊 Play
+        ðŸ”Š Play
       </button>
       <textarea
         rows={2}
         value={typed}
         onChange={(e) => setTyped(e.target.value)}
         className="rounded-2xl border border-black/10 dark:border-white/15 bg-white dark:bg-white/5 px-3 py-2 outline-none focus:ring-2 focus:ring-sky-400"
-        placeholder="Type the sentence…"
+        placeholder="Type the sentenceâ€¦"
       />
       <button className="btn-ghost self-start" disabled={!typed.trim()} onClick={() => {
           const r = scoreSpeech(s, typed);
           setRes({ pct: r.score, flags: r.flags });
+          ctx.onScore?.(r.score);
         }}>
-        ✔ Check
+        âœ” Check
       </button>
       {res && (
         <div className="card">
@@ -350,7 +374,7 @@ function WriteDictation() {
             ))}
           </p>
           <p className="font-bold mt-1">
-            {res.flags.filter(Boolean).length} / {res.flags.length} words correct · {pteScale(res.pct)}/90
+            {res.flags.filter(Boolean).length} / {res.flags.length} words correct Â· {pteScale(res.pct)}/90
           </p>
         </div>
       )}
@@ -358,8 +382,9 @@ function WriteDictation() {
   );
 }
 
-function HighlightIncorrect() {
-  const [i, setI] = useState(0);
+export function HighlightIncorrect() {
+  const ctx = useContext(SessionCtx);
+  const [i, setI] = useState(ctx.fixed ?? 0);
   const [picked, setPicked] = useState<Set<number>>(new Set());
   const [checked, setChecked] = useState(false);
   const item = highlightIncorrect[i];
@@ -374,7 +399,7 @@ function HighlightIncorrect() {
       <p className="text-sm opacity-70">Play the audio. Some words in the text are different from what you hear. Click those words.</p>
       <Pager i={i} n={highlightIncorrect.length} set={(n) => { setI(n); setPicked(new Set()); setChecked(false); }} />
       <button className="btn-primary self-start" onClick={() => speak(item.spoken)}>
-        🔊 Play audio
+        ðŸ”Š Play audio
       </button>
       <p className="card text-lg leading-loose">
         {shown.map((w, k) => (
@@ -408,13 +433,19 @@ function HighlightIncorrect() {
         ))}
       </p>
       {!checked ? (
-        <button className="btn-ghost self-start" onClick={() => setChecked(true)}>
-          ✔ Check
+        <button
+          className="btn-ghost self-start"
+          onClick={() => {
+            setChecked(true);
+            ctx.onScore?.(Math.round((Math.max(0, right - bad) / Math.max(1, wrong.size)) * 100));
+          }}
+        >
+          âœ” Check
         </button>
       ) : (
         <p className="font-bold">
-          Found {right} of {wrong.size} · Wrong clicks: {bad} · Score: {Math.max(0, right - bad)} / {wrong.size}
-          <span className="block text-sm font-normal opacity-70">Green = found · Yellow = missed · Red = wrong click</span>
+          Found {right} of {wrong.size} Â· Wrong clicks: {bad} Â· Score: {Math.max(0, right - bad)} / {wrong.size}
+          <span className="block text-sm font-normal opacity-70">Green = found Â· Yellow = missed Â· Red = wrong click</span>
         </p>
       )}
     </div>
@@ -427,10 +458,10 @@ export function PteView() {
   return (
     <div className="flex flex-col gap-5">
       <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-extrabold">🎓 PTE Practice</h1>
+        <h1 className="text-3xl font-extrabold">ðŸŽ“ PTE Practice</h1>
         <p className="opacity-70">
           Practise PTE Academic-style tasks with timers and instant feedback. These are original practice questions. Scores are estimates to help you
-          practise — they are not official PTE scores.
+          practise â€” they are not official PTE scores.
         </p>
       </header>
       <MicWarning />

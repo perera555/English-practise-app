@@ -5,6 +5,7 @@ import { useState } from "react";
 import { chapters } from "@/lib/content";
 import { ChatBox } from "./ChatBox";
 import { DescribePicture, Dictation, MicWarning, RepeatLine } from "./Practice";
+import { SessionGrid } from "./Sessions";
 
 function pick<T>(arr: T[], n: number, seed: number) {
   // Deterministic for the first render (seed 0), random after "New set".
@@ -24,8 +25,12 @@ export function ListeningHub() {
     <div className="flex flex-col gap-6">
       <header>
         <h1 className="text-3xl font-extrabold">🎧 Listening Practice</h1>
-        <p className="opacity-70">Train your ears. Do a quick dictation, or open any chapter&apos;s listening test.</p>
+        <p className="opacity-70">Train your ears. Do a guided session, a quick dictation, or any chapter&apos;s listening test.</p>
       </header>
+      <section className="flex flex-col gap-3">
+        <h2 className="font-bold text-lg">🎯 Listening sessions (10 sessions · 4 steps each)</h2>
+        <SessionGrid kind="listening" />
+      </section>
       <section className="card">
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-bold text-lg">✍️ Quick dictation — 5 sentences</h2>
@@ -56,15 +61,6 @@ export function ListeningHub() {
 
 /* ---------------- Speaking ---------------- */
 
-const TWISTERS = [
-  "She sells sea shells by the sea shore.",
-  "Red lorry, yellow lorry.",
-  "Three free throws.",
-  "The thirty three thieves thought that they thrilled the throne.",
-  "How much wood would a woodchuck chuck if a woodchuck could chuck wood?",
-  "Fresh French fried fish.",
-];
-
 const MINIMAL_PAIRS = ["ship / sheep", "live / leave", "full / fool", "bat / bet", "very / berry", "thin / tin", "walk / work", "light / right"];
 
 export function SpeakingHub() {
@@ -78,6 +74,18 @@ export function SpeakingHub() {
         <p className="opacity-70">Listen, repeat and get a pronunciation score. Green words are correct, red words need practice.</p>
       </header>
       <MicWarning />
+      <section className="flex flex-col gap-3">
+        <h2 className="font-bold text-lg">🎯 Speaking sessions (10 sessions · 4 steps each)</h2>
+        <SessionGrid kind="speaking" />
+      </section>
+      <Link href="/twisters" className="rounded-3xl bg-gradient-to-r from-pink-500 to-purple-600 text-white p-4 flex items-center gap-3 hover:-translate-y-0.5 transition">
+        <span className="text-4xl">👅</span>
+        <span>
+          <b className="text-lg">Tongue Twister Karaoke</b>
+          <br />
+          <span className="text-sm opacity-90">More than 100 twisters with karaoke at 3 speeds →</span>
+        </span>
+      </Link>
       <section className="card flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-lg">🔁 Repeat after me</h2>
@@ -87,12 +95,6 @@ export function SpeakingHub() {
         </div>
         {lines.map((l, i) => (
           <RepeatLine key={`${seed}-${i}`} text={l.text} label={`Chapter ${l.chapter.chapter} · ${l.chapter.title}`} />
-        ))}
-      </section>
-      <section className="card flex flex-col gap-3">
-        <h2 className="font-bold text-lg">👅 Tongue twisters</h2>
-        {TWISTERS.map((t) => (
-          <RepeatLine key={t} text={t} />
         ))}
       </section>
       <section className="card flex flex-col gap-3">

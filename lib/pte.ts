@@ -88,6 +88,36 @@ export const describeImage: DescribeItem[] = [
     },
     keywords: ["picture", "hotel", "receptionist", "guest", "key", "checking", "desk"],
   },
+  {
+    kind: "chart",
+    chart: {
+      title: "Average hours of study per week",
+      unit: "h",
+      bars: [
+        { label: "Mon", value: 3 },
+        { label: "Tue", value: 4 },
+        { label: "Wed", value: 2 },
+        { label: "Thu", value: 5 },
+        { label: "Fri", value: 1 },
+      ],
+    },
+    keywords: ["chart", "hours", "study", "thursday", "friday", "highest", "lowest", "week"],
+  },
+  {
+    kind: "scene",
+    title: "A cricket match",
+    scene: {
+      sky: ["#1e3a8a", "#60a5fa"],
+      ground: "#16a34a",
+      items: [
+        { e: "🏟️", x: 50, y: 22, s: 6 },
+        { e: "🏏", x: 35, y: 62, s: 4 },
+        { e: "🔴", x: 55, y: 60, s: 2 },
+        { e: "🙌", x: 80, y: 60, s: 3.5 },
+      ],
+    },
+    keywords: ["picture", "cricket", "stadium", "batter", "ball", "crowd", "match"],
+  },
 ];
 
 export const shortQuestions: { q: string; answers: string[] }[] = [
@@ -124,4 +154,18 @@ export const highlightIncorrect: { spoken: string; shown: string }[] = [
     spoken: "The professor explained that regular practice is the key to learning a new language quickly.",
     shown: "The professor explained that daily practice is the key to learning a new skill quickly.",
   },
+  {
+    spoken: "Fresh fruit and vegetables are an important part of a healthy diet for children and adults.",
+    shown: "Fresh fruit and vegetables are an essential part of a healthy diet for students and adults.",
+  },
+  {
+    spoken: "The train to the airport leaves every fifteen minutes from platform two in the morning.",
+    shown: "The bus to the airport leaves every fifty minutes from platform two in the morning.",
+  },
+  {
+    spoken: "Scientists believe that the ocean absorbs a large amount of the heat produced on Earth.",
+    shown: "Scientists believe that the ocean absorbs a small amount of the heat produced on Earth.",
+  },
 ];
+
+export const SESSION_COUNT = 6;

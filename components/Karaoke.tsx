@@ -13,6 +13,10 @@ type Props = {
   /** Start with subtitles hidden (listening test). */
   hideSubtitles?: boolean;
   allowRolePlay?: boolean;
+  /** Start in role-play mode. */
+  startRolePlay?: boolean;
+  /** Called with the score each time the learner speaks a line in role-play. */
+  onTurn?: (score: number) => void;
 };
 
 const SPEAKER_COLORS = [
@@ -34,13 +38,22 @@ export function useMicSupport() {
   return ok;
 }
 
-export function Karaoke({ lines, learnerRole, onLine, onFinish, hideSubtitles = false, allowRolePlay = true }: Props) {
+export function Karaoke({
+  lines,
+  learnerRole,
+  onLine,
+  onFinish,
+  hideSubtitles = false,
+  allowRolePlay = true,
+  startRolePlay = false,
+  onTurn,
+}: Props) {
   const speakers = [...new Set(lines.map((l) => l.speaker))];
   const [current, setCurrent] = useState(-1);
   const [word, setWord] = useState(-1);
   const [playing, setPlaying] = useState(false);
   const [subs, setSubs] = useState<"on" | "off">(hideSubtitles ? "off" : "on");
-  const [rolePlay, setRolePlay] = useState(false);
+  const [rolePlay, setRolePlay] = useState(startRolePlay);
   const [listening, setListening] = useState(false);
   const [interim, setInterim] = useState("");
   const [turns, setTurns] = useState<Record<number, Turn>>({});
@@ -85,6 +98,7 @@ export function Karaoke({ lines, learnerRole, onLine, onFinish, hideSubtitles = 
         if (runId.current !== id) return;
         const { score, flags } = scoreSpeech(line.text, said);
         setTurns((t) => ({ ...t, [i]: { said, score, flags } }));
+        onTurn?.(score);
         await new Promise((r) => setTimeout(r, 900));
       } else {
         await speak(line.text, {

@@ -10,7 +10,8 @@ const SECTIONS = [
   { href: "/listening", emoji: "🎧", title: "Listening", text: "Dictation & listening tests", color: "from-sky-500 to-cyan-500" },
   { href: "/speaking", emoji: "🎤", title: "Speaking", text: "Repeat, score, tongue twisters", color: "from-rose-500 to-orange-500" },
   { href: "/chat", emoji: "🤖", title: "Robot Chat", text: "Live AI conversation + 20-min sessions", color: "from-violet-500 to-fuchsia-500" },
-  { href: "/music", emoji: "🎵", title: "Music Karaoke", text: "Sing along with lyrics", color: "from-pink-500 to-purple-500" },
+  { href: "/twisters", emoji: "👅", title: "Tongue Twisters", text: "100+ twisters, karaoke style", color: "from-fuchsia-500 to-pink-600" },
+  { href: "/music", emoji: "🎵", title: "Music Karaoke", text: "8 sing-along songs", color: "from-pink-500 to-purple-500" },
   { href: "/pte", emoji: "🎓", title: "PTE Practice", text: "Read aloud, repeat, describe image…", color: "from-emerald-500 to-teal-500" },
 ];
 
@@ -49,7 +50,7 @@ export function Home() {
         <Scene scene={chapters[1].scene} label="Airport check-in illustration" />
       </section>
 
-      <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {SECTIONS.map((s) => (
           <Link key={s.href} href={s.href} className={`rounded-3xl p-4 text-white bg-gradient-to-br ${s.color} shadow-md hover:-translate-y-1 transition`}>
             <div className="text-3xl">{s.emoji}</div>

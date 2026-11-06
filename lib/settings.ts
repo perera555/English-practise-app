@@ -60,10 +60,19 @@ export type Progress = {
   done: Record<string, string[]>;
   minutes: number;
   days: string[]; // ISO dates practised
+  /** session key (e.g. "listening-3") -> best score 0-100 */
+  sessions: Record<string, number>;
 };
 
 const PKEY = "erp-progress";
-const EMPTY: Progress = { done: {}, minutes: 0, days: [] };
+const EMPTY: Progress = { done: {}, minutes: 0, days: [], sessions: {} };
+
+export function saveSessionScore(key: string, score: number) {
+  pload();
+  const best = Math.max(score, progress.sessions[key] ?? -1);
+  const days = progress.days.includes(today()) ? progress.days : [...progress.days, today()].slice(-60);
+  psave({ ...progress, sessions: { ...progress.sessions, [key]: best }, days });
+}
 let progress: Progress = EMPTY;
 let ploaded = false;
 const plisteners = new Set<() => void>();
