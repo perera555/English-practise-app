@@ -7,6 +7,7 @@ import { VideoPlayer } from "./VideoPlayer";
 import { LocalPlayer } from "./LocalPlayer";
 
 export const VIDEO_CATEGORIES: { id: VideoCategory; label: string }[] = [
+  { id: "motivation", label: "💪 Motivational speeches" },
   { id: "travel", label: "✈️ Travel & hotel" },
   { id: "sports", label: "🏏 Sports commentary" },
   { id: "daily", label: "☕ Daily conversation" },
@@ -36,7 +37,7 @@ export function VideosHub() {
         const list = videos.filter((v) => v.category === cat.id);
         if (!list.length) return null;
         return (
-          <section key={cat.id} className="flex flex-col gap-3">
+          <section key={cat.id} id={cat.id} className="flex flex-col gap-3 scroll-mt-20">
             <h2 className="text-xl font-bold">{cat.label}</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {list.map((v) => (

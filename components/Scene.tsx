@@ -1,7 +1,39 @@
-import type { Scene as SceneT } from "@/lib/types";
+"use client";
 
-/** An illustrated picture scene made of layered emoji over a sky + ground. */
-export function Scene({ scene, label, className = "" }: { scene: SceneT; label?: string; className?: string }) {
+import { useState } from "react";
+import type { Scene as SceneT } from "@/lib/types";
+import { usePhoto } from "@/lib/photos";
+
+/**
+ * A picture for a lesson. Shows a REAL photo when one is available (photoKey),
+ * otherwise (or offline) the drawn emoji scene.
+ */
+export function Scene({ scene, label, className = "", photoKey }: { scene: SceneT; label?: string; className?: string; photoKey?: string }) {
+  const photo = usePhoto(photoKey);
+  const [broken, setBroken] = useState(false);
+
+  if (photo && !broken) {
+    return (
+      <figure className={`relative overflow-hidden rounded-3xl shadow-lg aspect-[16/9] bg-slate-200 dark:bg-slate-800 ${className}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={photo.url}
+          alt={photo.alt || label || ""}
+          loading="lazy"
+          decoding="async"
+          onError={() => setBroken(true)}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <figcaption className="absolute bottom-1.5 right-2 rounded-full bg-black/45 px-2 py-0.5 text-[10px] text-white/90 backdrop-blur">
+          📷{" "}
+          <a href={photo.pageUrl} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
+            {photo.photographer} / Pexels
+          </a>
+        </figcaption>
+      </figure>
+    );
+  }
+
   return (
     <div
       role="img"

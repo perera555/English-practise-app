@@ -45,7 +45,7 @@ export function DailyHub() {
             <p className="opacity-90">“{today.lines[0].text}”</p>
             <span className="inline-block mt-3 rounded-xl bg-white text-pink-600 font-bold px-4 py-2">▶ Start today&apos;s talk</span>
           </div>
-          <Scene scene={today.scene} label={today.title} className="shadow-none" />
+          <Scene scene={today.scene} label={today.title} className="shadow-none" photoKey={`daily:${today.id}`} />
         </Link>
       )}
 
@@ -63,7 +63,7 @@ export function DailyHub() {
           const done = (progress.done[`daily-${t.id}`]?.length ?? 0) > 0;
           return (
             <Link key={t.id} href={`/daily/${t.id}`} className="card p-3 flex flex-col gap-2 hover:-translate-y-1 transition">
-              <Scene scene={t.scene} label={t.title} className="rounded-2xl shadow-none" />
+              <Scene scene={t.scene} label={t.title} className="rounded-2xl shadow-none" photoKey={`daily:${t.id}`} />
               <div className="flex items-start gap-2">
                 <span className="text-2xl">{t.emoji}</span>
                 <div className="flex-1">
@@ -121,7 +121,7 @@ export function DailyView({ talk }: { talk: DailyTalk }) {
 
       {tab === "listen" && (
         <section className="grid lg:grid-cols-[1fr_1.1fr] gap-5">
-          <Scene scene={talk.scene} label={talk.title} />
+          <Scene scene={talk.scene} label={talk.title} photoKey={`daily:${talk.id}`} />
           <div className="card">
             <p className="text-sm opacity-70 mb-3">Press Play. Words light up as they are spoken. Tap a line to hear it again.</p>
             <Karaoke lines={talk.lines} learnerRole={talk.learnerRole} allowRolePlay={false} onFinish={() => mark("listen")} />

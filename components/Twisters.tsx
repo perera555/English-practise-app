@@ -5,6 +5,7 @@ import { twisterGroups } from "@/lib/twisters";
 import { normalize, scoreLabel, scoreSpeech, speak, splitWords, stopSpeaking } from "@/lib/speech";
 import { MicWarning, useRecorder } from "./Practice";
 import { useCustomContent } from "@/lib/customContent";
+import { CameraButton } from "./SelfCam";
 
 const SPEEDS = [
   { rate: 0.7, label: "🐢 Slow" },
@@ -116,6 +117,7 @@ export function TwisterKaraoke({ text, tip, big = false, onScore }: { text: stri
         <button className={recording ? "btn-danger animate-pulse" : "btn-primary !bg-fuchsia-500 hover:!bg-fuchsia-600"} onClick={myTurn}>
           {recording ? "■ Done" : "🗣️ My turn"}
         </button>
+        {big && <CameraButton className="btn-ghost !bg-white/15 !text-white" />}
         {result && (
           <span className={`font-bold ${scoreLabel(result.score).color}`}>
             {result.score}% · {result.wps} words/sec {result.wps >= 3 && result.score >= 80 ? "🔥 Speed master!" : ""}

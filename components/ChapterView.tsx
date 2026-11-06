@@ -100,7 +100,7 @@ export function ChapterView({
       {tab === "watch" && (
         <section className="grid lg:grid-cols-[1.1fr_1fr] gap-5">
           <div className="flex flex-col gap-3">
-            {lesson.sport ? <Pitch sport={lesson.sport} action={action} tick={tick} /> : <Scene scene={lesson.scene} label={lesson.title} />}
+            {lesson.sport ? <Pitch sport={lesson.sport} action={action} tick={tick} /> : <Scene scene={lesson.scene} label={lesson.title} photoKey={`ch:${lesson.id}`} />}
             {lineIdx >= 0 && lesson.lines[lineIdx] && (
               <div className="rounded-2xl bg-black/80 text-white px-4 py-3 text-center text-lg font-medium">
                 <span className="opacity-60 mr-2">{lesson.lines[lineIdx].speaker}:</span>
@@ -170,7 +170,7 @@ export function ChapterView({
           </div>
           <div className="card flex flex-col gap-3">
             <h2 className="font-bold text-lg">3. Describe the picture 🖼️</h2>
-            <DescribePicture scene={lesson.scene} vocab={lesson.vocab} />
+            <DescribePicture scene={lesson.scene} vocab={lesson.vocab} photoKey={`ch:${lesson.id}`} />
           </div>
         </section>
       )}

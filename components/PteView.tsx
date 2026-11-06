@@ -272,7 +272,7 @@ export function DescribeImage() {
     <div className="flex flex-col gap-3">
       <p className="text-sm opacity-70">Look at the image. Prepare for 25 seconds, then describe it in detail for up to 40 seconds.</p>
       <Pager i={i} n={describeImage.length} set={(n) => { setI(n); setRes(null); }} />
-      <div className="max-w-xl">{item.kind === "chart" ? <BarChart chart={item.chart} /> : <Scene scene={item.scene} label={item.title} />}</div>
+      <div className="max-w-xl">{item.kind === "chart" ? <BarChart chart={item.chart} /> : <Scene scene={item.scene} label={item.title} photoKey={`pte:${i}`} />}</div>
       <details className="text-sm">
         <summary className="cursor-pointer opacity-80">💡 Useful template</summary>
         <p className="mt-2 opacity-80">

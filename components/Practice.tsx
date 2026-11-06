@@ -5,6 +5,7 @@ import type { Question, Scene as SceneT, Vocab } from "@/lib/types";
 import { listen, normalize, scoreLabel, scoreSpeech, speak, splitWords, stopSpeaking } from "@/lib/speech";
 import { useMicSupport } from "./Karaoke";
 import { Scene } from "./Scene";
+import { CameraButton } from "./SelfCam";
 
 /* ---------- Mic hook: record one answer and score it ---------- */
 
@@ -314,7 +315,9 @@ export function DescribePicture({
   prompt = "Describe this picture. What can you see? What are the people doing?",
   seconds = 40,
   onScore,
+  photoKey,
 }: {
+  photoKey?: string;
   scene: SceneT;
   vocab: Vocab[];
   prompt?: string;
@@ -342,9 +345,12 @@ export function DescribePicture({
 
   return (
     <div className="grid md:grid-cols-2 gap-4">
-      <Scene scene={scene} />
+      <Scene scene={scene} photoKey={photoKey} />
       <div className="flex flex-col gap-3">
-        <p className="font-semibold">{prompt}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="font-semibold flex-1">{prompt}</p>
+          <CameraButton />
+        </div>
         <p className="text-sm opacity-70">Try to speak for {seconds} seconds. Use these words:</p>
         <div className="flex flex-wrap gap-1.5">
           {vocab.map((v) => (

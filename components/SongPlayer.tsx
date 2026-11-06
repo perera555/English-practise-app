@@ -178,7 +178,7 @@ export function SongPlayer({ song }: { song: Song }) {
     <div className="grid lg:grid-cols-[1fr_1.1fr] gap-5">
       <div className="flex flex-col gap-3">
         <div className="relative">
-          <Scene scene={song.scene} label={song.title} />
+          <Scene scene={song.scene} label={song.title} photoKey={`song:${song.id}`} />
           {countIn > 0 && (
             <div className="absolute inset-0 grid place-items-center">
               <span key={countIn} className="animate-flash text-7xl font-black text-white drop-shadow-lg">

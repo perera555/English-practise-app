@@ -52,7 +52,7 @@ export function Home() {
             <Stat n={`${progress.minutes}`} label="Talk minutes" />
           </div>
         </div>
-        <Scene scene={chapters[1].scene} label="Airport check-in illustration" />
+        <Scene scene={chapters[1].scene} label="Airport check-in" photoKey="ch:airport-check-in" />
       </section>
 
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -94,7 +94,7 @@ export function Home() {
                 const n = progress.done[c.id]?.length ?? 0;
                 return (
                   <Link key={c.id} href={`/chapter/${c.id}`} className="card p-3 flex flex-col gap-2 hover:-translate-y-1 hover:shadow-lg transition">
-                    <Scene scene={c.scene} label={c.title} className="rounded-2xl shadow-none" />
+                    <Scene scene={c.scene} label={c.title} className="rounded-2xl shadow-none" photoKey={`ch:${c.id}`} />
                     <div className="flex items-start gap-2">
                       <span className="text-2xl">{c.emoji}</span>
                       <div className="flex-1">

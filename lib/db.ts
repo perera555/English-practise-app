@@ -69,6 +69,48 @@ export async function dbGet<K extends keyof Schema>(key: K): Promise<Schema[K]> 
   return v ? ({ ...structuredClone(DEFAULTS[key]), ...v } as Schema[K]) : structuredClone(DEFAULTS[key]);
 }
 
+/* ---------- Photos: one field per picture (safe for many writes at once) ---------- */
+
+export type PhotoInfo = {
+  url: string; // landscape image URL
+  photographer: string;
+  photographerUrl: string;
+  pageUrl: string; // link to the photo page (attribution)
+  alt: string;
+};
+
+const PHOTOS = PREFIX + "photos";
+
+export async function photosAll(): Promise<Record<string, PhotoInfo>> {
+  if (storageMode() === "upstash") {
+    const { result } = await redis(["HGETALL", PHOTOS]);
+    const arr = (result as string[] | null) ?? [];
+    const out: Record<string, PhotoInfo> = {};
+    for (let i = 0; i + 1 < arr.length; i += 2) {
+      try {
+        out[arr[i]] = JSON.parse(arr[i + 1]);
+      } catch {
+        /* skip bad entry */
+      }
+    }
+    return out;
+  }
+  return ((await readFile()) as { photos?: Record<string, PhotoInfo> }).photos ?? {};
+}
+
+export async function photoSet(key: string, info: PhotoInfo | null) {
+  if (storageMode() === "upstash") {
+    await redis(info ? ["HSET", PHOTOS, key, JSON.stringify(info)] : ["HDEL", PHOTOS, key]);
+    return;
+  }
+  const all = (await readFile()) as Partial<Schema> & { photos?: Record<string, PhotoInfo> };
+  all.photos ??= {};
+  if (info) all.photos[key] = info;
+  else delete all.photos[key];
+  await fs.mkdir(path.dirname(FILE), { recursive: true });
+  await fs.writeFile(FILE, JSON.stringify(all, null, 2), "utf8");
+}
+
 export async function dbSet<K extends keyof Schema>(key: K, value: Schema[K]) {
   if (storageMode() === "upstash") {
     await redis(["SET", PREFIX + key, JSON.stringify(value)]);

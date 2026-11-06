@@ -28,6 +28,15 @@ export default function PrivacyPage() {
         Android, Apple on iPhone, or your browser). We do not record or store audio.
       </p>
 
+      <h2 className="text-xl font-bold mt-2">Camera</h2>
+      <p>
+        The “See yourself” camera is used only when you open it. Background replacement runs on your device. Video and recordings stay on your device and are
+        never uploaded. Some app files for the background feature are downloaded from Google and jsDelivr the first time you use it.
+      </p>
+
+      <h2 className="text-xl font-bold mt-2">Photos and videos</h2>
+      <p>Real photos come from Pexels and videos are played from YouTube. When you view them, those services may receive your IP address.</p>
+
       <h2 className="text-xl font-bold mt-2">Payments</h2>
       <p>
         Subscriptions are processed by Google Play or the Apple App Store. We never see your card details. We use RevenueCat to check whether your subscription

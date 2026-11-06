@@ -9,6 +9,7 @@ import { useMicSupport } from "./Karaoke";
 import Link from "next/link";
 import { getUserId } from "@/lib/premium";
 import { apiUrl } from "@/lib/api";
+import { CameraButton } from "./SelfCam";
 
 type Props = {
   robot: string;
@@ -349,6 +350,8 @@ export function ChatBox({ robot, opener, topic, vocab = [], questions = [], sess
           <input type="checkbox" checked={autoSpeak} onChange={(e) => setAutoSpeak(e.target.checked)} /> Robot speaks replies
         </label>
         <span>Level: {settings.level}</span>
+        <span className="flex-1" />
+        <CameraButton className="btn-ghost !min-h-0 !py-1 text-xs" />
       </div>
     </div>
   );

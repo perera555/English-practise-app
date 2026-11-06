@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Nav } from "@/components/Nav";
+import { CameraBubble } from "@/components/SelfCam";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <Nav />
+        <CameraBubble />
         <main className="app-main mx-auto w-full max-w-6xl px-4 py-5 md:py-6 flex-1 pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-6">{children}</main>
         <footer className="hidden md:block text-center text-xs opacity-60 py-6">
           SpeakUp English · Practise a little every day 🌱 ·{" "}

@@ -25,7 +25,7 @@ export default function MusicPage() {
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {songs.map((s, i) => (
           <Link key={s.id} href={`/music/${s.id}`} className="card p-3 flex flex-col gap-2 hover:-translate-y-1 transition">
-            <Scene scene={s.scene} label={s.title} />
+            <Scene scene={s.scene} label={s.title} photoKey={`song:${s.id}`} />
             <div className="flex items-center gap-2">
               <span className="text-2xl">{s.emoji}</span>
               <div>

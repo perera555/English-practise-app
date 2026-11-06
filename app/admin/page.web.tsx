@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { adminEnabled, isAdmin } from "@/lib/adminAuth";
-import { dbGet, storageMode } from "@/lib/db";
+import { dbGet, photosAll, storageMode } from "@/lib/db";
+import { pexelsEnabled, youtubeEnabled } from "@/lib/mediaServer";
 import { AdminDashboard, AdminLogin } from "@/components/admin/AdminDashboard";
 
 export const metadata = { title: "Admin · SpeakUp English", robots: { index: false } };
@@ -21,8 +22,18 @@ async function AdminInner() {
     );
   }
   if (!(await isAdmin())) return <AdminLogin />;
-  const [grants, codes, content] = await Promise.all([dbGet("grants"), dbGet("codes"), dbGet("content")]);
-  return <AdminDashboard grants={grants} codes={codes} content={content} storage={storageMode()} />;
+  const [grants, codes, content, photos] = await Promise.all([dbGet("grants"), dbGet("codes"), dbGet("content"), photosAll()]);
+  return (
+    <AdminDashboard
+      grants={grants}
+      codes={codes}
+      content={content}
+      storage={storageMode()}
+      photos={photos}
+      pexels={pexelsEnabled()}
+      youtube={youtubeEnabled()}
+    />
+  );
 }
 
 export default function AdminPage() {

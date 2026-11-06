@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Line } from "@/lib/types";
 import { canListen, listen, scoreLabel, scoreSpeech, speak, splitWords, stopSpeaking } from "@/lib/speech";
+import { CameraButton } from "./SelfCam";
 
 type Props = {
   lines: Line[];
@@ -159,6 +160,7 @@ export function Karaoke({
             🎭 Role-play as {learnerRole}: {rolePlay ? "on" : "off"}
           </button>
         )}
+        {allowRolePlay && <CameraButton />}
       </div>
       {rolePlay && (
         <p className="text-sm rounded-xl bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300 px-3 py-2">

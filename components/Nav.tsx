@@ -17,6 +17,7 @@ const LINKS = [
   { href: "/music", label: "Music", emoji: "🎵" },
   { href: "/pte", label: "PTE", emoji: "🎓" },
   { href: "/premium", label: "Premium", emoji: "⭐" },
+  { href: "/help", label: "Guide", emoji: "📖" },
 ];
 
 const ACCENTS = [

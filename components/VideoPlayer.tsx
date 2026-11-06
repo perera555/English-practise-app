@@ -57,7 +57,8 @@ export function VideoPlayer({ video, compact = false, local = false }: { video: 
         videoId: video.youtubeId,
         width: "100%",
         height: "100%",
-        playerVars: { playsinline: 1, rel: 0, modestbranding: 1, cc_load_policy: 0 },
+        // No typed karaoke subtitles? Then switch on YouTube's own English captions.
+        playerVars: { playsinline: 1, rel: 0, modestbranding: 1, cc_load_policy: video.subtitles.length ? 0 : 1, cc_lang_pref: "en", hl: "en" },
       });
     });
     const t = setInterval(() => {
@@ -78,7 +79,7 @@ export function VideoPlayer({ video, compact = false, local = false }: { video: 
       yt.current = null;
       el.remove();
     };
-  }, [video.youtubeId]);
+  }, [video.youtubeId, video.subtitles.length]);
 
   const seek = (s: number) => {
     if (yt.current) {

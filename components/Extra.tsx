@@ -89,7 +89,7 @@ export function NewChapters() {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {c.chapters.map((ch) => (
           <Link key={ch.id} href={`/extra?chapter=${ch.id}`} className="card p-3 flex flex-col gap-2 hover:-translate-y-1 transition">
-            <Scene scene={ch.scene} label={ch.title} className="rounded-2xl shadow-none" />
+            <Scene scene={ch.scene} label={ch.title} className="rounded-2xl shadow-none" photoKey={`ch:${ch.id}`} />
             <div className="flex items-start gap-2">
               <span className="text-2xl">{ch.emoji}</span>
               <div>
@@ -116,7 +116,7 @@ export function NewSongs() {
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {c.songs.map((s) => (
           <Link key={s.id} href={`/extra?song=${s.id}`} className="card p-3 flex flex-col gap-2 hover:-translate-y-1 transition">
-            <Scene scene={s.scene} label={s.title} />
+            <Scene scene={s.scene} label={s.title} photoKey={`song:${s.id}`} />
             <div className="font-bold">
               {s.emoji} {s.title}
             </div>

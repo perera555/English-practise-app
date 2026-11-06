@@ -23,6 +23,9 @@ import {
   saveVideo,
 } from "@/lib/adminActions";
 import { VIDEO_CATEGORIES } from "@/components/Videos";
+import { PicturesTab, YouTubeFinder } from "./MediaTabs";
+import { AdminGuide } from "./AdminGuide";
+import type { PhotoInfo } from "@/lib/db";
 
 const input = "rounded-xl border border-black/10 dark:border-white/15 bg-white dark:bg-slate-800 px-3 py-2 w-full";
 const area = input + " font-mono text-sm";
@@ -50,11 +53,14 @@ type Props = {
   codes: Record<string, GiftCode>;
   content: CustomContent;
   storage: string;
+  photos: Record<string, PhotoInfo>;
+  pexels: boolean;
+  youtube: boolean;
 };
 
-const TABS = ["👥 Users & Premium", "🎁 Gift codes", "📚 Chapters", "🎬 Videos", "🎵 Songs", "👅 Twisters"] as const;
+const TABS = ["📖 Admin guide", "👥 Users & Premium", "🎁 Gift codes", "🖼️ Pictures", "🎬 Videos", "📚 Chapters", "🎵 Songs", "👅 Twisters"] as const;
 
-export function AdminDashboard({ grants, codes, content, storage }: Props) {
+export function AdminDashboard({ grants, codes, content, storage, photos, pexels, youtube }: Props) {
   const [tab, setTab] = useState<(typeof TABS)[number]>(TABS[0]);
   const [msg, setMsg] = useState("");
   const [pending, start] = useTransition();
@@ -96,12 +102,14 @@ export function AdminDashboard({ grants, codes, content, storage }: Props) {
       {msg && <p className="font-semibold">{msg}</p>}
       {pending && <p className="text-sm opacity-60">Saving…</p>}
 
-      {tab === TABS[0] && <UsersTab grants={grants} run={run} />}
-      {tab === TABS[1] && <CodesTab codes={codes} run={run} />}
-      {tab === TABS[2] && <ChaptersTab content={content} run={run} />}
-      {tab === TABS[3] && <VideosTab content={content} run={run} />}
-      {tab === TABS[4] && <SongsTab content={content} run={run} />}
-      {tab === TABS[5] && <TwistersTab content={content} run={run} />}
+      {tab === "📖 Admin guide" && <AdminGuide pexels={pexels} youtube={youtube} storage={storage} />}
+      {tab === "👥 Users & Premium" && <UsersTab grants={grants} run={run} />}
+      {tab === "🎁 Gift codes" && <CodesTab codes={codes} run={run} />}
+      {tab === "🖼️ Pictures" && <PicturesTab photos={photos} pexels={pexels} run={run} />}
+      {tab === "🎬 Videos" && <VideosTab content={content} run={run} youtube={youtube} />}
+      {tab === "📚 Chapters" && <ChaptersTab content={content} run={run} />}
+      {tab === "🎵 Songs" && <SongsTab content={content} run={run} />}
+      {tab === "👅 Twisters" && <TwistersTab content={content} run={run} />}
     </div>
   );
 }
@@ -403,8 +411,8 @@ function parseSubs(text: string) {
     .filter((x): x is { start: number; text: string } => !!x);
 }
 
-function VideosTab({ content, run }: { content: CustomContent; run: Run }) {
-  const empty = { id: "", url: "", title: "", category: "travel" as VideoCategory, chapterId: "", subs: "" };
+function VideosTab({ content, run, youtube }: { content: CustomContent; run: Run; youtube: boolean }) {
+  const empty = { id: "", url: "", title: "", category: "motivation" as VideoCategory, chapterId: "", subs: "" };
   const [f, setF] = useState(empty);
   const set = (k: keyof typeof empty) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value });
   const allChapters = [...chapters, ...content.chapters];
@@ -412,6 +420,15 @@ function VideosTab({ content, run }: { content: CustomContent; run: Run }) {
   const videos = content.videos ?? [];
 
   return (
+    <div className="flex flex-col gap-4">
+    <YouTubeFinder
+      youtube={youtube}
+      run={run}
+      onPick={(r) => {
+        setF({ ...f, url: `https://youtu.be/${r.id}`, title: r.title });
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      }}
+    />
     <div className="grid lg:grid-cols-[1.4fr_1fr] gap-4">
       <div className="card flex flex-col gap-3">
         <h2 className="font-bold text-lg">{f.id ? "✏️ Edit video" : "➕ Add a real video"}</h2>
@@ -488,6 +505,7 @@ function VideosTab({ content, run }: { content: CustomContent; run: Run }) {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 }

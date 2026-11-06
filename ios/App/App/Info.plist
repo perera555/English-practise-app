@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>SpeakUp English uses the camera so you can see yourself while you practise speaking. Video stays on your phone.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>SpeakUp English uses the microphone so you can practise speaking and get a pronunciation score.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

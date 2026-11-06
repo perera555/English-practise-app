@@ -3,7 +3,10 @@
 import { randomBytes } from "crypto";
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE, adminCookieValue, checkPassword, requireAdmin } from "./adminAuth";
-import { dbGet, dbSet, type CustomContent } from "./db";
+import { dbGet, dbSet, photosAll, photoSet, type CustomContent, type PhotoInfo } from "./db";
+import { pexelsEnabled, searchPhotos, searchYouTube, youtubeEnabled, type YouTubeResult } from "./mediaServer";
+import { PHOTO_QUERIES } from "./photoQueries";
+import { chapters as builtInChapters } from "./content";
 import { validUserId } from "./premiumServer";
 import type { Lesson, Song, Video } from "./types";
 
@@ -144,6 +147,89 @@ export async function deleteSong(id: string): Promise<Result> {
     c.songs = c.songs.filter((x) => x.id !== id);
   });
   return { ok: true, message: "Song deleted." };
+}
+
+/* ---------------- Real pictures (Pexels) ---------------- */
+
+export async function adminSearchPhotos(query: string): Promise<{ ok: true; photos: PhotoInfo[] } | { ok: false; error: string }> {
+  await requireAdmin();
+  if (!pexelsEnabled()) return { ok: false, error: "Add your free PEXELS_API_KEY first (see Admin guide → Real pictures)." };
+  try {
+    return { ok: true, photos: await searchPhotos(query.slice(0, 100), 15) };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Search failed" };
+  }
+}
+
+export async function adminSetPhoto(key: string, photo: PhotoInfo | null): Promise<Result> {
+  await requireAdmin();
+  if (!/^[a-z]+:[\w-]+$/.test(key)) return { ok: false, error: "Bad picture key" };
+  await photoSet(key, photo);
+  return { ok: true, message: photo ? "Picture changed ✅" : "Picture removed (drawn picture will show)." };
+}
+
+/** Finds a real photo for every picture that doesn't have one yet. */
+export async function adminAutoFillPhotos(): Promise<Result> {
+  await requireAdmin();
+  if (!pexelsEnabled()) return { ok: false, error: "Add your free PEXELS_API_KEY first (see Admin guide → Real pictures)." };
+  const have = await photosAll();
+  let added = 0;
+  let failed = 0;
+  for (const [key, q] of Object.entries(PHOTO_QUERIES)) {
+    if (have[key]) continue;
+    try {
+      const [p] = await searchPhotos(q, 1);
+      if (p) {
+        await photoSet(key, p);
+        added++;
+      }
+    } catch {
+      failed++;
+    }
+  }
+  return { ok: true, message: `Added ${added} real pictures.${failed ? ` ${failed} failed. Try again in a minute.` : ""}` };
+}
+
+/* ---------------- Real videos (YouTube search) ---------------- */
+
+export async function adminSearchYouTube(query: string, captionsOnly: boolean): Promise<{ ok: true; results: YouTubeResult[] } | { ok: false; error: string }> {
+  await requireAdmin();
+  if (!youtubeEnabled()) return { ok: false, error: "Add your free YOUTUBE_API_KEY first (see Admin guide → Real videos)." };
+  try {
+    return { ok: true, results: await searchYouTube(query.slice(0, 120), { captionsOnly }) };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Search failed" };
+  }
+}
+
+/** Adds one embeddable, captioned YouTube video to every built-in chapter that has none. */
+export async function adminAutoAddChapterVideos(): Promise<Result> {
+  await requireAdmin();
+  if (!youtubeEnabled()) return { ok: false, error: "Add your free YOUTUBE_API_KEY first (see Admin guide → Real videos)." };
+  const content = await dbGet("content");
+  content.videos ??= [];
+  let added = 0;
+  for (const ch of builtInChapters) {
+    if (content.videos.some((v) => v.chapterId === ch.id)) continue;
+    try {
+      const [best] = await searchYouTube(ch.watch, { captionsOnly: true, max: 1 });
+      if (!best) continue;
+      content.videos.push({
+        id: slug(best.title),
+        title: best.title,
+        youtubeId: best.id,
+        fileUrl: "",
+        category: ch.unit === "sports" ? "sports" : "travel",
+        chapterId: ch.id,
+        subtitles: [],
+      });
+      added++;
+    } catch {
+      break; // quota or network problem: stop and keep what we have
+    }
+  }
+  await dbSet("content", content);
+  return { ok: true, message: `Added ${added} videos. Please watch them and delete any you don't like.` };
 }
 
 /** Accepts youtu.be/ID, youtube.com/watch?v=ID, /shorts/ID, /embed/ID or a bare 11-char ID. */

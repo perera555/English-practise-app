@@ -108,7 +108,7 @@ export function SpeakingHub() {
       </section>
       <section className="card flex flex-col gap-3">
         <h2 className="font-bold text-lg">🖼️ Describe the picture — {sceneChapter.title}</h2>
-        <DescribePicture key={seed} scene={sceneChapter.scene} vocab={sceneChapter.vocab} />
+        <DescribePicture key={seed} scene={sceneChapter.scene} vocab={sceneChapter.vocab} photoKey={`ch:${sceneChapter.id}`} />
       </section>
     </div>
   );

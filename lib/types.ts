@@ -58,7 +58,7 @@ export type Lesson = {
   opener: string;
 };
 
-export type VideoCategory = "travel" | "sports" | "daily" | "music" | "pte" | "general";
+export type VideoCategory = "motivation" | "travel" | "sports" | "daily" | "music" | "pte" | "general";
 
 export type Video = {
   id: string;
