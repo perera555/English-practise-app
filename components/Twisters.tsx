@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { twisterGroups } from "@/lib/twisters";
 import { normalize, scoreLabel, scoreSpeech, speak, splitWords, stopSpeaking } from "@/lib/speech";
 import { MicWarning, useRecorder } from "./Practice";
+import { useCustomContent } from "@/lib/customContent";
 
 const SPEEDS = [
   { rate: 0.7, label: "🐢 Slow" },
@@ -129,13 +130,20 @@ export function TwisterKaraoke({ text, tip, big = false, onScore }: { text: stri
 
 /** Browse all twisters by sound. */
 export function TwisterBrowser() {
+  const custom = useCustomContent();
+  const groups = custom.twisters.length
+    ? [
+        ...twisterGroups,
+        { id: "new", sound: "New ✨", emoji: "🆕", tip: "Fresh tongue twisters added by our team.", items: custom.twisters.map((t) => t.text) },
+      ]
+    : twisterGroups;
   const [g, setG] = useState(twisterGroups[0].id);
-  const group = twisterGroups.find((x) => x.id === g)!;
+  const group = groups.find((x) => x.id === g) ?? groups[0];
   return (
     <div className="flex flex-col gap-4">
       <MicWarning />
       <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-        {twisterGroups.map((x) => (
+        {groups.map((x) => (
           <button key={x.id} onClick={() => setG(x.id)} className={`shrink-0 ${g === x.id ? "btn-primary" : "btn-ghost"}`}>
             {x.emoji} {x.sound} <span className="opacity-60 text-xs">({x.items.length})</span>
           </button>

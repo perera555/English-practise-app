@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getSettings } from "./settings";
+import { isNativeApp, nativeListen, nativeSpeak, nativeStopSpeaking } from "./native";
 
 /* ---------------- Text-to-speech ---------------- */
 
@@ -55,6 +56,24 @@ export type SpeakOptions = {
  * Resolves when finished or cancelled.
  */
 export function speak(text: string, opts: SpeakOptions = {}): Promise<void> {
+  if (isNativeApp()) {
+    const words = splitWords(text);
+    const starts: number[] = [];
+    let pos = 0;
+    for (const w of words) {
+      const i = text.indexOf(w, pos);
+      starts.push(i);
+      pos = i + w.length;
+    }
+    opts.onWord?.(0);
+    return nativeSpeak(text, getSettings().accent, (opts.rate ?? 1) * getSettings().rate, (ci) => {
+      let idx = 0;
+      for (let k = 0; k < starts.length; k++) if (starts[k] <= ci) idx = k;
+      opts.onWord?.(idx);
+    })
+      .catch(() => {})
+      .finally(() => opts.onWord?.(words.length));
+  }
   return new Promise((resolve) => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return resolve();
     const synth = window.speechSynthesis;
@@ -119,6 +138,10 @@ export function speak(text: string, opts: SpeakOptions = {}): Promise<void> {
 }
 
 export function stopSpeaking() {
+  if (isNativeApp()) {
+    void nativeStopSpeaking();
+    return;
+  }
   if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
 }
 
@@ -151,7 +174,7 @@ function getRecognitionCtor(): RecognitionCtor | undefined {
 }
 
 export function canListen() {
-  return !!getRecognitionCtor();
+  return isNativeApp() || !!getRecognitionCtor();
 }
 
 export type ListenHandle = { stop: () => void; result: Promise<string> };
@@ -161,6 +184,7 @@ export type ListenHandle = { stop: () => void; result: Promise<string> };
  * The promise resolves with the final transcript ("" if nothing was heard).
  */
 export function listen(opts: { onInterim?: (text: string) => void; continuous?: boolean } = {}): ListenHandle {
+  if (isNativeApp()) return nativeListen(getSettings().accent || "en-US", opts.onInterim);
   const Ctor = getRecognitionCtor();
   if (!Ctor) return { stop: () => {}, result: Promise.reject(new Error("unsupported")) };
   const rec = new Ctor();

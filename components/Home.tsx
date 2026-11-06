@@ -5,6 +5,9 @@ import { useState } from "react";
 import { chapters, units } from "@/lib/content";
 import { PARTS, streak, useProgress } from "@/lib/settings";
 import { Scene } from "./Scene";
+import { LockBadge } from "./Premium";
+import { NewChapters } from "./Extra";
+import { FREE } from "@/lib/sessions";
 
 const SECTIONS = [
   { href: "/listening", emoji: "🎧", title: "Listening", text: "Dictation & listening tests", color: "from-sky-500 to-cyan-500" },
@@ -70,6 +73,8 @@ export function Home() {
         ))}
       </div>
 
+      <NewChapters />
+
       {units.map((u) => {
         const list = chapters.filter((c) => c.unit === u.id && (level === "All" || c.level === level));
         if (!list.length) return null;
@@ -98,6 +103,7 @@ export function Home() {
                         <div className="text-sm opacity-70">{c.subtitle}</div>
                       </div>
                       {n >= PARTS.length && <span title="Completed">🏆</span>}
+                      <LockBadge free={c.chapter <= FREE.chapters} />
                     </div>
                     <div className="h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
                       <div className="h-full bg-gradient-to-r from-sky-500 to-emerald-500" style={{ width: `${(n / PARTS.length) * 100}%` }} />

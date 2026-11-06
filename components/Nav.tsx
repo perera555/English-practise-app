@@ -14,6 +14,7 @@ const LINKS = [
   { href: "/twisters", label: "Twisters", emoji: "👅" },
   { href: "/music", label: "Music", emoji: "🎵" },
   { href: "/pte", label: "PTE", emoji: "🎓" },
+  { href: "/premium", label: "Premium", emoji: "⭐" },
 ];
 
 const ACCENTS = [
@@ -34,7 +35,8 @@ export function Nav() {
     <header className="sticky top-0 z-30 backdrop-blur-md bg-[var(--background)]/80 border-b border-black/5 dark:border-white/10">
       <div className="mx-auto max-w-6xl px-4 h-14 flex items-center gap-3">
         <Link href="/" className="font-black text-lg flex items-center gap-1.5 shrink-0">
-          <span className="text-2xl">🗣️</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.svg" alt="" width={32} height={32} className="rounded-lg" />
           <span className="hidden sm:inline bg-gradient-to-r from-sky-500 to-fuchsia-500 bg-clip-text text-transparent">SpeakUp English</span>
         </Link>
         <nav className="flex gap-1 overflow-x-auto flex-1 no-scrollbar">

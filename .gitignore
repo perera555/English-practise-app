@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# phone app build output + local database
+.next-mobile/
+.data/
+

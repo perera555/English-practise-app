@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { songs } from "@/lib/content";
 import { Scene } from "@/components/Scene";
+import { LockBadge } from "@/components/Premium";
+import { NewSongs } from "@/components/Extra";
+import { FREE } from "@/lib/sessions";
 
 export const metadata = { title: "Music Karaoke · English Practice" };
 
@@ -19,7 +22,7 @@ export default function MusicPage() {
         <p className="opacity-70">Sing along! The words light up in time with the music. All songs are original and made for learning.</p>
       </header>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {songs.map((s) => (
+        {songs.map((s, i) => (
           <Link key={s.id} href={`/music/${s.id}`} className="card p-3 flex flex-col gap-2 hover:-translate-y-1 transition">
             <Scene scene={s.scene} label={s.title} />
             <div className="flex items-center gap-2">
@@ -28,10 +31,14 @@ export default function MusicPage() {
                 <div className="font-bold">{s.title}</div>
                 <div className="text-xs opacity-70">{s.mood}</div>
               </div>
+              <span className="ml-auto">
+                <LockBadge free={i < FREE.songs} />
+              </span>
             </div>
           </Link>
         ))}
       </div>
+      <NewSongs />
       <section className="card">
         <h2 className="font-bold text-lg mb-2">📺 Real English music with lyrics</h2>
         <p className="text-sm opacity-70 mb-3">Open YouTube lyric videos — turn on subtitles (CC) and sing along.</p>

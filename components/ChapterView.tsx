@@ -20,7 +20,17 @@ const TABS = [
 
 type Tab = (typeof TABS)[number]["id"];
 
-export function ChapterView({ lesson, prev, next }: { lesson: Lesson; prev?: Lesson; next?: Lesson }) {
+export function ChapterView({
+  lesson,
+  prev,
+  next,
+  hrefFor = (l) => `/chapter/${l.id}`,
+}: {
+  lesson: Lesson;
+  prev?: Lesson;
+  next?: Lesson;
+  hrefFor?: (l: Lesson) => string;
+}) {
   const [tab, setTab] = useState<Tab>("watch");
   const [lineIdx, setLineIdx] = useState(-1);
   const [tick, setTick] = useState(0);
@@ -56,7 +66,9 @@ export function ChapterView({ lesson, prev, next }: { lesson: Lesson; prev?: Les
         <div className="flex flex-wrap items-center gap-3">
           <span className="text-4xl">{lesson.emoji}</span>
           <div>
-            <p className="text-sm font-semibold text-sky-600 dark:text-sky-400">Chapter {lesson.chapter} of 30</p>
+            <p className="text-sm font-semibold text-sky-600 dark:text-sky-400">
+              Chapter {lesson.chapter} {lesson.chapter <= 30 ? "of 30" : "· ✨ New"}
+            </p>
             <h1 className="text-2xl sm:text-3xl font-extrabold">{lesson.title}</h1>
             <p className="opacity-70">{lesson.subtitle}</p>
           </div>
@@ -188,14 +200,14 @@ export function ChapterView({ lesson, prev, next }: { lesson: Lesson; prev?: Les
 
       <footer className="flex justify-between gap-3 pt-2">
         {prev ? (
-          <Link href={`/chapter/${prev.id}`} className="btn-ghost">
+          <Link href={hrefFor(prev)} className="btn-ghost">
             ← Ch {prev.chapter}: {prev.title}
           </Link>
         ) : (
           <span />
         )}
         {next && (
-          <Link href={`/chapter/${next.id}`} className="btn-primary">
+          <Link href={hrefFor(next)} className="btn-primary">
             Ch {next.chapter}: {next.title} →
           </Link>
         )}

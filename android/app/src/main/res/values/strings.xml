@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SpeakUp English</string>
+    <string name="title_activity_main">SpeakUp English</string>
+    <string name="package_name">com.perera555.speakupenglish</string>
+    <string name="custom_url_scheme">com.perera555.speakupenglish</string>
+</resources>

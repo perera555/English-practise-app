@@ -12,14 +12,15 @@ import { DescribeImage, HighlightIncorrect, ReadAloud, RepeatSentence, SessionCt
 import { Scene } from "./Scene";
 import { TwisterKaraoke } from "./Twisters";
 import { twisterSession } from "@/lib/twisters";
-import { SESSION_TOTALS, type SessionKind } from "@/lib/sessions";
+import { FREE, SESSION_TOTALS, type SessionKind } from "@/lib/sessions";
+import { LockBadge } from "./Premium";
 
 
 const KIND_META: Record<SessionKind, { title: string; emoji: string; color: string }> = {
-  listening: { title: "Listening Session", emoji: "ðŸŽ§", color: "from-sky-500 to-cyan-500" },
-  speaking: { title: "Speaking Session", emoji: "ðŸŽ¤", color: "from-rose-500 to-orange-500" },
-  pte: { title: "PTE Session", emoji: "ðŸŽ“", color: "from-emerald-500 to-teal-500" },
-  twisters: { title: "Tongue Twister Karaoke", emoji: "ðŸ‘…", color: "from-pink-500 to-purple-600" },
+  listening: { title: "Listening Session", emoji: "🎧", color: "from-sky-500 to-cyan-500" },
+  speaking: { title: "Speaking Session", emoji: "🎤", color: "from-rose-500 to-orange-500" },
+  pte: { title: "PTE Session", emoji: "🎓", color: "from-emerald-500 to-teal-500" },
+  twisters: { title: "Tongue Twister Karaoke", emoji: "👅", color: "from-pink-500 to-purple-600" },
 };
 
 type Step = { title: string; emoji: string; help: string; render: (report: (score: number) => void) => ReactNode };
@@ -61,7 +62,7 @@ function SessionRunner({ kind, n, steps }: { kind: SessionKind; n: number; steps
   return (
     <div className="flex flex-col gap-5">
       <Link href={`/${kind}`} className="text-sm opacity-60 hover:opacity-100">
-        â† All {kind === "pte" ? "PTE" : kind === "twisters" ? "tongue twister" : kind} sessions
+        ← All {kind === "pte" ? "PTE" : kind === "twisters" ? "tongue twister" : kind} sessions
       </Link>
       <div className={`rounded-3xl bg-gradient-to-r ${meta.color} text-white p-5`}>
         <p className="text-sm opacity-90">
@@ -104,26 +105,26 @@ function SessionRunner({ kind, n, steps }: { kind: SessionKind; n: number; steps
             <span className="flex-1" />
             {step > 0 && (
               <button className="btn-ghost" onClick={() => go(step - 1)}>
-                â† Back
+                ← Back
               </button>
             )}
             {step < steps.length - 1 ? (
               <button className="btn-primary" onClick={() => go(step + 1)}>
-                {scores[step] === undefined ? "Skip â†’" : "Next step â†’"}
+                {scores[step] === undefined ? "Skip →" : "Next step →"}
               </button>
             ) : (
               <button className="btn-primary" onClick={() => setFinished(true)}>
-                ðŸ Finish session
+                🏁 Finish session
               </button>
             )}
           </div>
         </section>
       ) : (
         <section className="card flex flex-col items-center text-center gap-4 py-8">
-          <div className="text-6xl">{avg >= 70 ? "ðŸ†" : avg >= 40 ? "ðŸŽ‰" : "ðŸ’ª"}</div>
+          <div className="text-6xl">{avg >= 70 ? "🏆" : avg >= 40 ? "🎉" : "💪"}</div>
           <h2 className="text-3xl font-black">Session {n} complete!</h2>
           <p className={`text-xl font-bold ${scoreLabel(avg).color}`}>
-            Your score: {avg}% Â· {scoreLabel(avg).text}
+            Your score: {avg}% · {scoreLabel(avg).text}
           </p>
           <ul className="w-full max-w-md flex flex-col gap-2 text-left">
             {steps.map((s, i) => (
@@ -144,11 +145,11 @@ function SessionRunner({ kind, n, steps }: { kind: SessionKind; n: number; steps
                 setStep(0);
               }}
             >
-              ðŸ” Do it again
+              🔁 Do it again
             </button>
             {n < total && (
               <Link href={`/${kind}/session/${n + 1}`} className="btn-primary">
-                Session {n + 1} â†’
+                Session {n + 1} →
               </Link>
             )}
           </div>
@@ -165,7 +166,7 @@ export function ListeningSession({ n }: { n: number }) {
   const dict = (ch: typeof a) => ch.lines.map((l) => l.text).filter((t) => t.split(" ").length <= 12).slice(1, 4);
   const listenQuiz = (ch: typeof a): Step => ({
     title: `Listen & answer: ${ch.title}`,
-    emoji: "ðŸ™ˆ",
+    emoji: "🙈",
     help: "Press Play and listen. The subtitles are hidden. Then answer the questions.",
     render: (report) => (
       <div className="grid lg:grid-cols-2 gap-4">
@@ -181,15 +182,15 @@ export function ListeningSession({ n }: { n: number }) {
     listenQuiz(a),
     {
       title: `Dictation: ${b.title}`,
-      emoji: "âœï¸",
+      emoji: "✍️",
       help: "Listen to each sentence and type exactly what you hear.",
       render: (report) => <Dictation sentences={dict(b)} onDone={report} />,
     },
     listenQuiz(c),
     {
       title: "Final dictation",
-      emoji: "ðŸŽ¯",
-      help: "Three sentences from this session's chapters. Use ðŸ¢ slow only if you need it!",
+      emoji: "🎯",
+      help: "Three sentences from this session's chapters. Use 🐢 slow only if you need it!",
       render: (report) => <Dictation sentences={[dict(a)[0], dict(b)[2] ?? dict(b)[0], dict(c)[1] ?? dict(c)[0]].filter(Boolean)} onDone={report} />,
     },
   ];
@@ -240,25 +241,25 @@ export function SpeakingSession({ n }: { n: number }) {
   const steps: Step[] = [
     {
       title: "Warm-up: tongue twisters",
-      emoji: "ðŸ‘…",
+      emoji: "👅",
       help: "Say each one slowly first, then faster. This warms up your mouth!",
       render: (report) => <RepeatSet lines={[TWISTERS[(n - 1) % TWISTERS.length], TWISTERS[n % TWISTERS.length]]} report={report} />,
     },
     {
       title: `Repeat after me: ${a.title}`,
-      emoji: "ðŸ”",
-      help: `Listen to each sentence, then press ðŸŽ¤ and say it. You are the ${a.learnerRole}.`,
+      emoji: "🔁",
+      help: `Listen to each sentence, then press 🎤 and say it. You are the ${a.learnerRole}.`,
       render: (report) => <RepeatSet lines={mine(a)} report={report} />,
     },
     {
       title: `Role-play: ${b.title}`,
-      emoji: "ðŸŽ­",
+      emoji: "🎭",
       help: `Press Play. The robot speaks the other parts. When it's your line as ${b.learnerRole}, read it out loud.`,
       render: (report) => <RolePlayStep lines={b.lines} role={b.learnerRole} report={report} />,
     },
     {
       title: `Describe the picture: ${c.title}`,
-      emoji: "ðŸ–¼ï¸",
+      emoji: "🖼️",
       help: "Speak for 40 seconds. Use the target words. More words = higher score.",
       render: (report) => <DescribePicture scene={c.scene} vocab={c.vocab} onScore={report} />,
     },
@@ -274,12 +275,12 @@ export function PteSession({ n }: { n: number }) {
     <SessionCtx.Provider value={{ fixed, onScore: report }}>{el}</SessionCtx.Provider>
   );
   const steps: Step[] = [
-    { title: "Read Aloud", emoji: "ðŸ“–", help: "35 seconds to prepare, 40 seconds to read aloud.", render: wrap(k % readAloud.length, <ReadAloud />) },
-    { title: "Repeat Sentence", emoji: "ðŸ”", help: "Listen once, then repeat the sentence exactly.", render: wrap(k % repeatSentence.length, <RepeatSentence />) },
-    { title: "Describe Image", emoji: "ðŸ“Š", help: "25 seconds to prepare, 40 seconds to describe.", render: wrap(k % describeImage.length, <DescribeImage />) },
-    { title: "Answer Short Question", emoji: "â“", help: "Answer with one word or a few words.", render: wrap(k % shortQuestions.length, <ShortQuestion />) },
-    { title: "Write from Dictation", emoji: "âœï¸", help: "Type the sentence you hear.", render: wrap(k % writeFromDictation.length, <WriteDictation />) },
-    { title: "Highlight Incorrect Words", emoji: "ðŸ–ï¸", help: "Click the words that are different from the audio.", render: wrap(k % highlightIncorrect.length, <HighlightIncorrect />) },
+    { title: "Read Aloud", emoji: "📖", help: "35 seconds to prepare, 40 seconds to read aloud.", render: wrap(k % readAloud.length, <ReadAloud />) },
+    { title: "Repeat Sentence", emoji: "🔁", help: "Listen once, then repeat the sentence exactly.", render: wrap(k % repeatSentence.length, <RepeatSentence />) },
+    { title: "Describe Image", emoji: "📊", help: "25 seconds to prepare, 40 seconds to describe.", render: wrap(k % describeImage.length, <DescribeImage />) },
+    { title: "Answer Short Question", emoji: "❓", help: "Answer with one word or a few words.", render: wrap(k % shortQuestions.length, <ShortQuestion />) },
+    { title: "Write from Dictation", emoji: "✍️", help: "Type the sentence you hear.", render: wrap(k % writeFromDictation.length, <WriteDictation />) },
+    { title: "Highlight Incorrect Words", emoji: "🖍️", help: "Click the words that are different from the audio.", render: wrap(k % highlightIncorrect.length, <HighlightIncorrect />) },
   ];
   return <SessionRunner kind="pte" n={n} steps={steps} />;
 }
@@ -313,14 +314,15 @@ export function SessionGrid({ kind }: { kind: SessionKind }) {
               <span className="font-black text-lg">
                 {meta.emoji} {n}
               </span>
-              {best !== undefined && <span className="text-sm font-bold">â­ {best}%</span>}
+              {best !== undefined && <span className="text-sm font-bold">⭐ {best}%</span>}
+              <LockBadge free={n <= FREE.sessions} />
             </div>
             <span className="text-xs opacity-70">
               {chs
-                ? chs.map((c) => c.emoji + " " + c.title).join(" Â· ")
+                ? chs.map((c) => c.emoji + " " + c.title).join(" · ")
                 : kind === "pte"
                   ? "All 6 PTE task types"
-                  : `${twisterSession(n).length} twisters Â· mixed sounds`}
+                  : `${twisterSession(n).length} twisters · mixed sounds`}
             </span>
           </Link>
         );

@@ -1,4 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { isPremiumUser } from "@/lib/premiumServer";
+import { cors, preflight } from "@/lib/cors";
+import { isAdminRequest } from "@/lib/adminAuth";
 
 type InMsg = { role: "user" | "assistant"; content: string };
 
@@ -14,12 +17,23 @@ function clip(s: unknown, n: number) {
   return typeof s === "string" ? s.slice(0, n) : "";
 }
 
+export const OPTIONS = preflight;
+
 export async function POST(req: Request) {
-  let body: { messages?: InMsg[]; robot?: string; topic?: string; level?: string; stage?: string };
+  return cors(req, await handle(req));
+}
+
+async function handle(req: Request): Promise<Response> {
+  let body: { messages?: InMsg[]; robot?: string; topic?: string; level?: string; stage?: string; userId?: string };
   try {
     body = await req.json();
   } catch {
     return Response.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  // The AI robot costs money per reply, so it is a Premium feature (unless FREE_AI=true).
+  if (process.env.FREE_AI !== "true" && !isAdminRequest(req) && !(await isPremiumUser(body.userId))) {
+    return Response.json({ offline: true, locked: true }, { status: 503 });
   }
 
   const robot = clip(body.robot, 200) || "a friendly English tutor";

@@ -7,12 +7,12 @@ import { Scene } from "./Scene";
 import { MicWarning } from "./Practice";
 
 export const TASKS = [
-  { id: "ra", name: "Read Aloud", emoji: "ðŸ“–", skill: "Speaking & Reading" },
-  { id: "rs", name: "Repeat Sentence", emoji: "ðŸ”", skill: "Speaking & Listening" },
-  { id: "di", name: "Describe Image", emoji: "ðŸ“Š", skill: "Speaking" },
-  { id: "asq", name: "Answer Short Question", emoji: "â“", skill: "Speaking & Listening" },
-  { id: "wfd", name: "Write from Dictation", emoji: "âœï¸", skill: "Listening & Writing" },
-  { id: "hiw", name: "Highlight Incorrect Words", emoji: "ðŸ–ï¸", skill: "Listening & Reading" },
+  { id: "ra", name: "Read Aloud", emoji: "📖", skill: "Speaking & Reading" },
+  { id: "rs", name: "Repeat Sentence", emoji: "🔁", skill: "Speaking & Listening" },
+  { id: "di", name: "Describe Image", emoji: "📊", skill: "Speaking" },
+  { id: "asq", name: "Answer Short Question", emoji: "❓", skill: "Speaking & Listening" },
+  { id: "wfd", name: "Write from Dictation", emoji: "✍️", skill: "Listening & Writing" },
+  { id: "hiw", name: "Highlight Incorrect Words", emoji: "🖍️", skill: "Listening & Reading" },
 ] as const;
 
 type TaskId = (typeof TASKS)[number]["id"];
@@ -22,7 +22,7 @@ function pteScale(pct: number) {
   return Math.round(10 + (Math.max(0, Math.min(100, pct)) / 100) * 80);
 }
 
-/* ---------- Timed speaking: prep countdown â†’ recording countdown ---------- */
+/* ---------- Timed speaking: prep countdown → recording countdown ---------- */
 
 function TimedSpeak({
   prep,
@@ -97,29 +97,29 @@ function TimedSpeak({
       <div className="flex flex-wrap items-center gap-2">
         {phase === "idle" || phase === "done" ? (
           <button className="btn-primary" onClick={begin}>
-            {phase === "done" ? "ðŸ” Try again" : "â–¶ Start"}
+            {phase === "done" ? "🔁 Try again" : "▶ Start"}
           </button>
         ) : phase === "prep" ? (
           <>
             <span className="rounded-full bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-200 px-3 py-1 font-mono">
-              Prepareâ€¦ {left}s
+              Prepare… {left}s
             </span>
             <button className="btn-ghost" onClick={() => void record()}>
-              Skip â€” start recording
+              Skip — start recording
             </button>
           </>
         ) : phase === "audio" ? (
-          <span className="rounded-full bg-sky-100 text-sky-900 dark:bg-sky-500/20 dark:text-sky-200 px-3 py-1">ðŸ”Š Playing audioâ€¦</span>
+          <span className="rounded-full bg-sky-100 text-sky-900 dark:bg-sky-500/20 dark:text-sky-200 px-3 py-1">🔊 Playing audio…</span>
         ) : (
           <>
-            <span className="rounded-full bg-red-500 text-white px-3 py-1 font-mono animate-pulse">â— Recording {left}s</span>
+            <span className="rounded-full bg-red-500 text-white px-3 py-1 font-mono animate-pulse">● Recording {left}s</span>
             <button className="btn-danger" onClick={() => stopRef.current()}>
-              â–  Finish
+              ■ Finish
             </button>
           </>
         )}
       </div>
-      {phase === "rec" && interim && <p className="text-sm italic opacity-80">â€œ{interim}â€</p>}
+      {phase === "rec" && interim && <p className="text-sm italic opacity-80">“{interim}”</p>}
     </div>
   );
 }
@@ -133,7 +133,7 @@ function ScoreBox({ pct, said, extra }: { pct: number; said: string; extra?: Rea
         <span className={`ml-auto font-bold ${scoreLabel(pct).color}`}>{scoreLabel(pct).text}</span>
       </div>
       {extra}
-      <p className="text-xs opacity-70">You said: â€œ{said || "(nothing heard)"}â€</p>
+      <p className="text-xs opacity-70">You said: “{said || "(nothing heard)"}”</p>
     </div>
   );
 }
@@ -144,13 +144,13 @@ function Pager({ i, n, set }: { i: number; n: number; set: (i: number) => void }
   return (
     <div className="flex items-center gap-2 text-sm">
       <button className="btn-ghost" disabled={i === 0} onClick={() => set(i - 1)}>
-        â†
+        ←
       </button>
       <span>
         Question {i + 1} / {n}
       </span>
       <button className="btn-ghost" disabled={i === n - 1} onClick={() => set(i + 1)}>
-        â†’
+        →
       </button>
     </div>
   );
@@ -223,11 +223,11 @@ export function ReadAloud() {
         <ScoreBox
           pct={res.pct}
           said={res.said}
-          extra={<p className="text-sm">Content: {res.pct}% Â· Speed: {res.wpm} words/min {res.wpm < 90 ? "(try a little faster)" : res.wpm > 170 ? "(slow down a little)" : "(good pace ðŸ‘)"}</p>}
+          extra={<p className="text-sm">Content: {res.pct}% · Speed: {res.wpm} words/min {res.wpm < 90 ? "(try a little faster)" : res.wpm > 170 ? "(slow down a little)" : "(good pace 👍)"}</p>}
         />
       )}
       <button className="btn-ghost self-start" onClick={() => speak(text)}>
-        ðŸ”Š Hear a model answer
+        🔊 Hear a model answer
       </button>
     </div>
   );
@@ -251,7 +251,7 @@ export function RepeatSentence() {
       {res && <ScoreBox pct={res.pct} said={res.said} />}
       {res && (
         <button className="btn-ghost self-start" onClick={() => setReveal(true)}>
-          ðŸ‘€ Show the sentence
+          👀 Show the sentence
         </button>
       )}
       {reveal && <p className="card text-lg">{s}</p>}
@@ -274,9 +274,9 @@ export function DescribeImage() {
       <Pager i={i} n={describeImage.length} set={(n) => { setI(n); setRes(null); }} />
       <div className="max-w-xl">{item.kind === "chart" ? <BarChart chart={item.chart} /> : <Scene scene={item.scene} label={item.title} />}</div>
       <details className="text-sm">
-        <summary className="cursor-pointer opacity-80">ðŸ’¡ Useful template</summary>
+        <summary className="cursor-pointer opacity-80">💡 Useful template</summary>
         <p className="mt-2 opacity-80">
-          â€œThis {item.kind === "chart" ? "bar chart showsâ€¦" : "picture showsâ€¦"} The highest / most important part isâ€¦ The lowest isâ€¦ Overall, it is clear thatâ€¦â€
+          “This {item.kind === "chart" ? "bar chart shows…" : "picture shows…"} The highest / most important part is… The lowest is… Overall, it is clear that…”
         </p>
       </details>
       <TimedSpeak
@@ -296,7 +296,7 @@ export function DescribeImage() {
           said={res.said}
           extra={
             <p className="text-sm">
-              {res.words} words Â· key words used: {res.used.join(", ") || "none"} (try: {item.keywords.filter((k) => !res.used.includes(k)).join(", ")})
+              {res.words} words · key words used: {res.used.join(", ") || "none"} (try: {item.keywords.filter((k) => !res.used.includes(k)).join(", ")})
             </p>
           }
         />
@@ -328,9 +328,9 @@ export function ShortQuestion() {
       />
       {res && (
         <div className={`rounded-2xl p-3 ${res.ok ? "bg-emerald-100 dark:bg-emerald-500/20" : "bg-rose-100 dark:bg-rose-500/20"}`}>
-          <p className="font-bold">{res.ok ? "âœ… Correct!" : `âŒ The answer is: ${item.answers[0]}`}</p>
+          <p className="font-bold">{res.ok ? "✅ Correct!" : `❌ The answer is: ${item.answers[0]}`}</p>
           <p className="text-sm opacity-80">Question: {item.q}</p>
-          <p className="text-xs opacity-70">You said: â€œ{res.said || "(nothing heard)"}â€</p>
+          <p className="text-xs opacity-70">You said: “{res.said || "(nothing heard)"}”</p>
         </div>
       )}
     </div>
@@ -348,21 +348,21 @@ export function WriteDictation() {
       <p className="text-sm opacity-70">Listen to the sentence and type it exactly. In the real test you hear it only once!</p>
       <Pager i={i} n={writeFromDictation.length} set={(n) => { setI(n); setRes(null); setTyped(""); }} />
       <button className="btn-primary self-start" onClick={() => speak(s)}>
-        ðŸ”Š Play
+        🔊 Play
       </button>
       <textarea
         rows={2}
         value={typed}
         onChange={(e) => setTyped(e.target.value)}
         className="rounded-2xl border border-black/10 dark:border-white/15 bg-white dark:bg-white/5 px-3 py-2 outline-none focus:ring-2 focus:ring-sky-400"
-        placeholder="Type the sentenceâ€¦"
+        placeholder="Type the sentence…"
       />
       <button className="btn-ghost self-start" disabled={!typed.trim()} onClick={() => {
           const r = scoreSpeech(s, typed);
           setRes({ pct: r.score, flags: r.flags });
           ctx.onScore?.(r.score);
         }}>
-        âœ” Check
+        ✔ Check
       </button>
       {res && (
         <div className="card">
@@ -374,7 +374,7 @@ export function WriteDictation() {
             ))}
           </p>
           <p className="font-bold mt-1">
-            {res.flags.filter(Boolean).length} / {res.flags.length} words correct Â· {pteScale(res.pct)}/90
+            {res.flags.filter(Boolean).length} / {res.flags.length} words correct · {pteScale(res.pct)}/90
           </p>
         </div>
       )}
@@ -399,7 +399,7 @@ export function HighlightIncorrect() {
       <p className="text-sm opacity-70">Play the audio. Some words in the text are different from what you hear. Click those words.</p>
       <Pager i={i} n={highlightIncorrect.length} set={(n) => { setI(n); setPicked(new Set()); setChecked(false); }} />
       <button className="btn-primary self-start" onClick={() => speak(item.spoken)}>
-        ðŸ”Š Play audio
+        🔊 Play audio
       </button>
       <p className="card text-lg leading-loose">
         {shown.map((w, k) => (
@@ -440,12 +440,12 @@ export function HighlightIncorrect() {
             ctx.onScore?.(Math.round((Math.max(0, right - bad) / Math.max(1, wrong.size)) * 100));
           }}
         >
-          âœ” Check
+          ✔ Check
         </button>
       ) : (
         <p className="font-bold">
-          Found {right} of {wrong.size} Â· Wrong clicks: {bad} Â· Score: {Math.max(0, right - bad)} / {wrong.size}
-          <span className="block text-sm font-normal opacity-70">Green = found Â· Yellow = missed Â· Red = wrong click</span>
+          Found {right} of {wrong.size} · Wrong clicks: {bad} · Score: {Math.max(0, right - bad)} / {wrong.size}
+          <span className="block text-sm font-normal opacity-70">Green = found · Yellow = missed · Red = wrong click</span>
         </p>
       )}
     </div>
@@ -458,10 +458,10 @@ export function PteView() {
   return (
     <div className="flex flex-col gap-5">
       <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-extrabold">ðŸŽ“ PTE Practice</h1>
+        <h1 className="text-3xl font-extrabold">🎓 PTE Practice</h1>
         <p className="opacity-70">
           Practise PTE Academic-style tasks with timers and instant feedback. These are original practice questions. Scores are estimates to help you
-          practise â€” they are not official PTE scores.
+          practise — they are not official PTE scores.
         </p>
       </header>
       <MicWarning />

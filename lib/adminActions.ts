@@ -1,0 +1,169 @@
+"use server";
+
+import { randomBytes } from "crypto";
+import { cookies } from "next/headers";
+import { ADMIN_COOKIE, adminCookieValue, checkPassword, requireAdmin } from "./adminAuth";
+import { dbGet, dbSet, type CustomContent } from "./db";
+import { validUserId } from "./premiumServer";
+import type { Lesson, Song } from "./types";
+
+type Result = { ok: true; message?: string; codes?: string[] } | { ok: false; error: string };
+
+/* ---------------- Login ---------------- */
+
+export async function adminLogin(_: unknown, form: FormData): Promise<Result> {
+  const pw = String(form.get("password") ?? "");
+  if (!checkPassword(pw)) {
+    await new Promise((r) => setTimeout(r, 900)); // slow down guessing
+    return { ok: false, error: "Wrong password." };
+  }
+  (await cookies()).set(ADMIN_COOKIE, adminCookieValue(), {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30,
+  });
+  return { ok: true };
+}
+
+export async function adminLogout() {
+  (await cookies()).delete(ADMIN_COOKIE);
+}
+
+/* ---------------- Users & Premium ---------------- */
+
+export async function grantPremium(userId: string, days: number | null, note: string): Promise<Result> {
+  await requireAdmin();
+  const id = userId.trim();
+  if (!validUserId(id)) return { ok: false, error: "That user ID does not look right. It starts with u_ and is shown on the user's Premium page." };
+  const grants = await dbGet("grants");
+  grants[id] = {
+    until: days ? new Date(Date.now() + days * 86400000).toISOString() : null,
+    note: note.slice(0, 120) || (days ? `${days} days` : "Lifetime"),
+    createdAt: new Date().toISOString(),
+  };
+  await dbSet("grants", grants);
+  return { ok: true, message: `Premium given to ${id}.` };
+}
+
+export async function revokePremium(userId: string): Promise<Result> {
+  await requireAdmin();
+  const grants = await dbGet("grants");
+  delete grants[userId];
+  await dbSet("grants", grants);
+  return { ok: true, message: "Premium removed." };
+}
+
+export async function createCodes(count: number, days: number | null): Promise<Result> {
+  await requireAdmin();
+  const n = Math.max(1, Math.min(100, Math.floor(count)));
+  const codes = await dbGet("codes");
+  const made: string[] = [];
+  for (let i = 0; i < n; i++) {
+    const raw = randomBytes(5).toString("hex").toUpperCase();
+    const code = `${raw.slice(0, 4)}-${raw.slice(4, 8)}`;
+    codes[code] = { createdAt: new Date().toISOString(), days };
+    made.push(code);
+  }
+  await dbSet("codes", codes);
+  return { ok: true, codes: made, message: `${n} gift code(s) created.` };
+}
+
+export async function deleteCode(code: string): Promise<Result> {
+  await requireAdmin();
+  const codes = await dbGet("codes");
+  delete codes[code];
+  await dbSet("codes", codes);
+  return { ok: true };
+}
+
+/* ---------------- Content ---------------- */
+
+async function updateContent(fn: (c: CustomContent) => void) {
+  const c = await dbGet("content");
+  fn(c);
+  await dbSet("content", c);
+}
+
+function slug(s: string) {
+  return (
+    "x-" +
+    s
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 40) +
+    "-" +
+    randomBytes(2).toString("hex")
+  );
+}
+
+export async function saveChapter(lesson: Lesson): Promise<Result> {
+  await requireAdmin();
+  if (!lesson.title?.trim() || !Array.isArray(lesson.lines) || lesson.lines.length < 2) {
+    return { ok: false, error: "A chapter needs a title and at least 2 dialogue lines." };
+  }
+  let msg = "";
+  await updateContent((c) => {
+    const id = lesson.id || slug(lesson.title);
+    const i = c.chapters.findIndex((x) => x.id === id);
+    const chapter = 30 + (i >= 0 ? i + 1 : c.chapters.length + 1);
+    const clean: Lesson = { ...lesson, id, chapter };
+    if (i >= 0) c.chapters[i] = clean;
+    else c.chapters.push(clean);
+    msg = `Chapter ${chapter} “${lesson.title}” saved. It now appears in the app.`;
+  });
+  return { ok: true, message: msg };
+}
+
+export async function deleteChapter(id: string): Promise<Result> {
+  await requireAdmin();
+  await updateContent((c) => {
+    c.chapters = c.chapters.filter((x) => x.id !== id).map((x, i) => ({ ...x, chapter: 31 + i }));
+  });
+  return { ok: true, message: "Chapter deleted." };
+}
+
+export async function saveSong(song: Song): Promise<Result> {
+  await requireAdmin();
+  if (!song.title?.trim() || song.lines.length < 2) return { ok: false, error: "A song needs a title and at least 2 lines." };
+  await updateContent((c) => {
+    const id = song.id || slug(song.title);
+    const i = c.songs.findIndex((x) => x.id === id);
+    const clean = { ...song, id };
+    if (i >= 0) c.songs[i] = clean;
+    else c.songs.push(clean);
+  });
+  return { ok: true, message: `Song “${song.title}” saved.` };
+}
+
+export async function deleteSong(id: string): Promise<Result> {
+  await requireAdmin();
+  await updateContent((c) => {
+    c.songs = c.songs.filter((x) => x.id !== id);
+  });
+  return { ok: true, message: "Song deleted." };
+}
+
+export async function addTwisters(text: string): Promise<Result> {
+  await requireAdmin();
+  const lines = text
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l.length > 3)
+    .slice(0, 200);
+  if (!lines.length) return { ok: false, error: "Type one tongue twister per line." };
+  await updateContent((c) => {
+    for (const l of lines) if (!c.twisters.some((t) => t.text === l)) c.twisters.push({ group: "New", text: l.slice(0, 300) });
+  });
+  return { ok: true, message: `${lines.length} tongue twister(s) added.` };
+}
+
+export async function deleteTwister(text: string): Promise<Result> {
+  await requireAdmin();
+  await updateContent((c) => {
+    c.twisters = c.twisters.filter((t) => t.text !== text);
+  });
+  return { ok: true };
+}
