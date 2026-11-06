@@ -142,6 +142,20 @@ export async function refreshPremium() {
   return state.premium;
 }
 
+/** Price text from the store, e.g. "$4.99/month" (null on the website or if not set up yet). */
+export async function getPremiumPrice(): Promise<string | null> {
+  try {
+    const rc = await revenueCat();
+    if (!rc) return null;
+    const pkg = (await rc.getOfferings()).current?.availablePackages[0];
+    if (!pkg) return null;
+    const period = pkg.packageType === "ANNUAL" ? "/year" : pkg.packageType === "MONTHLY" ? "/month" : pkg.packageType === "WEEKLY" ? "/week" : "";
+    return `${pkg.product.priceString}${period}`;
+  } catch {
+    return null;
+  }
+}
+
 /** Subscribe through Google Play / the App Store. */
 export async function buyPremium(): Promise<{ ok: boolean; message?: string }> {
   const rc = await revenueCat();

@@ -34,14 +34,19 @@ export function Nav() {
   const accentVoices = voices.filter((v) => v.lang.replace("_", "-") === s.accent);
 
   return (
-    <header className="sticky top-0 z-30 backdrop-blur-md bg-[var(--background)]/80 border-b border-black/5 dark:border-white/10">
+    <>
+    <header className="app-top sticky top-0 z-30 backdrop-blur-md bg-[var(--background)]/80 border-b border-black/5 dark:border-white/10">
       <div className="mx-auto max-w-6xl px-4 h-14 flex items-center gap-3">
-        <Link href="/" className="font-black text-lg flex items-center gap-1.5 shrink-0">
+        <Link href="/" className="font-black text-base sm:text-lg flex items-center gap-2 min-w-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" alt="" width={32} height={32} className="rounded-lg" />
-          <span className="hidden sm:inline bg-gradient-to-r from-sky-500 to-fuchsia-500 bg-clip-text text-transparent">SpeakUp English</span>
+          <img src="/logo.svg" alt="" width={34} height={34} className="rounded-xl shadow-md shrink-0" />
+          <span className="truncate bg-gradient-to-r from-sky-500 to-fuchsia-500 bg-clip-text text-transparent">SpeakUp English</span>
         </Link>
-        <nav className="flex gap-1 overflow-x-auto flex-1 no-scrollbar">
+        <span className="flex-1 md:hidden" />
+        <Link href="/premium" className="md:hidden shrink-0 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1.5 shadow">
+          ⭐ Premium
+        </Link>
+        <nav className="hidden md:flex gap-1 overflow-x-auto flex-1 no-scrollbar">
           {LINKS.map((l) => {
             const active = l.href === "/" ? path === "/" || path.startsWith("/chapter") : path.startsWith(l.href);
             return (
@@ -109,5 +114,65 @@ export function Nav() {
         </div>
       )}
     </header>
+    <BottomTabs path={path} />
+    </>
+  );
+}
+
+/* ---------------- Phone-style bottom tab bar ---------------- */
+
+const TABS = [
+  { href: "/", label: "Learn", emoji: "📚", match: (p: string) => p === "/" || p.startsWith("/chapter") },
+  { href: "/daily", label: "Daily", emoji: "☕", match: (p: string) => p.startsWith("/daily") },
+  { href: "/chat", label: "Robot", emoji: "🤖", match: (p: string) => p.startsWith("/chat") },
+  { href: "/videos", label: "Videos", emoji: "🎬", match: (p: string) => p.startsWith("/videos") || p.startsWith("/extra") },
+];
+
+const MORE = LINKS.filter((l) => !TABS.some((t) => t.href === l.href) && l.href !== "/");
+
+function BottomTabs({ path }: { path: string }) {
+  const [more, setMore] = useState(false);
+  const moreActive = MORE.some((l) => path.startsWith(l.href));
+  return (
+    <>
+      {more && (
+        <div className="md:hidden fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" onClick={() => setMore(false)}>
+          <div
+            className="absolute inset-x-0 bottom-0 rounded-t-3xl bg-[var(--background)] p-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] grid grid-cols-3 gap-3 animate-sheet"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="col-span-3 mx-auto h-1.5 w-12 rounded-full bg-black/15 dark:bg-white/20 mb-1" />
+            {MORE.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setMore(false)}
+                className={`card p-3 flex flex-col items-center gap-1 text-center ${path.startsWith(l.href) ? "ring-2 ring-sky-400" : ""}`}
+              >
+                <span className="text-3xl">{l.emoji}</span>
+                <span className="text-xs font-semibold">{l.label}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+      <nav className="app-tabs md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-black/5 dark:border-white/10 bg-[var(--background)]/90 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
+        <div className="grid grid-cols-5 h-16">
+          {TABS.map((t) => {
+            const active = t.match(path);
+            return (
+              <Link key={t.href} href={t.href} onClick={() => setMore(false)} className="flex flex-col items-center justify-center gap-0.5">
+                <span className={`text-2xl transition-transform ${active ? "scale-115 -translate-y-0.5" : "opacity-70"}`}>{t.emoji}</span>
+                <span className={`text-[11px] font-semibold ${active ? "text-sky-500" : "opacity-60"}`}>{t.label}</span>
+              </Link>
+            );
+          })}
+          <button onClick={() => setMore((m) => !m)} className="flex flex-col items-center justify-center gap-0.5">
+            <span className={`text-2xl ${more || moreActive ? "" : "opacity-70"}`}>☰</span>
+            <span className={`text-[11px] font-semibold ${more || moreActive ? "text-sky-500" : "opacity-60"}`}>More</span>
+          </button>
+        </div>
+      </nav>
+    </>
   );
 }

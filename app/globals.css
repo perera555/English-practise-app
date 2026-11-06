@@ -107,6 +107,48 @@ body {
   }
 }
 
+/* ---------- Native app feel ---------- */
+html {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+html,
+body {
+  /* never scroll sideways like a website */
+  overflow-x: clip;
+  max-width: 100%;
+}
+button,
+a {
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+.app-top {
+  padding-top: env(safe-area-inset-top);
+}
+.app-main {
+  animation: page-in 0.28s ease-out;
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes sheet {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+.animate-sheet {
+  animation: sheet 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@media (max-width: 767px) {
+  /* Bigger, thumb-friendly controls on phones */
+  .btn-primary,
+  .btn-danger,
+  .btn-ghost {
+    min-height: 2.75rem;
+  }
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

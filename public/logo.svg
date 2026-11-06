@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="0.5" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#c026d3"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.3" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="0.6" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bubble" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e0e7ff"/>
+    </linearGradient>
+    <linearGradient id="side" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a5b4fc"/>
+      <stop offset="1" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="0.5" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#d946ef"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fef08a"/>
+      <stop offset="0.5" stop-color="#facc15"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="drop" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="28" stdDeviation="26" flood-color="#1e1b4b" flood-opacity="0.45"/>
+    </filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#312e81" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- background tile with glow -->
+  <rect width="1024" height="1024" rx="230" fill="url(#bg)"/>
+  <rect width="1024" height="1024" rx="230" fill="url(#glow)"/>
+  <circle cx="830" cy="180" r="110" fill="#ffffff" opacity="0.10"/>
+  <circle cx="160" cy="890" r="150" fill="#ffffff" opacity="0.07"/>
+
+  <g filter="url(#drop)">
+    <!-- 3D side / thickness of the bubble -->
+    <path transform="translate(0 34)" d="M262 250h500a96 96 0 0 1 96 96v270a96 96 0 0 1-96 96H500l-150 122c-14 11-34 1-34-17V712h-54a96 96 0 0 1-96-96V346a96 96 0 0 1 96-96z" fill="url(#side)"/>
+    <!-- bubble face -->
+    <path d="M262 250h500a96 96 0 0 1 96 96v270a96 96 0 0 1-96 96H500l-150 122c-14 11-34 1-34-17V712h-54a96 96 0 0 1-96-96V346a96 96 0 0 1 96-96z" fill="url(#bubble)"/>
+    <!-- glossy highlight -->
+    <path d="M270 276h480a74 74 0 0 1 74 74v40c-150-40-460-40-628 26v-66a74 74 0 0 1 74-74z" fill="#ffffff" opacity="0.85"/>
+  </g>
+
+  <!-- 3D sound bars -->
+  <g filter="url(#soft)">
+    <g fill="#4338ca" transform="translate(0 14)">
+      <rect x="322" y="430" width="52" height="110" rx="26"/>
+      <rect x="404" y="370" width="52" height="230" rx="26"/>
+      <rect x="486" y="320" width="52" height="330" rx="26"/>
+      <rect x="568" y="385" width="52" height="200" rx="26"/>
+      <rect x="650" y="445" width="52" height="80" rx="26"/>
+    </g>
+    <g fill="url(#bar)">
+      <rect x="322" y="430" width="52" height="110" rx="26"/>
+      <rect x="404" y="370" width="52" height="230" rx="26"/>
+      <rect x="486" y="320" width="52" height="330" rx="26"/>
+      <rect x="568" y="385" width="52" height="200" rx="26"/>
+      <rect x="650" y="445" width="52" height="80" rx="26"/>
+    </g>
+    <g fill="#ffffff" opacity="0.55">
+      <rect x="334" y="444" width="12" height="40" rx="6"/>
+      <rect x="416" y="384" width="12" height="80" rx="6"/>
+      <rect x="498" y="334" width="12" height="110" rx="6"/>
+      <rect x="580" y="399" width="12" height="70" rx="6"/>
+      <rect x="662" y="457" width="12" height="28" rx="6"/>
+    </g>
+  </g>
+
+  <!-- 3D star -->
+  <g filter="url(#soft)">
+    <path transform="translate(0 16)" d="M800 610l28 58 64 9-46 45 11 63-57-30-57 30 11-63-46-45 64-9z" fill="#b45309"/>
+    <path d="M800 610l28 58 64 9-46 45 11 63-57-30-57 30 11-63-46-45 64-9z" fill="url(#gold)" stroke="#ffffff" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M800 640l14 30 30 5-12 4-26-3-6-26z" fill="#ffffff" opacity="0.7"/>
+  </g>
+</svg>

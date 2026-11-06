@@ -1,9 +1,15 @@
 // Renders assets/logo.svg into the PNGs that @capacitor/assets turns into app icons + splash screens.
-// Usage: node scripts/make-icons.mjs && npx @capacitor/assets generate
-import { readFileSync } from "fs";
+// Usage: node scripts/make-icons.mjs && npx @capacitor/assets generate --android --ios
+import { copyFileSync, readFileSync } from "fs";
 import sharp from "sharp";
 
 const logo = readFileSync("assets/logo.svg");
+
+// Website / installable web app icons
+copyFileSync("assets/logo.svg", "public/logo.svg");
+copyFileSync("assets/logo.svg", "app/icon.svg");
+for (const size of [192, 512]) await sharp(logo).resize(size, size).png().toFile(`public/icon-${size}.png`);
+await sharp(logo).resize(180, 180).png().toFile("app/apple-icon.png");
 
 // App icon (full square, stores round the corners themselves)
 const square = Buffer.from(

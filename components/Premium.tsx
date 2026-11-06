@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
-import { buyPremium, getUserId, redeemCode, restorePurchases, usePremium } from "@/lib/premium";
+import { buyPremium, getPremiumPrice, getUserId, redeemCode, restorePurchases, usePremium } from "@/lib/premium";
 import { isNativeApp } from "@/lib/native";
 
 const FEATURES = [
@@ -46,10 +46,12 @@ export function PremiumPage() {
   const [code, setCode] = useState("");
   const [native, setNative] = useState(false);
   const [uid, setUid] = useState("");
+  const [price, setPrice] = useState<string | null>(null);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setNative(isNativeApp());
     setUid(getUserId());
+    void getPremiumPrice().then(setPrice);
   }, []);
   const playUrl = process.env.NEXT_PUBLIC_PLAY_STORE_URL;
   const appleUrl = process.env.NEXT_PUBLIC_APP_STORE_URL;
@@ -95,7 +97,7 @@ export function PremiumPage() {
           {native ? (
             <>
               <button className="btn-primary text-lg py-3" disabled={busy} onClick={() => run(buyPremium, "Welcome to Premium! 🎉")}>
-                {busy ? "Please wait…" : expired ? "🔁 Renew Premium" : "⭐ Subscribe to Premium"}
+                {busy ? "Please wait…" : `${expired ? "🔁 Renew Premium" : "⭐ Subscribe to Premium"}${price ? ` · ${price}` : ""}`}
               </button>
               <p className="text-xs opacity-70 text-center">
                 Payment is handled securely by {/iPhone|iPad/.test(navigator.userAgent) ? "the App Store" : "Google Play"}. The subscription renews automatically
