@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { adminEnabled, isAdmin } from "@/lib/adminAuth";
-import { dbGet, photosAll, storageMode } from "@/lib/db";
+import { customersAll, dbGet, photosAll, seenAll, storageMode } from "@/lib/db";
 import { pexelsEnabled, youtubeEnabled } from "@/lib/mediaServer";
 import { AdminDashboard, AdminLogin } from "@/components/admin/AdminDashboard";
 
@@ -22,7 +22,14 @@ async function AdminInner() {
     );
   }
   if (!(await isAdmin())) return <AdminLogin />;
-  const [grants, codes, content, photos] = await Promise.all([dbGet("grants"), dbGet("codes"), dbGet("content"), photosAll()]);
+  const [grants, codes, content, photos, customers, seen] = await Promise.all([
+    dbGet("grants"),
+    dbGet("codes"),
+    dbGet("content"),
+    photosAll(),
+    customersAll(),
+    seenAll(),
+  ]);
   return (
     <AdminDashboard
       grants={grants}
@@ -32,6 +39,9 @@ async function AdminInner() {
       photos={photos}
       pexels={pexelsEnabled()}
       youtube={youtubeEnabled()}
+      customers={customers}
+      seen={seen}
+      setup={{ ai: !!process.env.ANTHROPIC_API_KEY, payments: !!process.env.REVENUECAT_SECRET_KEY }}
     />
   );
 }

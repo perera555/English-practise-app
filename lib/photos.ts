@@ -3,7 +3,24 @@
 import { useEffect, useSyncExternalStore } from "react";
 import { apiUrl } from "./api";
 
-export type PhotoInfo = { url: string; photographer: string; photographerUrl: string; pageUrl: string; alt: string };
+import { BUNDLED_PHOTOS } from "./bundledPhotos";
+
+export type PhotoInfo = {
+  url: string;
+  photographer: string;
+  photographerUrl: string;
+  pageUrl: string;
+  alt: string;
+  /** Where the photo comes from (for the credit line). */
+  source?: "pexels" | "commons";
+  license?: string;
+};
+
+/** Real photos bundled inside the app (work offline). */
+function bundled(key: string): PhotoInfo | undefined {
+  const b = BUNDLED_PHOTOS[key];
+  return b && { url: b.src, photographer: b.author, photographerUrl: b.sourceUrl, pageUrl: b.sourceUrl, alt: "", source: "commons", license: b.license };
+}
 
 const KEY = "erp-photos";
 let map: Record<string, PhotoInfo> = {};
@@ -77,7 +94,12 @@ export function usePhoto(key?: string) {
     () => EMPTY,
   );
   useEffect(() => {
-    if (key) void fetchOne(key);
+    if (!key) return;
+    // Bundled photo? Only check for an admin replacement (no per-photo search needed).
+    if (BUNDLED_PHOTOS[key]) void fetchAll();
+    else void fetchOne(key);
   }, [key]);
-  return key ? all[key] : undefined;
+  if (!key) return undefined;
+  // Admin-chosen photo first, then the photo bundled in the app.
+  return all[key] ?? bundled(key);
 }

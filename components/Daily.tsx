@@ -10,6 +10,8 @@ import { Scene } from "./Scene";
 import { ChatBox } from "./ChatBox";
 import { MicWarning, RepeatLine } from "./Practice";
 import { LockBadge } from "./Premium";
+import { isHidden, useCustomContent } from "@/lib/customContent";
+import { RemovedNotice } from "./HideIf";
 
 export function DailyHub() {
   const progress = useProgress();
@@ -23,7 +25,8 @@ export function DailyHub() {
     setToday(dailyTalks[day % dailyTalks.length]); // eslint-disable-line react-hooks/set-state-in-effect
   }, []);
 
-  const list = dailyTalks.filter((t) => level === "All" || t.level === level);
+  const custom = useCustomContent();
+  const list = dailyTalks.filter((t) => !isHidden(custom, `daily:${t.id}`) && (level === "All" || t.level === level));
 
   return (
     <div className="flex flex-col gap-6">
@@ -91,6 +94,12 @@ const TABS = [
 ] as const;
 
 export function DailyView({ talk }: { talk: DailyTalk }) {
+  const custom = useCustomContent();
+  if (isHidden(custom, `daily:${talk.id}`)) return <RemovedNotice />;
+  return <DailyViewInner talk={talk} />;
+}
+
+function DailyViewInner({ talk }: { talk: DailyTalk }) {
   const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("listen");
   const [mins, setMins] = useState(0);
   const i = dailyTalks.indexOf(talk);

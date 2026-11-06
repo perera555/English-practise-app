@@ -17,15 +17,24 @@ import {
   deleteTwister,
   deleteVideo,
   grantPremium,
+  hideItem,
+  restoreItem,
   revokePremium,
   saveChapter,
   saveSong,
   saveVideo,
 } from "@/lib/adminActions";
 import { VIDEO_CATEGORIES } from "@/components/Videos";
+import { VideoPlayer } from "@/components/VideoPlayer";
+import { dailyTalks } from "@/lib/daily";
+import { stories } from "@/lib/stories";
+import { speeches } from "@/lib/motivation";
+import { refreshPremium } from "@/lib/premium";
+import { CustomerView } from "./CustomerView";
 import { PicturesTab, YouTubeFinder } from "./MediaTabs";
 import { AdminGuide } from "./AdminGuide";
-import type { PhotoInfo } from "@/lib/db";
+import type { Customer, PhotoInfo } from "@/lib/db";
+import { CustomersTab, ONLINE_MS, Overview } from "./PeopleTabs";
 
 const input = "rounded-xl border border-black/10 dark:border-white/15 bg-white dark:bg-slate-800 px-3 py-2 w-full";
 const area = input + " font-mono text-sm";
@@ -56,12 +65,46 @@ type Props = {
   photos: Record<string, PhotoInfo>;
   pexels: boolean;
   youtube: boolean;
+  customers: Record<string, Customer>;
+  seen: Record<string, number>;
+  setup: { ai: boolean; payments: boolean };
 };
 
-const TABS = ["📖 Admin guide", "👥 Users & Premium", "🎁 Gift codes", "🖼️ Pictures", "🎬 Videos", "📚 Chapters", "🎵 Songs", "👅 Twisters"] as const;
+type TabId = "overview" | "view" | "customers" | "premium" | "codes" | "library" | "pictures" | "videos" | "chapters" | "songs" | "twisters" | "guide";
 
-export function AdminDashboard({ grants, codes, content, storage, photos, pexels, youtube }: Props) {
-  const [tab, setTab] = useState<(typeof TABS)[number]>(TABS[0]);
+const NAV: { group: string; items: { id: TabId; label: string; emoji: string }[] }[] = [
+  {
+    group: "",
+    items: [
+      { id: "overview", label: "Overview", emoji: "🏠" },
+      { id: "view", label: "Customer view", emoji: "📱" },
+    ],
+  },
+  {
+    group: "People",
+    items: [
+      { id: "customers", label: "Customers", emoji: "👥" },
+      { id: "premium", label: "Give Premium", emoji: "⭐" },
+      { id: "codes", label: "Gift codes", emoji: "🎁" },
+    ],
+  },
+  {
+    group: "Content",
+    items: [
+      { id: "library", label: "Library", emoji: "🗂️" },
+      { id: "pictures", label: "Pictures", emoji: "🖼️" },
+      { id: "videos", label: "Videos", emoji: "🎬" },
+      { id: "chapters", label: "Chapters", emoji: "📚" },
+      { id: "songs", label: "Songs", emoji: "🎵" },
+      { id: "twisters", label: "Twisters", emoji: "👅" },
+    ],
+  },
+  { group: "Help", items: [{ id: "guide", label: "Admin guide", emoji: "📖" }] },
+];
+
+export function AdminDashboard({ grants, codes, content, storage, photos, pexels, youtube, customers, seen, setup }: Props) {
+  const [tab, setTab] = useState<TabId>("overview");
+  const [prefill, setPrefill] = useState("");
   const [msg, setMsg] = useState("");
   const [pending, start] = useTransition();
   const router = useRouter();
@@ -75,41 +118,112 @@ export function AdminDashboard({ grants, codes, content, storage, photos, pexels
     });
   }
 
-  return (
-    <div className="flex flex-col gap-5">
-      <header className="flex flex-wrap items-center gap-3">
-        <h1 className="text-3xl font-extrabold mr-auto">🛠️ Admin dashboard</h1>
-        <span className="text-xs rounded-full bg-black/5 dark:bg-white/10 px-3 py-1">Storage: {storage}</span>
-        <span className="text-xs rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-200 px-3 py-1">
-          ⭐ Admins get Premium free
-        </span>
-        <button className="btn-ghost" onClick={() => start(async () => { await adminLogout(); router.refresh(); })}>
-          Log out
-        </button>
-      </header>
-      {storage === "local-file" && (
-        <p className="rounded-xl bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-200 px-3 py-2 text-sm">
-          You are using local test storage. Online (Vercel), connect an Upstash Redis database so your changes are saved. See STORE-GUIDE.md.
-        </p>
-      )}
-      <nav className="flex gap-2 overflow-x-auto no-scrollbar">
-        {TABS.map((t) => (
-          <button key={t} className={`shrink-0 ${tab === t ? "btn-primary" : "btn-ghost"}`} onClick={() => { setTab(t); setMsg(""); }}>
-            {t}
-          </button>
-        ))}
-      </nav>
-      {msg && <p className="font-semibold">{msg}</p>}
-      {pending && <p className="text-sm opacity-60">Saving…</p>}
+  function go(t: TabId) {
+    setTab(t);
+    setMsg("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
-      {tab === "📖 Admin guide" && <AdminGuide pexels={pexels} youtube={youtube} storage={storage} />}
-      {tab === "👥 Users & Premium" && <UsersTab grants={grants} run={run} />}
-      {tab === "🎁 Gift codes" && <CodesTab codes={codes} run={run} />}
-      {tab === "🖼️ Pictures" && <PicturesTab photos={photos} pexels={pexels} run={run} />}
-      {tab === "🎬 Videos" && <VideosTab content={content} run={run} youtube={youtube} />}
-      {tab === "📚 Chapters" && <ChaptersTab content={content} run={run} />}
-      {tab === "🎵 Songs" && <SongsTab content={content} run={run} />}
-      {tab === "👅 Twisters" && <TwistersTab content={content} run={run} />}
+  // Logged-in admins get everything unlocked straight away (no subscription needed).
+  useEffect(() => {
+    void refreshPremium();
+  }, []);
+
+  const onlineCount = Object.values(seen).filter((t) => Date.now() - t < ONLINE_MS).length;
+  const current = NAV.flatMap((g) => g.items).find((i) => i.id === tab)!;
+
+  return (
+    <div className="grid md:grid-cols-[15rem_1fr] gap-5 items-start">
+      {/* Sidebar */}
+      <aside className="md:sticky md:top-20 rounded-3xl bg-gradient-to-b from-slate-900 to-indigo-950 text-white p-3 shadow-xl flex md:flex-col gap-1 overflow-x-auto no-scrollbar">
+        <div className="hidden md:flex items-center gap-2 px-2 py-2 mb-1">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.svg" alt="" width={36} height={36} className="rounded-xl" />
+          <div>
+            <div className="font-black leading-tight">SpeakUp</div>
+            <div className="text-[11px] opacity-60">Admin panel</div>
+          </div>
+        </div>
+        {NAV.map((g) => (
+          <div key={g.group || "top"} className="contents md:block">
+            {g.group && <p className="hidden md:block px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest opacity-50">{g.group}</p>}
+            {g.items.map((i) => (
+              <button
+                key={i.id}
+                onClick={() => go(i.id)}
+                className={`shrink-0 md:w-full flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition ${
+                  tab === i.id ? "bg-white text-indigo-900 shadow-[0_3px_0_rgba(0,0,0,0.3)]" : "hover:bg-white/10"
+                }`}
+              >
+                <span>{i.emoji}</span>
+                {i.label}
+                {i.id === "customers" && onlineCount > 0 && (
+                  <span className="ml-auto rounded-full bg-emerald-500 text-white text-[10px] px-1.5">{onlineCount}</span>
+                )}
+              </button>
+            ))}
+          </div>
+        ))}
+        <a
+          href="/"
+          target="_blank"
+          rel="noreferrer"
+          className="shrink-0 md:mt-4 md:w-full flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold hover:bg-white/10"
+        >
+          👁️ View app (as admin: everything unlocked)
+        </a>
+        <button
+          className="shrink-0 md:w-full flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold hover:bg-white/10 opacity-80"
+          onClick={() => start(async () => { await adminLogout(); router.refresh(); })}
+        >
+          🚪 Log out
+        </button>
+      </aside>
+
+      {/* Main */}
+      <div className="flex flex-col gap-4 min-w-0">
+        <header className="flex flex-wrap items-center gap-2">
+          <h1 className="text-2xl sm:text-3xl font-extrabold mr-auto">
+            {current.emoji} {current.label}
+          </h1>
+          <span className="text-xs rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-200 px-3 py-1">
+            ⭐ Admins get Premium free
+          </span>
+        </header>
+        {storage === "local-file" && (
+          <p className="rounded-xl bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-200 px-3 py-2 text-sm">
+            Local test storage. When the site is online (Vercel), connect Upstash Redis so changes are saved. See the Admin guide.
+          </p>
+        )}
+        {msg && <p className="rounded-xl bg-sky-100 text-sky-900 dark:bg-sky-500/20 dark:text-sky-100 px-3 py-2 font-semibold">{msg}</p>}
+        {pending && <p className="text-sm opacity-60">Saving…</p>}
+
+        {tab === "overview" && (
+          <Overview customers={customers} seen={seen} grants={grants} codes={codes} content={content} photos={photos} storage={storage} pexels={pexels} youtube={youtube} setup={setup} go={go} />
+        )}
+        {tab === "customers" && (
+          <CustomersTab
+            customers={customers}
+            seen={seen}
+            grants={grants}
+            onPremium={(id) => {
+              setPrefill(id);
+              go("premium");
+            }}
+            run={(fn, after) => run(fn, after ? () => after() : undefined)}
+          />
+        )}
+        {tab === "premium" && <UsersTab key={prefill} initialId={prefill} grants={grants} run={run} />}
+        {tab === "view" && <CustomerView />}
+        {tab === "codes" && <CodesTab codes={codes} run={run} />}
+        {tab === "library" && <LibraryTab content={content} run={run} />}
+        {tab === "pictures" && <PicturesTab photos={photos} pexels={pexels} run={run} />}
+        {tab === "videos" && <VideosTab content={content} run={run} youtube={youtube} />}
+        {tab === "chapters" && <ChaptersTab content={content} run={run} />}
+        {tab === "songs" && <SongsTab content={content} run={run} />}
+        {tab === "twisters" && <TwistersTab content={content} run={run} />}
+        {tab === "guide" && <AdminGuide pexels={pexels} youtube={youtube} storage={storage} />}
+      </div>
     </div>
   );
 }
@@ -118,8 +232,8 @@ type Run = (fn: () => Promise<{ ok: boolean; message?: string; error?: string; c
 
 /* ---------------- Users ---------------- */
 
-function UsersTab({ grants, run }: { grants: Record<string, Grant>; run: Run }) {
-  const [userId, setUserId] = useState("");
+function UsersTab({ grants, run, initialId = "" }: { grants: Record<string, Grant>; run: Run; initialId?: string }) {
+  const [userId, setUserId] = useState(initialId);
   const [days, setDays] = useState("30");
   const [note, setNote] = useState("");
   const list = Object.entries(grants).sort((a, b) => b[1].createdAt.localeCompare(a[1].createdAt));
@@ -367,20 +481,161 @@ function ChaptersTab({ content, run }: { content: CustomContent; run: Run }) {
         </div>
       </div>
       <div className="card flex flex-col gap-2">
-        <h2 className="font-bold text-lg">New chapters ({content.chapters.length})</h2>
-        <p className="text-xs opacity-60">Built-in chapters 1-30 are in the code. New chapters are numbered 31 and up and are Premium.</p>
-        {content.chapters.map((c) => (
-          <div key={c.id} className="flex items-center gap-2 rounded-xl bg-black/5 dark:bg-white/10 px-3 py-2 text-sm">
-            <span>{c.emoji}</span>
-            <span className="flex-1">
-              <b>Ch {c.chapter}</b> {c.title}
-            </span>
-            <button className="text-xs text-sky-600" onClick={() => edit(c)}>
-              Edit
-            </button>
-            <button className="text-xs text-rose-500" onClick={() => confirm(`Delete “${c.title}”?`) && run(() => deleteChapter(c.id))}>
-              Delete
-            </button>
+        <h2 className="font-bold text-lg">All chapters ({chapters.length + content.chapters.length})</h2>
+        <p className="text-xs opacity-60">
+          👁️ View opens it like a customer sees it · ✏️ Edit changes it for everyone · 🗑️ Remove hides it (built-in chapters can be restored).
+        </p>
+        <div className="flex flex-col gap-1 max-h-[38rem] overflow-y-auto pr-1">
+          {[...chapters, ...content.chapters].map((base) => {
+            const builtIn = chapters.includes(base);
+            const c = (builtIn && content.overrides?.[base.id]) || base;
+            const hidden = (content.hidden ?? []).includes(`ch:${base.id}`);
+            const edited = builtIn && !!content.overrides?.[base.id];
+            return (
+              <div
+                key={base.id}
+                className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm ${hidden ? "bg-rose-500/10 opacity-70" : "bg-black/5 dark:bg-white/10"}`}
+              >
+                <span>{c.emoji}</span>
+                <span className="flex-1 min-w-0 truncate">
+                  <b>Ch {c.chapter}</b> {c.title}
+                  {edited && <span className="ml-1 text-[10px] rounded bg-sky-500 text-white px-1">edited</span>}
+                  {hidden && <span className="ml-1 text-[10px] rounded bg-rose-500 text-white px-1">removed</span>}
+                </span>
+                <a className="text-xs" href={builtIn ? `/chapter/${base.id}` : `/extra?chapter=${base.id}`} target="_blank" rel="noreferrer" title="View">
+                  👁️
+                </a>
+                <button className="text-xs text-sky-600" onClick={() => edit(c)} title="Edit">
+                  ✏️
+                </button>
+                {hidden || edited ? (
+                  <button className="text-xs text-emerald-600" onClick={() => run(() => restoreItem(`ch:${base.id}`))} title="Restore original">
+                    ↩️
+                  </button>
+                ) : null}
+                {!hidden && (
+                  <button
+                    className="text-xs text-rose-500"
+                    onClick={() => confirm(`Remove “${c.title}” from the app?`) && run(() => deleteChapter(base.id))}
+                    title="Remove"
+                  >
+                    🗑️
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Library: view / remove / restore built-in items ---------------- */
+
+function LibraryTab({ content, run }: { content: CustomContent; run: Run }) {
+  const ch = (unit: string) =>
+    chapters
+      .filter((c) => c.unit === unit)
+      .map((base) => {
+        const c = content.overrides?.[base.id] ?? base;
+        return { key: `ch:${c.id}`, label: `Ch ${c.chapter}. ${c.emoji} ${c.title}`, href: `/chapter/${c.id}` };
+      });
+  const sessions = (kind: string, n: number, emoji: string) =>
+    Array.from({ length: n }, (_, i) => ({ key: "", label: `${emoji} Session ${i + 1}`, href: `/${kind}/session/${i + 1}` }));
+  const videos = content.videos ?? [];
+  const vids = (cat: string) => videos.filter((v) => v.category === cat).map((v) => ({ key: "", label: `🎬 ${v.title}`, href: `/extra?video=${v.id}` }));
+
+  const groups: { title: string; page?: string; items: { key: string; label: string; href: string }[] }[] = [
+    { title: "✈️ Travel: Airport & flying", page: "/travel", items: ch("airport") },
+    { title: "🏨 Travel: Hotel", page: "/travel", items: ch("hotel") },
+    { title: "🏙️ Travel: Around the city", page: "/travel", items: [...ch("city"), ...vids("travel")] },
+    { title: "🏏 Sports commentary", page: "/", items: [...ch("sports"), ...vids("sports")] },
+    {
+      title: "✨ New chapters (added by admin)",
+      items: content.chapters.map((c) => ({ key: "", label: `Ch ${c.chapter}. ${c.emoji} ${c.title}`, href: `/extra?chapter=${c.id}` })),
+    },
+    {
+      title: "☕ Daily conversations",
+      page: "/daily",
+      items: [...dailyTalks.map((d) => ({ key: `daily:${d.id}`, label: `${d.n}. ${d.emoji} ${d.title}`, href: `/daily/${d.id}` })), ...vids("daily")],
+    },
+    { title: "📖 Stories", page: "/stories", items: stories.map((s) => ({ key: `story:${s.id}`, label: `${s.n}. ${s.emoji} ${s.title}`, href: `/stories/${s.id}` })) },
+    {
+      title: "💪 Motivation",
+      page: "/motivation",
+      items: [...speeches.map((s) => ({ key: `speech:${s.id}`, label: `${s.n}. ${s.emoji} ${s.title}`, href: `/motivation/${s.id}` })), ...vids("motivation")],
+    },
+    {
+      title: "🎵 Music",
+      page: "/music",
+      items: [
+        ...builtInSongs.map((s) => ({ key: `song:${s.id}`, label: `${s.emoji} ${s.title}`, href: `/music/${s.id}` })),
+        ...content.songs.map((s) => ({ key: "", label: `✨ ${s.emoji} ${s.title}`, href: `/extra?song=${s.id}` })),
+        ...vids("music"),
+      ],
+    },
+    { title: "🎬 Other videos", page: "/videos", items: [...vids("pte"), ...vids("general")] },
+    { title: "🎧 Listening sessions", page: "/listening", items: sessions("listening", 10, "🎧") },
+    { title: "🎤 Speaking sessions", page: "/speaking", items: sessions("speaking", 10, "🎤") },
+    { title: "👅 Tongue twister sessions", page: "/twisters", items: sessions("twisters", 12, "👅") },
+    { title: "🎓 PTE sessions", page: "/pte", items: sessions("pte", 6, "🎓") },
+    {
+      title: "📄 Other pages",
+      items: [
+        { key: "", label: "🤖 Robot chat", href: "/chat" },
+        { key: "", label: "⭐ Premium page", href: "/premium" },
+        { key: "", label: "👤 Profile / login", href: "/login" },
+        { key: "", label: "❓ User guide", href: "/help" },
+        { key: "", label: "🔒 Privacy policy", href: "/privacy" },
+      ],
+    },
+  ].filter((g) => g.items.length);
+  const hidden = new Set(content.hidden ?? []);
+  return (
+    <div className="flex flex-col gap-4">
+      <p className="text-sm opacity-70">
+        Everything customers can see. 👁️ opens it as a customer sees it (everything is unlocked for admins). 🗑️ removes it from the app; ↩️ brings it back. To
+        change a chapter&apos;s words, use 📚 Chapters; for videos, use 🎬 Videos.
+      </p>
+      <div className="grid lg:grid-cols-2 gap-4">
+        {groups.map((g) => (
+          <div key={g.title} className="card flex flex-col gap-1">
+            <h2 className="font-bold text-lg mb-1 flex items-center gap-2">
+              <span className="flex-1">
+                {g.title} <span className="text-sm font-normal opacity-60">({g.items.length - g.items.filter((i) => hidden.has(i.key)).length}/{g.items.length})</span>
+              </span>
+              {g.page && (
+                <a className="text-xs font-semibold text-sky-600" href={g.page} target="_blank" rel="noreferrer">
+                  Open section ↗
+                </a>
+              )}
+            </h2>
+            <div className="flex flex-col gap-1 max-h-96 overflow-y-auto pr-1">
+              {g.items.map((i) => {
+                const off = hidden.has(i.key);
+                return (
+                  <div key={i.href} className={`flex items-center gap-2 rounded-xl px-3 py-1.5 text-sm ${off ? "bg-rose-500/10 opacity-70" : "bg-black/5 dark:bg-white/10"}`}>
+                    <span className="flex-1 truncate">
+                      {i.label}
+                      {off && <span className="ml-1 text-[10px] rounded bg-rose-500 text-white px-1">removed</span>}
+                    </span>
+                    <a href={i.href} target="_blank" rel="noreferrer" title="View">
+                      👁️
+                    </a>
+                    {!i.key ? null : off ? (
+                      <button className="text-emerald-600" title="Restore" onClick={() => run(() => restoreItem(i.key))}>
+                        ↩️
+                      </button>
+                    ) : (
+                      <button className="text-rose-500" title="Remove" onClick={() => confirm(`Remove “${i.label}”?`) && run(() => hideItem(i.key))}>
+                        🗑️
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         ))}
       </div>
@@ -418,6 +673,7 @@ function VideosTab({ content, run, youtube }: { content: CustomContent; run: Run
   const allChapters = [...chapters, ...content.chapters];
   const parsed = parseSubs(f.subs);
   const videos = content.videos ?? [];
+  const [preview, setPreview] = useState<(typeof videos)[number] | null>(null);
 
   return (
     <div className="flex flex-col gap-4">
@@ -479,11 +735,27 @@ function VideosTab({ content, run, youtube }: { content: CustomContent; run: Run
         </div>
       </div>
       <div className="card flex flex-col gap-2">
-        <h2 className="font-bold text-lg">Videos ({videos.length})</h2>
+        <h2 className="font-bold text-lg">Videos customers see ({videos.length})</h2>
+        {preview && (
+          <div className="flex flex-col gap-2">
+            <VideoPlayer key={preview.id} video={preview} compact />
+            <button className="btn-ghost self-start" onClick={() => setPreview(null)}>
+              ✕ Close preview
+            </button>
+          </div>
+        )}
         {videos.map((v) => (
           <div key={v.id} className="flex items-center gap-2 rounded-xl bg-black/5 dark:bg-white/10 px-3 py-2 text-sm">
-            <span>🎬</span>
-            <span className="flex-1 truncate">{v.title}</span>
+            <button title="Watch" onClick={() => setPreview(v)}>
+              ▶️
+            </button>
+            <span className="flex-1 truncate">
+              {v.title}
+              <span className="ml-1 text-[10px] opacity-60">{VIDEO_CATEGORIES.find((c) => c.id === v.category)?.label}</span>
+            </span>
+            <a className="text-xs" href={`/extra?video=${v.id}`} target="_blank" rel="noreferrer" title="View as customer">
+              👁️
+            </a>
             <button
               className="text-xs text-sky-600"
               onClick={() =>

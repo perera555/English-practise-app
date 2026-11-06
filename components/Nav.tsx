@@ -5,11 +5,16 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { speak, useVoices } from "@/lib/speech";
 import { updateSettings, useSettings } from "@/lib/settings";
+import { useProfile } from "@/lib/profile";
+import { Avatar } from "./Avatar";
 
 const LINKS = [
   { href: "/", label: "Chapters", emoji: "📚" },
+  { href: "/travel", label: "Travel", emoji: "✈️" },
   { href: "/daily", label: "Daily Talk", emoji: "☕" },
   { href: "/videos", label: "Videos", emoji: "🎬" },
+  { href: "/stories", label: "Stories", emoji: "📖" },
+  { href: "/motivation", label: "Motivation", emoji: "💪" },
   { href: "/listening", label: "Listening", emoji: "🎧" },
   { href: "/speaking", label: "Speaking", emoji: "🎤" },
   { href: "/chat", label: "Robot Chat", emoji: "🤖" },
@@ -17,7 +22,7 @@ const LINKS = [
   { href: "/music", label: "Music", emoji: "🎵" },
   { href: "/pte", label: "PTE", emoji: "🎓" },
   { href: "/premium", label: "Premium", emoji: "⭐" },
-  { href: "/help", label: "Guide", emoji: "📖" },
+  { href: "/help", label: "Guide", emoji: "❓" },
 ];
 
 const ACCENTS = [
@@ -63,6 +68,7 @@ export function Nav() {
             );
           })}
         </nav>
+        <ProfileButton />
         <button className="rounded-full h-9 w-9 grid place-items-center hover:bg-black/5 dark:hover:bg-white/10 shrink-0" onClick={() => setOpen((o) => !o)} aria-label="Settings">
           ⚙️
         </button>
@@ -117,6 +123,24 @@ export function Nav() {
     </header>
     <BottomTabs path={path} />
     </>
+  );
+}
+
+/* ---------------- Profile picture with online / offline dot ---------------- */
+
+function ProfileButton() {
+  const { profile, online } = useProfile();
+  if (!profile) {
+    return (
+      <Link href="/login" className="shrink-0 rounded-full bg-sky-500 text-white text-xs font-bold px-3 py-1.5 shadow">
+        👤 Log in
+      </Link>
+    );
+  }
+  return (
+    <Link href="/login" className="shrink-0" title={`${profile.name} · ${online ? "Online" : "Offline"}`}>
+      <Avatar name={profile.name} photo={profile.photo} online={online} size={34} />
+    </Link>
   );
 }
 

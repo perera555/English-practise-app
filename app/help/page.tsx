@@ -61,6 +61,10 @@ export default function HelpPage() {
       </nav>
 
       <Topic id="start" emoji="🚀" title="Getting started">
+        <Step n={0} title="Create your profile">
+          Tap <b>👤 Log in</b> (top right). Type your name, then take a selfie 🤳 or choose a picture 🖼️. Your picture shows a <b>green dot</b> when you are online
+          and a grey dot when you are offline.
+        </Step>
         <Step n={1} title="Choose your level">
           Tap ⚙️ (top right) → <b>My level</b> → Beginner 🌱 or Intermediate 🌳. The robot talks more simply for beginners.
         </Step>
@@ -71,7 +75,11 @@ export default function HelpPage() {
           The first time you press 🎤, your phone asks for permission. Tap <b>Allow</b>.
         </Step>
         <Step n={4} title="Start Chapter 1">
-          On <b>📚 Learn</b>, press <b>▶ Start: Chapter 1</b>. Your progress, streak 🔥 and minutes are saved automatically.
+          On <b>📚 Learn</b>, press <b>▶ Start: Chapter 1</b>. Your progress, streak 🔥 and minutes are saved automatically. Going on a trip? Open{" "}
+          <Link className="underline" href="/travel">
+            ✈️ Travel
+          </Link>{" "}
+          to practise every step from the airport to the hotel.
         </Step>
       </Topic>
 

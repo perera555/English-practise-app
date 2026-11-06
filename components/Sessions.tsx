@@ -171,7 +171,7 @@ export function ListeningSession({ n }: { n: number }) {
     render: (report) => (
       <div className="grid lg:grid-cols-2 gap-4">
         <div className="flex flex-col gap-3">
-          {ch.sport ? null : <Scene scene={ch.scene} label={ch.title} photoKey={`ch:${ch.id}`} />}
+          <Scene scene={ch.scene} label={ch.title} photoKey={`ch:${ch.id}`} />
           <Karaoke lines={ch.lines} hideSubtitles allowRolePlay={false} />
         </div>
         <Quiz questions={ch.quiz} onDone={(correct) => report(Math.round((correct / ch.quiz.length) * 100))} />

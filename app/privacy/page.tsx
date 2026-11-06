@@ -22,6 +22,13 @@ export default function PrivacyPage() {
         </li>
       </ul>
 
+      <h2 className="text-xl font-bold mt-2">Your profile</h2>
+      <p>
+        If you create a profile, we store your <b>name</b>, your <b>email</b> (optional), your <b>profile picture</b> (a small photo you choose) and the last time
+        the app was open (to show “online” to our support team). You can change or delete your profile at any time on the profile page (Log out deletes it from
+        our server).
+      </p>
+
       <h2 className="text-xl font-bold mt-2">Microphone</h2>
       <p>
         The app uses your microphone only while you press a speaking button. Your voice is turned into text by your device&apos;s speech service (Google on

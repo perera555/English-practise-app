@@ -5,10 +5,22 @@ import { apiUrl } from "./api";
 import type { Lesson, Song, Video } from "./types";
 
 /** Content the admin adds online. Downloaded when online and saved on the device for offline use. */
-export type Custom = { chapters: Lesson[]; songs: Song[]; twisters: { group: string; text: string }[]; videos: Video[] };
+export type Custom = {
+  chapters: Lesson[];
+  songs: Song[];
+  twisters: { group: string; text: string }[];
+  videos: Video[];
+  overrides: Record<string, Lesson>;
+  hidden: string[];
+};
 
 const KEY = "erp-custom-content";
-const EMPTY: Custom = { chapters: [], songs: [], twisters: [], videos: [] };
+const EMPTY: Custom = { chapters: [], songs: [], twisters: [], videos: [], overrides: {}, hidden: [] };
+
+/** True when the admin removed this built-in item (e.g. "ch:cafe"). */
+export function isHidden(c: Custom, key: string) {
+  return (c.hidden ?? []).includes(key);
+}
 let data: Custom = EMPTY;
 let loaded = false;
 const listeners = new Set<() => void>();

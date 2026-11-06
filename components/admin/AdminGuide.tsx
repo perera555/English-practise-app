@@ -172,6 +172,33 @@ export function AdminGuide({ pexels, youtube, storage }: { pexels: boolean; yout
         </ul>
       </Section>
 
+      <Section emoji="🧭" title="Using this admin panel">
+        <ul>
+          <li>
+            <b>🏠 Overview</b>: customers, who is online now, Premium users, gift codes, pictures and videos at a glance, plus a setup checklist.
+          </li>
+          <li>
+            <b>📱 Customer view</b>: the real app inside the admin panel (phone or computer size). As an admin, everything is unlocked, so you can see every
+            picture, video and lesson.
+          </li>
+          <li>
+            <b>👥 Customers</b>: everyone who created a profile on the website or in the phone apps, with their picture and a <b>🟢 Online now</b> or last-seen
+            time. 👁️ View / ✏️ Edit changes their name or email or removes an unsuitable picture. 🗑️ Delete removes the profile.
+          </li>
+          <li>
+            <b>🗂️ Library</b>: every section (Travel, Sports, Daily, Stories, Motivation, Music, Videos, all sessions). 👁️ opens an item, 🗑️ removes it from the
+            app, and ↩️ restores it.
+          </li>
+          <li>
+            <b>📚 Chapters</b>: ✏️ edit any chapter, including built-in chapters 1–30. ↩️ undoes your edits. ➕ adds new chapters.
+          </li>
+          <li>
+            <b>Admins never need a subscription.</b> On the website, logging in to Admin unlocks everything. On your own phone, use ⭐ Give Premium → “Use this
+            device’s ID” → Lifetime.
+          </li>
+        </ul>
+      </Section>
+
       <Section emoji="👥" title="Users, Premium and gift codes">
         <ul>
           <li>

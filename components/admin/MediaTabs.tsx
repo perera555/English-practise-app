@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { PHOTO_QUERIES } from "@/lib/photoQueries";
+import { BUNDLED_PHOTOS } from "@/lib/bundledPhotos";
 import { chapters, songs } from "@/lib/content";
 import { dailyTalks } from "@/lib/daily";
 import type { PhotoInfo } from "@/lib/db";
@@ -26,7 +27,17 @@ function labelFor(key: string) {
     const s = songs.find((x) => x.id === id);
     return s ? `🎵 ${s.title}` : key;
   }
+  if (kind === "story") return `📖 Story: ${id.replace(/-/g, " ")}`;
+  if (kind === "speech") return `💪 Speech: ${id.replace(/-/g, " ")}`;
+  if (kind === "home") return `🏠 Front page: ${id}`;
   return `🎓 PTE image ${id}`;
+}
+
+/** Admin-chosen photo, or the real photo bundled in the app. */
+function currentPhoto(photos: Record<string, PhotoInfo>, k: string): (PhotoInfo & { bundled?: boolean }) | undefined {
+  if (photos[k]) return photos[k];
+  const b = BUNDLED_PHOTOS[k];
+  return b && { url: b.src, photographer: b.author, photographerUrl: b.sourceUrl, pageUrl: b.sourceUrl, alt: "", bundled: true };
 }
 
 /* ---------------- Pictures ---------------- */
@@ -38,7 +49,7 @@ export function PicturesTab({ photos, pexels, run }: { photos: Record<string, Ph
   const [results, setResults] = useState<PhotoInfo[]>([]);
   const [err, setErr] = useState("");
   const [pending, start] = useTransition();
-  const filled = keys.filter((k) => photos[k]).length;
+  const filled = keys.filter((k) => currentPhoto(photos, k)).length;
 
   function search(query: string) {
     setErr("");
@@ -55,7 +66,8 @@ export function PicturesTab({ photos, pexels, run }: { photos: Record<string, Ph
         <div className="flex-1 min-w-60">
           <h2 className="font-bold text-lg">🖼️ Real pictures</h2>
           <p className="text-sm opacity-70">
-            {filled} of {keys.length} pictures are real photos. Photos come from Pexels: free to use in paid apps. Offline, the app shows the drawn picture.
+            {filled} of {keys.length} pictures are real photos. Built-in photos come from Wikimedia Commons and work offline. With a Pexels key you can swap any of them for a
+            different photo.
           </p>
           {!pexels && <p className="text-sm text-amber-600 mt-1">⚠️ Add PEXELS_API_KEY to turn this on (Admin guide → Real pictures).</p>}
         </div>
@@ -65,7 +77,7 @@ export function PicturesTab({ photos, pexels, run }: { photos: Record<string, Ph
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {keys.map((k) => {
-          const p = photos[k];
+          const p = currentPhoto(photos, k);
           return (
             <div key={k} className="card p-2 flex flex-col gap-2">
               <div className="aspect-video rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-800 grid place-items-center">
@@ -90,11 +102,12 @@ export function PicturesTab({ photos, pexels, run }: { photos: Record<string, Ph
                 >
                   🔎 Change
                 </button>
-                {p && (
+                {p && !p.bundled && (
                   <button className="text-xs text-rose-500" onClick={() => run(() => adminSetPhoto(k, null))}>
-                    Remove
+                    Reset
                   </button>
                 )}
+                {p?.bundled && <span className="text-[11px] opacity-50 self-center">built-in photo</span>}
               </div>
             </div>
           );

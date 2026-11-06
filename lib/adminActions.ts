@@ -3,9 +3,10 @@
 import { randomBytes } from "crypto";
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE, adminCookieValue, checkPassword, requireAdmin } from "./adminAuth";
-import { dbGet, dbSet, photosAll, photoSet, type CustomContent, type PhotoInfo } from "./db";
+import { customerGet, customerSet, dbGet, dbSet, photosAll, photoSet, seenDelete, type CustomContent, type PhotoInfo } from "./db";
 import { pexelsEnabled, searchPhotos, searchYouTube, youtubeEnabled, type YouTubeResult } from "./mediaServer";
 import { PHOTO_QUERIES } from "./photoQueries";
+import { BUNDLED_PHOTOS } from "./bundledPhotos";
 import { chapters as builtInChapters } from "./content";
 import { validUserId } from "./premiumServer";
 import type { Lesson, Song, Video } from "./types";
@@ -48,6 +49,29 @@ export async function grantPremium(userId: string, days: number | null, note: st
   };
   await dbSet("grants", grants);
   return { ok: true, message: `Premium given to ${id}.` };
+}
+
+export async function adminUpdateCustomer(id: string, patch: { name: string; email: string; removePhoto: boolean }): Promise<Result> {
+  await requireAdmin();
+  const c = await customerGet(id);
+  if (!c) return { ok: false, error: "Customer not found." };
+  const name = patch.name.trim().slice(0, 40);
+  if (!name) return { ok: false, error: "Name can't be empty." };
+  await customerSet(id, { ...c, name, email: patch.email.trim().slice(0, 80), photo: patch.removePhoto ? "" : c.photo, updatedAt: new Date().toISOString() });
+  return { ok: true, message: "Customer updated." };
+}
+
+/** Deletes the customer's profile, online status and any admin-given Premium. (Store subscriptions are cancelled by the customer in their store.) */
+export async function adminDeleteCustomer(id: string): Promise<Result> {
+  await requireAdmin();
+  await customerSet(id, null);
+  await seenDelete(id);
+  const grants = await dbGet("grants");
+  if (grants[id]) {
+    delete grants[id];
+    await dbSet("grants", grants);
+  }
+  return { ok: true, message: "Customer deleted." };
 }
 
 export async function revokePremium(userId: string): Promise<Result> {
@@ -107,6 +131,15 @@ export async function saveChapter(lesson: Lesson): Promise<Result> {
   if (!lesson.title?.trim() || !Array.isArray(lesson.lines) || lesson.lines.length < 2) {
     return { ok: false, error: "A chapter needs a title and at least 2 dialogue lines." };
   }
+  // Editing a built-in chapter (1-30): save it as an override, keeping its number and sport animation.
+  const builtIn = builtInChapters.find((b) => b.id === lesson.id);
+  if (builtIn) {
+    await updateContent((c) => {
+      c.overrides ??= {};
+      c.overrides[builtIn.id] = { ...lesson, id: builtIn.id, chapter: builtIn.chapter, sport: builtIn.sport, unit: builtIn.unit };
+    });
+    return { ok: true, message: `Chapter ${builtIn.chapter} “${lesson.title}” updated. Phones get it the next time they are online.` };
+  }
   let msg = "";
   await updateContent((c) => {
     const id = lesson.id || slug(lesson.title);
@@ -120,8 +153,29 @@ export async function saveChapter(lesson: Lesson): Promise<Result> {
   return { ok: true, message: msg };
 }
 
+/** Hide (remove) any built-in item: "ch:id", "daily:id", "story:id", "song:id", "speech:id". */
+export async function hideItem(key: string): Promise<Result> {
+  await requireAdmin();
+  if (!/^(ch|daily|story|song|speech):[\w-]+$/.test(key)) return { ok: false, error: "Unknown item" };
+  await updateContent((c) => {
+    c.hidden = [...new Set([...(c.hidden ?? []), key])];
+  });
+  return { ok: true, message: "Removed from the app. You can restore it any time." };
+}
+
+/** Undo a hide, and undo any edits (back to the original built-in version). */
+export async function restoreItem(key: string): Promise<Result> {
+  await requireAdmin();
+  await updateContent((c) => {
+    c.hidden = (c.hidden ?? []).filter((k) => k !== key);
+    if (key.startsWith("ch:") && c.overrides) delete c.overrides[key.slice(3)];
+  });
+  return { ok: true, message: "Restored to the original version." };
+}
+
 export async function deleteChapter(id: string): Promise<Result> {
   await requireAdmin();
+  if (builtInChapters.some((b) => b.id === id)) return hideItem(`ch:${id}`);
   await updateContent((c) => {
     c.chapters = c.chapters.filter((x) => x.id !== id).map((x, i) => ({ ...x, chapter: 31 + i }));
   });
@@ -176,7 +230,7 @@ export async function adminAutoFillPhotos(): Promise<Result> {
   let added = 0;
   let failed = 0;
   for (const [key, q] of Object.entries(PHOTO_QUERIES)) {
-    if (have[key]) continue;
+    if (have[key] || BUNDLED_PHOTOS[key]) continue; // keep built-in photos unless the admin changes one
     try {
       const [p] = await searchPhotos(q, 1);
       if (p) {

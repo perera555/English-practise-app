@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import type { Scene as SceneT } from "@/lib/types";
-import { usePhoto } from "@/lib/photos";
+import { usePhoto, type PhotoInfo } from "@/lib/photos";
+
+/** Short credit line, e.g. "Jane Doe / Wikimedia · CC BY-SA 4.0". */
+export function photoCredit(p: PhotoInfo) {
+  const name = p.photographer.length > 28 ? p.photographer.slice(0, 26) + "…" : p.photographer;
+  return p.source === "commons" ? `${name} / Wikimedia${p.license ? ` · ${p.license}` : ""}` : `${name} / Pexels`;
+}
 
 /**
  * A picture for a lesson. Shows a REAL photo when one is available (photoKey),
@@ -24,10 +30,11 @@ export function Scene({ scene, label, className = "", photoKey }: { scene: Scene
           onError={() => setBroken(true)}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <figcaption className="absolute bottom-1.5 right-2 rounded-full bg-black/45 px-2 py-0.5 text-[10px] text-white/90 backdrop-blur">
+        <figcaption className="absolute top-1.5 right-2 max-w-[70%] truncate rounded-full bg-black/40 px-2 py-0.5 text-[9px] text-white/85 backdrop-blur">
+
           📷{" "}
           <a href={photo.pageUrl} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
-            {photo.photographer} / Pexels
+            {photoCredit(photo)}
           </a>
         </figcaption>
       </figure>

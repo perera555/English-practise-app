@@ -4,7 +4,24 @@
  * The server looks these up on Pexels (free licence, OK for paid apps) and saves the result.
  * Admins can replace any picture in Admin → Pictures.
  */
+import { stories } from "./stories";
+import { speeches } from "./motivation";
+
 export const PHOTO_QUERIES: Record<string, string> = {
+  ...Object.fromEntries(stories.map((s) => [`story:${s.id}`, s.photo])),
+  ...Object.fromEntries(speeches.map((s) => [`speech:${s.id}`, s.photo])),
+  // Front page
+  "home:hero": "happy young people learning english together laughing",
+  "home:daily": "friends talking coffee shop",
+  "home:stories": "woman reading book cozy",
+  "home:motivation": "motivational speaker audience stage",
+  "home:videos": "watching video tablet headphones",
+  "home:chat": "video call laptop smiling",
+  "home:listening": "woman listening headphones smiling",
+  "home:speaking": "young man speaking confidently",
+  "home:twisters": "friends laughing fun",
+  "home:music": "friends singing karaoke microphone",
+  "home:pte": "student exam laptop studying",
   // Airport
   "ch:booking-a-flight": "woman booking flight on laptop",
   "ch:airport-check-in": "airport check-in counter passenger",

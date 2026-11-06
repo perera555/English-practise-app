@@ -9,6 +9,8 @@ import { Pitch } from "./Pitch";
 import { Scene } from "./Scene";
 import { ChatBox } from "./ChatBox";
 import { ChapterVideos } from "./Videos";
+import { isHidden, useCustomContent } from "@/lib/customContent";
+import { RemovedNotice } from "./HideIf";
 import { DescribePicture, Dictation, MicWarning, Quiz, RepeatLine, VocabCards } from "./Practice";
 
 const TABS = [
@@ -21,7 +23,15 @@ const TABS = [
 
 type Tab = (typeof TABS)[number]["id"];
 
-export function ChapterView({
+export function ChapterView(props: { lesson: Lesson; prev?: Lesson; next?: Lesson; hrefFor?: (l: Lesson) => string }) {
+  const custom = useCustomContent();
+  if (isHidden(custom, `ch:${props.lesson.id}`)) return <RemovedNotice />;
+  // The admin may have edited this chapter: use the edited version.
+  const lesson = custom.overrides?.[props.lesson.id] ?? props.lesson;
+  return <ChapterViewInner {...props} lesson={lesson} />;
+}
+
+function ChapterViewInner({
   lesson,
   prev,
   next,
@@ -100,7 +110,13 @@ export function ChapterView({
       {tab === "watch" && (
         <section className="grid lg:grid-cols-[1.1fr_1fr] gap-5">
           <div className="flex flex-col gap-3">
-            {lesson.sport ? <Pitch sport={lesson.sport} action={action} tick={tick} /> : <Scene scene={lesson.scene} label={lesson.title} photoKey={`ch:${lesson.id}`} />}
+            <Scene scene={lesson.scene} label={lesson.title} photoKey={`ch:${lesson.id}`} />
+            {lesson.sport && (
+              <>
+                <p className="text-sm font-semibold opacity-70">🎮 Live match animation: follows the commentary</p>
+                <Pitch sport={lesson.sport} action={action} tick={tick} />
+              </>
+            )}
             {lineIdx >= 0 && lesson.lines[lineIdx] && (
               <div className="rounded-2xl bg-black/80 text-white px-4 py-3 text-center text-lg font-medium">
                 <span className="opacity-60 mr-2">{lesson.lines[lineIdx].speaker}:</span>

@@ -1,0 +1,1074 @@
+{
+  "home:hero": {
+    "src": "/photos/home-hero.webp",
+    "author": "ProperAndPolite",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Happy_Young_Smiling_Teenage_Boy.jpg",
+    "title": "Happy Young Smiling Teenage Boy",
+    "query": "happy young"
+  },
+  "home:daily": {
+    "src": "/photos/home-daily.webp",
+    "author": "Nathan Dumlao nate_dumlao",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Coffee_and_Friends_(Unsplash).jpg",
+    "title": "Coffee and Friends (Unsplash)",
+    "query": "friends coffee"
+  },
+  "home:stories": {
+    "src": "/photos/home-stories.webp",
+    "author": "Widad.sirkhotte",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Child_reading_book.jpg",
+    "title": "Child reading book",
+    "query": "reading a book"
+  },
+  "home:motivation": {
+    "src": "/photos/home-motivation.webp",
+    "author": "Ekta Parishad",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rajagopal_speaking_to_25,000_people,_Janadesh_2007,_India.jpg",
+    "title": "Rajagopal speaking to 25,000 people, Janadesh 2007, India",
+    "query": "public speaking audience"
+  },
+  "home:videos": {
+    "src": "/photos/home-videos.webp",
+    "author": "U.S. Navy photo by Mass Communication Specialist 3rd Class Joshua Scott",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:US_Navy_071114-N-1635S-003_Sailors,_family_members_and_guests_watch_the_world_premier_of.jpg",
+    "title": "US Navy 071114-N-1635S-003 Sailors, family members and guests watch the world premier of",
+    "query": "family watching television"
+  },
+  "home:chat": {
+    "src": "/photos/home-chat.webp",
+    "author": "Shixart1985",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Woman_smiling_and_using_laptop_during_video_call_in_cozy_wooden_room.jpg",
+    "title": "Woman smiling and using laptop during video call in cozy wooden room",
+    "query": "video call laptop"
+  },
+  "home:listening": {
+    "src": "/photos/home-listening.webp",
+    "author": "Sascha Kohlmann",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Woman_with_Headphones.jpg",
+    "title": "Woman with Headphones",
+    "query": "headphones woman"
+  },
+  "home:speaking": {
+    "src": "/photos/home-speaking.webp",
+    "author": "Will Fisher from Richmond, VA, United States",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Keyboards_-_Rhodes_piano,_Leslie_speaker_with_microphone,_Hammond_C3,_Grand_piano_with_microphones_-_Studio_A,_In_Your_Ear_Studios.jpg",
+    "title": "Keyboards - Rhodes piano, Leslie speaker with microphone, Hammond C3, Grand piano with microphones - Studio A, In Your Ear Studios",
+    "query": "speaker microphone"
+  },
+  "home:twisters": {
+    "src": "/photos/home-twisters.webp",
+    "author": "Andres Rodriguez",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:People_laughing_in_Lutheran_Church_in_Ohio.jpg",
+    "title": "People laughing in Lutheran Church in Ohio",
+    "query": "people laughing"
+  },
+  "home:music": {
+    "src": "/photos/home-music.webp",
+    "author": "Diana Farroukh",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lebanese_singer_Shiraz_on_Platea_Stage_of_Juniyah.jpg",
+    "title": "Lebanese singer Shiraz on Platea Stage of Juniyah",
+    "query": "singer microphone stage"
+  },
+  "home:pte": {
+    "src": "/photos/home-pte.webp",
+    "author": "D00264450",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Study_Areas_on_3rd_Floor_at_the_HCC.jpg",
+    "title": "Study Areas on 3rd Floor at the HCC",
+    "query": "student studying laptop"
+  },
+  "ch:booking-a-flight": {
+    "src": "/photos/ch-booking-a-flight.webp",
+    "author": "Shixart1985",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Woman_smiling_and_using_laptop_during_video_call_in_cozy_wooden_room.jpg",
+    "title": "Woman smiling and using laptop during video call in cozy wooden room",
+    "query": "video call laptop"
+  },
+  "ch:airport-check-in": {
+    "src": "/photos/ch-airport-check-in.webp",
+    "author": "Sam Hidayat",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kualanamu_Airport_check-in_counter_(2).jpg",
+    "title": "Kualanamu Airport check-in counter (2)",
+    "query": "airport check-in counter"
+  },
+  "ch:security-check": {
+    "src": "/photos/ch-security-check.webp",
+    "author": "MaedaAkihiko",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kagoshima-Airport_Security-check.jpg",
+    "title": "Kagoshima-Airport Security-check",
+    "query": "airport security checkpoint"
+  },
+  "ch:at-the-gate": {
+    "src": "/photos/ch-at-the-gate.webp",
+    "author": "Wolfmann",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bergen_Airport_Flesland,_Norway_2019-11-21_Passengers_waiting_Gate_B16_B17_Wider%C3%B8e_Counter_Screens_Seating_(utgang,_avgangshall)_etcDSC01012.jpg",
+    "title": "Bergen Airport Flesland, Norway 2019-11-21 Passengers waiting Gate B16 B17 Widerøe Counter Screens Seating (utgang, avgangshall) etcDSC01012",
+    "query": "airport gate passengers waiting"
+  },
+  "ch:on-the-plane": {
+    "src": "/photos/ch-on-the-plane.webp",
+    "author": "Matti Blume",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vistajet,_EBACE_2019,_Le_Grand-Saconnex_(EB190484).jpg",
+    "title": "Vistajet, EBACE 2019, Le Grand-Saconnex (EB190484)",
+    "query": "airplane cabin passengers"
+  },
+  "ch:immigration-customs": {
+    "src": "/photos/ch-immigration-customs.webp",
+    "author": "Ceeseven",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:HZMB_HK_Passenger_Clearance_Building_Departure_Counters.jpg",
+    "title": "HZMB HK Passenger Clearance Building Departure Counters",
+    "query": "immigration counter passengers"
+  },
+  "ch:lost-luggage": {
+    "src": "/photos/ch-lost-luggage.webp",
+    "author": "Base64",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:VHHH_baggage_claim_area.jpg",
+    "title": "VHHH baggage claim area",
+    "query": "baggage carousel airport"
+  },
+  "ch:hotel-check-in": {
+    "src": "/photos/ch-hotel-check-in.webp",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Entrance_lounge_and_reception_desks_of_the_Carlton_Hotel_Downtown_Core_Singapore.jpg",
+    "title": "Entrance lounge and reception desks of the Carlton Hotel Downtown Core Singapore",
+    "query": "hotel reception desk"
+  },
+  "ch:room-problem": {
+    "src": "/photos/ch-room-problem.webp",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Restaurant_room_of_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg",
+    "title": "Restaurant room of Amantaka luxury Resort & Hotel in Luang Prabang Laos",
+    "query": "hotel room bed"
+  },
+  "ch:room-service": {
+    "src": "/photos/ch-room-service.webp",
+    "author": "Haninator",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ogura_toast_breakfast_tray.jpg",
+    "title": "Ogura toast breakfast tray",
+    "query": "breakfast tray hotel"
+  },
+  "ch:concierge": {
+    "src": "/photos/ch-concierge.webp",
+    "author": "Jorge Royan",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_hotel_concierge_handing_room_keys,_Rome_-_3566.jpg",
+    "title": "A hotel concierge handing room keys, Rome - 3566",
+    "query": "hotel concierge"
+  },
+  "ch:hotel-check-out": {
+    "src": "/photos/ch-hotel-check-out.webp",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lobby_lounge_of_Amantaka_Suite_Amantaka_luxury_Resort_%26_Hotel_Luang_Prabang_Laos.jpg",
+    "title": "Lobby lounge of Amantaka Suite Amantaka luxury Resort & Hotel Luang Prabang Laos",
+    "query": "hotel lobby"
+  },
+  "ch:taking-a-taxi": {
+    "src": "/photos/ch-taking-a-taxi.webp",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Green_and_yellow_taxi_at_night_in_Yasukuni-dori_Avenue,_Shinjuku,_Tokyo.jpg",
+    "title": "Green and yellow taxi at night in Yasukuni-dori Avenue, Shinjuku, Tokyo",
+    "query": "yellow taxi street"
+  },
+  "ch:asking-directions": {
+    "src": "/photos/ch-asking-directions.webp",
+    "author": "John Sutton",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tourists_on_Silver_Street_Bridge_-_geograph.org.uk_-_6052212.jpg",
+    "title": "Tourists on Silver Street Bridge - geograph.org.uk - 6052212",
+    "query": "tourists map city street"
+  },
+  "ch:train-station": {
+    "src": "/photos/ch-train-station.webp",
+    "author": "mattbuck (category)",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cardiff_Central_railway_station_MMB_31_43186_150217.jpg",
+    "title": "Cardiff Central railway station MMB 31 43186 150217",
+    "query": "railway station platform passengers"
+  },
+  "ch:restaurant": {
+    "src": "/photos/ch-restaurant.webp",
+    "author": "Florian Plag",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Waiter_in_a_restaurant,_Paris_2011.jpg",
+    "title": "Waiter in a restaurant, Paris 2011",
+    "query": "waiter restaurant"
+  },
+  "ch:cafe": {
+    "src": "/photos/ch-cafe.webp",
+    "author": "Anonoymous work for hire for CHI Polska",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barista_COSTA_COFFEE.JPG",
+    "title": "Barista COSTA COFFEE",
+    "query": "barista coffee"
+  },
+  "ch:shopping": {
+    "src": "/photos/ch-shopping.webp",
+    "author": "Kim Hansen",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Blue_and_white_clothes_shop_Guadeloupe_2010-03-27.JPG",
+    "title": "Blue and white clothes shop Guadeloupe 2010-03-27",
+    "query": "shoppers clothing store"
+  },
+  "ch:pharmacy": {
+    "src": "/photos/ch-pharmacy.webp",
+    "author": "U.S. Navy NMRTC by Emily McCamy",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pharmacy_Team_Recognized_on_National_Pharmacist_Day_(8197386).jpg",
+    "title": "Pharmacy Team Recognized on National Pharmacist Day (8197386)",
+    "query": "pharmacist customer"
+  },
+  "ch:emergency": {
+    "src": "/photos/ch-emergency.webp",
+    "author": "John Torcasio",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Paramedics_on_motorcycles.jpg",
+    "title": "Paramedics on motorcycles",
+    "query": "ambulance paramedics"
+  },
+  "ch:cricket-first-over": {
+    "src": "/photos/ch-cricket-first-over.webp",
+    "author": "Ndahiro derrick",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cricket_bowler_in_Rwanda_01.jpg",
+    "title": "Cricket bowler in Rwanda 01",
+    "query": "cricket bowler"
+  },
+  "ch:cricket-six": {
+    "src": "/photos/ch-cricket-six.webp",
+    "author": "Vikramdeep Sidhu from Jhajjar, India",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_batsman_making_a_shot_(11147206685).jpg",
+    "title": "A batsman making a shot (11147206685)",
+    "query": "cricket batsman shot"
+  },
+  "ch:cricket-last-ball": {
+    "src": "/photos/ch-cricket-last-ball.webp",
+    "author": "[2]",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Westpac_Stadium_Cricket_luving_Crowd.jpg",
+    "title": "Westpac Stadium Cricket luving Crowd",
+    "query": "cricket stadium crowd"
+  },
+  "ch:football-kick-off": {
+    "src": "/photos/ch-football-kick-off.webp",
+    "author": "Seruinda",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pre-season_friendly_football_match_between_Sky_sports_verse_Kataka_FC_played_in_Mbale_stadium.jpg",
+    "title": "Pre-season friendly football match between Sky sports verse Kataka FC played in Mbale stadium",
+    "query": "football players match ball"
+  },
+  "ch:football-winning-goal": {
+    "src": "/photos/ch-football-winning-goal.webp",
+    "author": "Pangalau",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Nazry_Aiman_Azaman_goal_and_celebration_12.jpg",
+    "title": "Nazry Aiman Azaman goal and celebration 12",
+    "query": "football goal celebration"
+  },
+  "ch:football-penalties": {
+    "src": "/photos/ch-football-penalties.webp",
+    "author": "md.faisalzaman from Worcester, MA",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bernier_penalty_kick_2013-09-08.jpg",
+    "title": "Bernier penalty kick 2013-09-08",
+    "query": "penalty kick goalkeeper"
+  },
+  "ch:rugby-try": {
+    "src": "/photos/ch-rugby-try.webp",
+    "author": "PierreSelim",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:ST_vs_Gloucester_-_Match_-_23.JPG",
+    "title": "ST vs Gloucester - Match - 23",
+    "query": "rugby union match"
+  },
+  "ch:rugby-final-kick": {
+    "src": "/photos/ch-rugby-final-kick.webp",
+    "author": "Pierre-Selim",
+    "license": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:ST_vs_CO_2012-03-10_-_42_-_Conversion_kick_by_Luke_McAlister.jpg",
+    "title": "ST vs CO 2012-03-10 - 42 - Conversion kick by Luke McAlister",
+    "query": "rugby conversion kick"
+  },
+  "ch:tennis-championship-point": {
+    "src": "/photos/ch-tennis-championship-point.webp",
+    "author": "IvanAndreevich",
+    "license": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ernests_Gulbis_Serve_01.jpg",
+    "title": "Ernests Gulbis Serve 01",
+    "query": "tennis serve"
+  },
+  "ch:sports-fan-chat": {
+    "src": "/photos/ch-sports-fan-chat.webp",
+    "author": "Ben Sutherland",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Black_Stars_(Ghana_national_football_team)_fans_watching_televised_match.jpg",
+    "title": "Black Stars (Ghana national football team) fans watching televised match",
+    "query": "football fans watching"
+  },
+  "daily:greetings": {
+    "src": "/photos/daily-greetings.webp",
+    "author": "amtec_photos",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Woman_on_a_Job_Interview_-_38826218972.jpg",
+    "title": "Woman on a Job Interview - 38826218972",
+    "query": "job interview"
+  },
+  "daily:how-was-your-day": {
+    "src": "/photos/daily-how-was-your-day.webp",
+    "author": "Fons Heijnsbroek",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Street_view_in_the_quite_Utrechtsestraat_with_people_walking_%26_talking;_free_photo_Amsterdam,_Fons_Heijnsbroek_12-10-2021.jpg",
+    "title": "Street view in the quite Utrechtsestraat with people walking & talking; free photo Amsterdam, Fons Heijnsbroek 12-10-2021",
+    "query": "people talking street"
+  },
+  "daily:weather": {
+    "src": "/photos/daily-weather.webp",
+    "author": "W.carter",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Les_Parapluies_de_Viborg.jpg",
+    "title": "Les Parapluies de Viborg",
+    "query": "umbrellas rain street"
+  },
+  "daily:weekend-plans": {
+    "src": "/photos/daily-weekend-plans.webp",
+    "author": "Acabashi",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Easton_Lodge_Gardens,_Little_Easton,_Essex,_England_outdoor_caf%C3%A9_17.jpg",
+    "title": "Easton Lodge Gardens, Little Easton, Essex, England outdoor café 17",
+    "query": "friends cafe table"
+  },
+  "daily:phone-call": {
+    "src": "/photos/daily-phone-call.webp",
+    "author": "Shixart1985",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Woman_talking_on_phone_while_holding_glass_of_water_in_kitchen_during_daytime.jpg",
+    "title": "Woman talking on phone while holding glass of water in kitchen during daytime",
+    "query": "woman talking mobile phone"
+  },
+  "daily:asking-for-help": {
+    "src": "/photos/daily-asking-for-help.webp",
+    "author": "Wilfredor",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Man_carrying_boxes_on_a_bicycle.jpg",
+    "title": "Man carrying boxes on a bicycle",
+    "query": "man carrying box"
+  },
+  "daily:supermarket": {
+    "src": "/photos/daily-supermarket.webp",
+    "author": "Wilfredor",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Aisle_in_L_Intermarche_supermarket_in_Quebec_City.jpg",
+    "title": "Aisle in L Intermarche supermarket in Quebec City",
+    "query": "supermarket aisle"
+  },
+  "daily:family": {
+    "src": "/photos/daily-family.webp",
+    "author": "Bill Branson (Photographer)",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Family_in_a_kitchen.jpg",
+    "title": "Family in a kitchen",
+    "query": "family smiling home"
+  },
+  "daily:hobbies": {
+    "src": "/photos/daily-hobbies.webp",
+    "author": "Shixart1985",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Older_man_plays_acoustic_guitar_while_sitting_in_a_chair.jpg",
+    "title": "Older man plays acoustic guitar while sitting in a chair",
+    "query": "old acoustic guitar playing"
+  },
+  "daily:ordering-pizza": {
+    "src": "/photos/daily-ordering-pizza.webp",
+    "author": "Petar Milošević",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vegetarian_Pizza.jpg",
+    "title": "Vegetarian Pizza",
+    "query": "pizza"
+  },
+  "daily:party-invitation": {
+    "src": "/photos/daily-party-invitation.webp",
+    "author": "Dr. Niraj Kumar Yadav",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Party_with_friends.jpg",
+    "title": "Party with friends",
+    "query": "friends party celebration"
+  },
+  "daily:saying-sorry": {
+    "src": "/photos/daily-saying-sorry.webp",
+    "author": "Adam Jones from Kelowna, BC, Canada",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Elderly_Woman_and_Girl_-_Matagalpa_-_Nicaragua_(31336524430).jpg",
+    "title": "Elderly Woman and Girl - Matagalpa - Nicaragua (31336524430)",
+    "query": "elderly woman and girl"
+  },
+  "daily:compliments": {
+    "src": "/photos/daily-compliments.webp",
+    "author": "Disabled And Here",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Disabled_BIPOC_taking_a_selfie.jpg",
+    "title": "Disabled BIPOC taking a selfie",
+    "query": "friends smiling selfie"
+  },
+  "daily:talking-food": {
+    "src": "/photos/daily-talking-food.webp",
+    "author": "Ocdp",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Beef_curry_rice_003.jpg",
+    "title": "Beef curry rice 003",
+    "query": "rice and curry"
+  },
+  "daily:bus-stop": {
+    "src": "/photos/daily-bus-stop.webp",
+    "author": "ReDHumus.Org Abonamos el cambio",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Waiting_for_bus_at_a_bus_stop_in_Hyderabad.jpg",
+    "title": "Waiting for bus at a bus stop in Hyderabad",
+    "query": "bus stop people waiting"
+  },
+  "daily:neighbour": {
+    "src": "/photos/daily-neighbour.webp",
+    "author": "Pacific Southwest Region 5",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Reaching_out_to_neighbors_(4704908150).jpg",
+    "title": "Reaching out to neighbors (4704908150)",
+    "query": "neighbors talking garden"
+  },
+  "daily:talking-work": {
+    "src": "/photos/daily-talking-work.webp",
+    "author": "Shixart1985",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Woman_smiling_and_using_laptop_during_video_call_in_cozy_wooden_room.jpg",
+    "title": "Woman smiling and using laptop during video call in cozy wooden room",
+    "query": "video call laptop"
+  },
+  "daily:bank": {
+    "src": "/photos/daily-bank.webp",
+    "author": "Melwinsy",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bank_Muamalat.JPG",
+    "title": "Bank Muamalat",
+    "query": "bank teller"
+  },
+  "daily:doctor-appointment": {
+    "src": "/photos/daily-doctor-appointment.webp",
+    "author": "Harrison Keely",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_waiting_room_at_a_medical_healthcare_clinic,_doctor%27s_office,_hospital.jpg",
+    "title": "A waiting room at a medical healthcare clinic, doctor's office, hospital",
+    "query": "clinic waiting room"
+  },
+  "daily:hair-salon": {
+    "src": "/photos/daily-hair-salon.webp",
+    "author": "Wilfredor",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hairdresser_cutting_hair.jpg",
+    "title": "Hairdresser cutting hair",
+    "query": "hairdresser cutting hair"
+  },
+  "daily:movies": {
+    "src": "/photos/daily-movies.webp",
+    "author": "Siyuwj",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_cinema_in_Hangzhou_selling_take-away_popcorn,_2020-06-20.jpg",
+    "title": "A cinema in Hangzhou selling take-away popcorn, 2020-06-20",
+    "query": "cinema popcorn"
+  },
+  "daily:borrowing": {
+    "src": "/photos/daily-borrowing.webp",
+    "author": "LG전자",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Inductive_charging_of_LG_smartphone_(1).jpg",
+    "title": "Inductive charging of LG smartphone (1)",
+    "query": "smartphone charging"
+  },
+  "daily:birthday": {
+    "src": "/photos/daily-birthday.webp",
+    "author": "Francesca Cesa Bianchi, Milano",
+    "license": "CC BY-SA 3.0 it",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Italy_-_birthday_cake_with_candles_5.jpg",
+    "title": "Italy - birthday cake with candles 5",
+    "query": "birthday cake candles"
+  },
+  "daily:time-date": {
+    "src": "/photos/daily-time-date.webp",
+    "author": "Gausanchennai",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wrist_watch_1.jpg",
+    "title": "Wrist watch 1",
+    "query": "wrist watch"
+  },
+  "daily:holidays": {
+    "src": "/photos/daily-holidays.webp",
+    "author": "Vyacheslav Argenberg",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Havelock_Island,_Mangrove_tree_on_the_beach,_Andaman_Islands.jpg",
+    "title": "Havelock Island, Mangrove tree on the beach, Andaman Islands",
+    "query": "tropical beach"
+  },
+  "daily:online-shopping": {
+    "src": "/photos/daily-online-shopping.webp",
+    "author": "WrS.tm.pl",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Delivery_of_parcels_to_an_Allegro_parcel_locker_AL005ETM._Tomasz%C3%B3w_Mazowiecki,_Poland.jpg",
+    "title": "Delivery of parcels to an Allegro parcel locker AL005ETM. Tomaszów Mazowiecki, Poland",
+    "query": "parcel delivery"
+  },
+  "daily:post-office": {
+    "src": "/photos/daily-post-office.webp",
+    "author": "Wutkh",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Thailand_Post_counter,_Thung_Song_Post_Office.jpg",
+    "title": "Thailand Post counter, Thung Song Post Office",
+    "query": "post office counter"
+  },
+  "daily:health-exercise": {
+    "src": "/photos/daily-health-exercise.webp",
+    "author": "Wing1990hk",
+    "license": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cornwall_Street_Park_Jogging_Path_2014.jpg",
+    "title": "Cornwall Street Park Jogging Path 2014",
+    "query": "jogging park"
+  },
+  "daily:saying-goodbye": {
+    "src": "/photos/daily-saying-goodbye.webp",
+    "author": "U.S. Customs and Border Protection",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hurricane_Maria_(2017)_170922-H-NI589-0006_(37312147171).jpg",
+    "title": "Hurricane Maria (2017) 170922-H-NI589-0006 (37312147171)",
+    "query": "airport goodbye hug"
+  },
+  "daily:job-interview": {
+    "src": "/photos/daily-job-interview.webp",
+    "author": "USEPA Environmental-Protection-Agency",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:June_21,_2012_EPA_Job_Training_Announcement,_New_Orleans_(7510108712).jpg",
+    "title": "June 21, 2012 EPA Job Training Announcement, New Orleans (7510108712)",
+    "query": "job interview office"
+  },
+  "song:pack-my-bags": {
+    "src": "/photos/song-pack-my-bags.webp",
+    "author": "Familydestinationsguide.com Images",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_Neatly_Packed_Suitcase_for_a_Holiday.jpg",
+    "title": "A Neatly Packed Suitcase for a Holiday",
+    "query": "open suitcase"
+  },
+  "song:room-two-oh-four": {
+    "src": "/photos/song-room-two-oh-four.webp",
+    "author": "Uwe Jelting",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hotel_Corridor_(184413335).jpeg",
+    "title": "Hotel Corridor (184413335)",
+    "query": "hotel corridor"
+  },
+  "song:hit-it-for-six": {
+    "src": "/photos/song-hit-it-for-six.webp",
+    "author": "Escpl",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ekana_cricket_stadium_.jpg",
+    "title": "Ekana cricket stadium ",
+    "query": "cricket stadium"
+  },
+  "song:good-morning-world": {
+    "src": "/photos/song-good-morning-world.webp",
+    "author": "Abrget47j",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunrise_at_viru_bog.jpg",
+    "title": "Sunrise at viru bog",
+    "query": "sunrise"
+  },
+  "song:left-right-straight": {
+    "src": "/photos/song-left-right-straight.webp",
+    "author": "Wilfredor",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Qu%C3%A9bec_city_downtown.jpg",
+    "title": "Québec city downtown",
+    "query": "street signs city"
+  },
+  "song:table-for-two": {
+    "src": "/photos/song-table-for-two.webp",
+    "author": "PattayaPatrol",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:DSC_7059_A_group_of_friends_laugh_and_chat_over_drinks_and_dinner_at_a_cozy_restaurant_with_warm_brick_walls_and_a_red_tablecloth_setting_the_scene.jpg",
+    "title": "DSC 7059 A group of friends laugh and chat over drinks and dinner at a cozy restaurant with warm brick walls and a red tablecloth setting the scene",
+    "query": "couple dinner restaurant"
+  },
+  "song:goal-goal-goal": {
+    "src": "/photos/song-goal-goal-goal.webp",
+    "author": "Jamain",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Football_(soccer)_supporters_J014.jpg",
+    "title": "Football (soccer) supporters J014",
+    "query": "football supporters"
+  },
+  "song:seven-days": {
+    "src": "/photos/song-seven-days.webp",
+    "author": "Matt Schmucker (@mtschmucker)",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tweek_at_Frostbite_2020.jpg",
+    "title": "Tweek at Frostbite 2020",
+    "query": "weekly planner calendar"
+  },
+  "song:desert-moon-motel": {
+    "src": "/photos/song-desert-moon-motel.webp",
+    "author": "APK",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Neon_Museum_path.jpg",
+    "title": "Neon Museum path",
+    "query": "motel neon sign"
+  },
+  "song:hello-again": {
+    "src": "/photos/song-hello-again.webp",
+    "author": "The original photos of the grand piano and the upright piano:Steinway &amp; Sons, 10 Rondenbarg, Hamburg D-22525, Germany, eu.steinway.com.Steinway &amp; Sons, 1 Steinway Place, Long Island City, New York 11105, The United States, www.steinway.com. Derivative work:Fieldsofthefields (talk).",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Two_pianos_-_grand_piano_and_upright_piano.jpg",
+    "title": "Two pianos - grand piano and upright piano",
+    "query": "piano"
+  },
+  "song:oceans-between-us": {
+    "src": "/photos/song-oceans-between-us.webp",
+    "author": "Michal Klajban",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rapanui_Rock_during_sunset,_Sumner,_Christchurch,_New_Zealand.jpg",
+    "title": "Rapanui Rock during sunset, Sumner, Christchurch, New Zealand",
+    "query": "ocean sunset"
+  },
+  "song:city-lights": {
+    "src": "/photos/song-city-lights.webp",
+    "author": "Wilfredor",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Price_Building_illuminated_at_night_in_Quebec_City.jpg",
+    "title": "Price Building illuminated at night in Quebec City",
+    "query": "city skyline night"
+  },
+  "song:coffee-in-the-morning": {
+    "src": "/photos/song-coffee-in-the-morning.webp",
+    "author": "Julius Schorzman",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_small_cup_of_coffee.JPG",
+    "title": "A small cup of coffee",
+    "query": "cup of coffee"
+  },
+  "song:boarding-pass": {
+    "src": "/photos/song-boarding-pass.webp",
+    "author": "Pinakpani",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Aerial_photograph_of_clouds_from_flight_window_04.jpg",
+    "title": "Aerial photograph of clouds from flight window 04",
+    "query": "airplane window view clouds"
+  },
+  "song:rainy-day-blues": {
+    "src": "/photos/song-rainy-day-blues.webp",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hozomon_with_visitors_under_their_umbrellas,_a_rainy_day_in_Tokyo,_Japan.jpg",
+    "title": "Hozomon with visitors under their umbrellas, a rainy day in Tokyo, Japan",
+    "query": "rainy street umbrellas"
+  },
+  "song:champions-tonight": {
+    "src": "/photos/song-champions-tonight.webp",
+    "author": "Prikryl",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Czech_team_celebrating_WFC_U19_2021.jpg",
+    "title": "Czech team celebrating WFC U19 2021",
+    "query": "team celebrating trophy"
+  },
+  "song:thank-you-song": {
+    "src": "/photos/song-thank-you-song.webp",
+    "author": "Palm Beach Police Department",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:GX-205_-_White_modern_home_with_palm_trees_patio_furniture_and_people_near_large_windows_under_sunny_sky.jpg",
+    "title": "GX-205 - White modern home with palm trees patio furniture and people near large windows under sunny sky",
+    "query": "palm trees beach sunny"
+  },
+  "song:dont-give-up": {
+    "src": "/photos/song-dont-give-up.webp",
+    "author": "Joshua Tree National Park",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hiker_at_the_summit_of_Ryan_Mountain_(38295653594).jpg",
+    "title": "Hiker at the summit of Ryan Mountain (38295653594)",
+    "query": "mountain summit hiker"
+  },
+  "song:road-trip": {
+    "src": "/photos/song-road-trip.webp",
+    "author": "Mike Pennington",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hired_campervan_off_the_road_at_Haroldswick_-_geograph.org.uk_-_5784002.jpg",
+    "title": "Hired campervan off the road at Haroldswick - geograph.org.uk - 5784002",
+    "query": "campervan road"
+  },
+  "song:goodnight-moon-river": {
+    "src": "/photos/song-goodnight-moon-river.webp",
+    "author": "NASA",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Full_moon_partially_obscured_by_atmosphere.jpg",
+    "title": "Full moon partially obscured by atmosphere",
+    "query": "full moon"
+  },
+  "pte:1": {
+    "src": "/photos/pte-1.webp",
+    "author": "Arne Müseler",
+    "license": "CC BY-SA 3.0 de",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Berlin_Brandenburg_Airport_Terminal_1.jpg",
+    "title": "Berlin Brandenburg Airport Terminal 1",
+    "query": "airport terminal"
+  },
+  "pte:3": {
+    "src": "/photos/pte-3.webp",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Reception_lounge_at_Amantaka_luxury_Resort_%26_Hotel_at_blue_hour_in_Luang_Prabang_Laos.jpg",
+    "title": "Reception lounge at Amantaka luxury Resort & Hotel at blue hour in Luang Prabang Laos",
+    "query": "hotel reception"
+  },
+  "pte:5": {
+    "src": "/photos/pte-5.webp",
+    "author": "Murad400",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mohamed_abdulla_(Cricketer).jpg",
+    "title": "Mohamed abdulla (Cricketer)",
+    "query": "cricket match players"
+  },
+  "story:the-lost-umbrella": {
+    "src": "/photos/story-the-lost-umbrella.webp",
+    "author": "Sergio Miranda",
+    "license": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Very_Stylish_With_This_Red_Umbrella_(222645297).jpeg",
+    "title": "Very Stylish With This Red Umbrella (222645297)",
+    "query": "red umbrella rain street"
+  },
+  "story:the-first-day": {
+    "src": "/photos/story-the-first-day.webp",
+    "author": "S.J. de Waard",
+    "license": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:FNV_Belastingservice.JPG",
+    "title": "FNV Belastingservice",
+    "query": "office desk computer worker"
+  },
+  "story:grandmas-recipe": {
+    "src": "/photos/story-grandmas-recipe.webp",
+    "author": "Infrogmation of New Orleans",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dinner_on_home_stove_-_curry_chicken_with_basmati_rice.jpg",
+    "title": "Dinner on home stove - curry chicken with basmati rice",
+    "query": "curry cooking kitchen"
+  },
+  "story:the-wrong-train": {
+    "src": "/photos/story-the-wrong-train.webp",
+    "author": "Ciara Ní Riain",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Train_window_view_Norway.jpg",
+    "title": "Train window view Norway",
+    "query": "train window"
+  },
+  "story:the-little-cricket-bat": {
+    "src": "/photos/story-the-little-cricket-bat.webp",
+    "author": "AngryStyro",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Students_playing_cricket_at_Christchurch_Boys%27_High_School.jpg",
+    "title": "Students playing cricket at Christchurch Boys' High School",
+    "query": "boys playing cricket"
+  },
+  "story:the-phone-call": {
+    "src": "/photos/story-the-phone-call.webp",
+    "author": "Billie Grace Ward from New York, USA",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sidewalk_Phone_Call_(15763978422).jpg",
+    "title": "Sidewalk Phone Call (15763978422)",
+    "query": "woman phone call smiling"
+  },
+  "story:the-honest-taxi-driver": {
+    "src": "/photos/story-the-honest-taxi-driver.webp",
+    "author": "www.Pixel.la Free Stock Photos",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:City-traffic-people-night_(24326935655).jpg",
+    "title": "City-traffic-people-night (24326935655)",
+    "query": "taxi driver city night"
+  },
+  "story:the-rainbow-cafe": {
+    "src": "/photos/story-the-rainbow-cafe.webp",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Colorful_clouds_with_wooden_terrace_on_the_river_banks_of_Si_Phan_Don,_Laos,_at_sunrise.jpg",
+    "title": "Colorful clouds with wooden terrace on the river banks of Si Phan Don, Laos, at sunrise",
+    "query": "colorful cafe"
+  },
+  "story:the-goalkeeper": {
+    "src": "/photos/story-the-goalkeeper.webp",
+    "author": "Jabby1",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jason_Peter_Jones_Goalkeeper_Coach.jpg",
+    "title": "Jason Peter Jones Goalkeeper Coach",
+    "query": "football goalkeeper diving save"
+  },
+  "story:the-new-neighbour": {
+    "src": "/photos/story-the-new-neighbour.webp",
+    "author": "Adam Jones from Kelowna, BC, Canada",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Elderly_Woman_and_Girl_-_Matagalpa_-_Nicaragua_(31336524430).jpg",
+    "title": "Elderly Woman and Girl - Matagalpa - Nicaragua (31336524430)",
+    "query": "elderly woman and girl"
+  },
+  "story:the-airport-mistake": {
+    "src": "/photos/story-the-airport-mistake.webp",
+    "author": "kallerna",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Helsinki_airport_departure_hall_2.jpg",
+    "title": "Helsinki airport departure hall 2",
+    "query": "airport departure"
+  },
+  "story:the-commentators-voice": {
+    "src": "/photos/story-the-commentators-voice.webp",
+    "author": "Kerttu Forsman",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yleisradio%27s_sports_commentator_booth_in_Hakamets%C3%A4.jpg",
+    "title": "Yleisradio's sports commentator booth in Hakametsä",
+    "query": "sports commentator microphone stadium"
+  },
+  "story:the-lost-dog": {
+    "src": "/photos/story-the-lost-dog.webp",
+    "author": "Sardaka",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Girl_walking_dog_001.jpg",
+    "title": "Girl walking dog 001",
+    "query": "girl with dog"
+  },
+  "story:the-job-interview": {
+    "src": "/photos/story-the-job-interview.webp",
+    "author": "amtec_photos",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Woman_on_a_Job_Interview_-_38826218972.jpg",
+    "title": "Woman on a Job Interview - 38826218972",
+    "query": "job interview"
+  },
+  "story:the-old-guitar": {
+    "src": "/photos/story-the-old-guitar.webp",
+    "author": "Shixart1985",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Older_man_plays_acoustic_guitar_while_sitting_in_a_chair.jpg",
+    "title": "Older man plays acoustic guitar while sitting in a chair",
+    "query": "old acoustic guitar playing"
+  },
+  "story:the-early-bird": {
+    "src": "/photos/story-the-early-bird.webp",
+    "author": "sterferg",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Morning_run_-_panoramio.jpg",
+    "title": "Morning run - panoramio",
+    "query": "sunrise morning run"
+  },
+  "story:the-hotel-surprise": {
+    "src": "/photos/story-the-hotel-surprise.webp",
+    "author": "Selbymay",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tadoussac_-_Hotel_(1).jpg",
+    "title": "Tadoussac - Hotel (1)",
+    "query": "hotel room"
+  },
+  "story:the-rugby-captain": {
+    "src": "/photos/story-the-rugby-captain.webp",
+    "author": "paddynapper",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:New_Zealand_national_rugby_league_team_(26_October_2008).jpg",
+    "title": "New Zealand national rugby league team (26 October 2008)",
+    "query": "rugby team huddle"
+  },
+  "story:the-street-singer": {
+    "src": "/photos/story-the-street-singer.webp",
+    "author": "Wide Awake!",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Guitarist_singing_at_TOPS_Cebu_(2024-10-06).jpg",
+    "title": "Guitarist singing at TOPS Cebu (2024-10-06)",
+    "query": "street musician singing city"
+  },
+  "story:the-thank-you-letter": {
+    "src": "/photos/story-the-thank-you-letter.webp",
+    "author": "CIPHR Connect",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Handwritten_Letter_of_Resignation.jpg",
+    "title": "Handwritten Letter of Resignation",
+    "query": "handwritten letter envelope"
+  },
+  "story:the-journey-to-london": {
+    "src": "/photos/story-the-journey-to-london.webp",
+    "author": "Mike Pennington",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_red_London_bus,_Whitehall,_Westminster_-_geograph.org.uk_-_4428036.jpg",
+    "title": "A red London bus, Whitehall, Westminster - geograph.org.uk - 4428036",
+    "query": "london street red bus"
+  },
+  "story:the-final-over": {
+    "src": "/photos/story-the-final-over.webp",
+    "author": "Lemonlolly",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cricketer_bowled.jpg",
+    "title": "Cricketer bowled",
+    "query": "cricket batsman"
+  },
+  "story:the-robot-teacher": {
+    "src": "/photos/story-the-robot-teacher.webp",
+    "author": "Caio.st.oliveira",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Onde_fica_o_CeDRI%3F_%E2%80%93_a_investiga%C3%A7%C3%A3o_em_formato_de_jogo_para_crian%C3%A7as,_Bragan%C3%A7a.jpg",
+    "title": "Onde fica o CeDRI? – a investigação em formato de jogo para crianças, Bragança",
+    "query": "child learning with robot"
+  },
+  "story:the-hotel-in-the-desert": {
+    "src": "/photos/story-the-hotel-in-the-desert.webp",
+    "author": "Gorup de Besanez",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Desert_Hill_03.jpg",
+    "title": "Desert Hill 03",
+    "query": "desert motel"
+  },
+  "story:the-penalty-kick": {
+    "src": "/photos/story-the-penalty-kick.webp",
+    "author": "مانفی (Monfie)",
+    "license": "CC BY 2.5",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Women_football_youth_olympic_games.JPG",
+    "title": "Women football youth olympic games",
+    "query": "women football"
+  },
+  "story:the-two-brothers": {
+    "src": "/photos/story-the-two-brothers.webp",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Water_reflection_of_a_wooden_house_surrounded_by_trees_with_farmers_walking_in_the_paddy_fields_of_Vang_Vieng_Laos.jpg",
+    "title": "Water reflection of a wooden house surrounded by trees with farmers walking in the paddy fields of Vang Vieng Laos",
+    "query": "farmers field"
+  },
+  "story:the-voice-of-confidence": {
+    "src": "/photos/story-the-voice-of-confidence.webp",
+    "author": "Paulrudd",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Young_muslim_woman_in_the_Thar_desert_near_Jaisalmer,_India.jpg",
+    "title": "Young muslim woman in the Thar desert near Jaisalmer, India",
+    "query": "young woman"
+  },
+  "story:the-lighthouse-keeper": {
+    "src": "/photos/story-the-lighthouse-keeper.webp",
+    "author": "Marianne Johnsen",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hestskj%C3%A6r_fyr_i_storm_fra_Nordvest.jpg",
+    "title": "Hestskjær fyr i storm fra Nordvest",
+    "query": "lighthouse storm sea"
+  },
+  "story:the-pte-dream": {
+    "src": "/photos/story-the-pte-dream.webp",
+    "author": "Tinsae Belay",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:African_student_studying_at_dormitory_from_tablet_computer,.jpg",
+    "title": "African student studying at dormitory from tablet computer,",
+    "query": "student studying"
+  },
+  "story:the-last-letter": {
+    "src": "/photos/story-the-last-letter.webp",
+    "author": "https://www.flickr.com/people/69061470@N05",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Flickr_-_Government_Press_Office_(GPO)_-_A_Tearful_Reunion.jpg",
+    "title": "Flickr - Government Press Office (GPO) - A Tearful Reunion",
+    "query": "airport reunion hug"
+  },
+  "speech:mistakes-are-teachers": {
+    "src": "/photos/speech-mistakes-are-teachers.webp",
+    "author": "Harrison Keely",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_public_high_school_teacher_in_a_classroom_in_the_United_States_08.jpg",
+    "title": "A public high school teacher in a classroom in the United States 08",
+    "query": "teacher classroom"
+  },
+  "speech:one-percent-better": {
+    "src": "/photos/speech-one-percent-better.webp",
+    "author": "Simon Legner (User:simon04)",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Climbing_World_Championships_2018_Combined_Final_Klingler_(BT0B0188).jpg",
+    "title": "Climbing World Championships 2018 Combined Final Klingler (BT0B0188)",
+    "query": "person climbing"
+  },
+  "speech:your-accent-is-your-story": {
+    "src": "/photos/speech-your-accent-is-your-story.webp",
+    "author": "Andres Rodriguez",
+    "license": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:People_laughing_in_Lutheran_Church_in_Ohio.jpg",
+    "title": "People laughing in Lutheran Church in Ohio",
+    "query": "people laughing"
+  },
+  "speech:the-courage-to-start": {
+    "src": "/photos/speech-the-courage-to-start.webp",
+    "author": "Santa Monica Mountains National Recreation Area",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rec_Fest_2015_-_Runners_at_the_starting_line_(22388620647).jpg",
+    "title": "Rec Fest 2015 - Runners at the starting line (22388620647)",
+    "query": "runner starting line"
+  },
+  "speech:dream-big-work-hard": {
+    "src": "/photos/speech-dream-big-work-hard.webp",
+    "author": "Sebastian Robi",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Graduation_Day_Celebration_In_Salesian_College.jpg",
+    "title": "Graduation Day Celebration In Salesian College",
+    "query": "graduation celebration students"
+  },
+  "speech:speak-up": {
+    "src": "/photos/speech-speak-up.webp",
+    "author": "Zerowebtech",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Manikanta_Belde_public_speaker.jpg",
+    "title": "Manikanta Belde public speaker",
+    "query": "public speaker"
+  },
+  "speech:discipline-beats-motivation": {
+    "src": "/photos/speech-discipline-beats-motivation.webp",
+    "author": "Santeri Viinamäki",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Classic_alarm_clock_20180513.jpg",
+    "title": "Classic alarm clock 20180513",
+    "query": "alarm clock"
+  },
+  "speech:fall-seven-times": {
+    "src": "/photos/speech-fall-seven-times.webp",
+    "author": "Mattsjc",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rock_climber_rappelling_at_Horsethief_Butte_in_a_Mazamas_class_02.jpg",
+    "title": "Rock climber rappelling at Horsethief Butte in a Mazamas class 02",
+    "query": "rock climber"
+  },
+  "speech:the-power-of-thank-you": {
+    "src": "/photos/speech-the-power-of-thank-you.webp",
+    "author": "Shixart1985",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Elderly_woman_with_curly_blonde_hair_smiling_while_eating_a_donut_with_pink_frosting.jpg",
+    "title": "Elderly woman with curly blonde hair smiling while eating a donut with pink frosting",
+    "query": "smiling elderly woman"
+  },
+  "speech:you-are-ready": {
+    "src": "/photos/speech-you-are-ready.webp",
+    "author": "Kelvin Mwanasoko",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Riding_with_calling.jpg",
+    "title": "Riding with calling",
+    "query": "woman confident city"
+  }
+}
