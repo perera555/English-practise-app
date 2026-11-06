@@ -8,6 +8,8 @@ import { updateSettings, useSettings } from "@/lib/settings";
 
 const LINKS = [
   { href: "/", label: "Chapters", emoji: "📚" },
+  { href: "/daily", label: "Daily Talk", emoji: "☕" },
+  { href: "/videos", label: "Videos", emoji: "🎬" },
   { href: "/listening", label: "Listening", emoji: "🎧" },
   { href: "/speaking", label: "Speaking", emoji: "🎤" },
   { href: "/chat", label: "Robot Chat", emoji: "🤖" },

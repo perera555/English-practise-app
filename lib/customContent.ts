@@ -2,13 +2,13 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 import { apiUrl } from "./api";
-import type { Lesson, Song } from "./types";
+import type { Lesson, Song, Video } from "./types";
 
 /** Content the admin adds online. Downloaded when online and saved on the device for offline use. */
-export type Custom = { chapters: Lesson[]; songs: Song[]; twisters: { group: string; text: string }[] };
+export type Custom = { chapters: Lesson[]; songs: Song[]; twisters: { group: string; text: string }[]; videos: Video[] };
 
 const KEY = "erp-custom-content";
-const EMPTY: Custom = { chapters: [], songs: [], twisters: [] };
+const EMPTY: Custom = { chapters: [], songs: [], twisters: [], videos: [] };
 let data: Custom = EMPTY;
 let loaded = false;
 const listeners = new Set<() => void>();

@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { CustomContent, GiftCode, Grant } from "@/lib/db";
-import type { Lesson, Level, Song, UnitId } from "@/lib/types";
+import type { Lesson, Level, Song, UnitId, VideoCategory } from "@/lib/types";
 import { chapters, songs as builtInSongs } from "@/lib/content";
 import { getUserId } from "@/lib/premium";
 import {
@@ -15,11 +15,14 @@ import {
   deleteCode,
   deleteSong,
   deleteTwister,
+  deleteVideo,
   grantPremium,
   revokePremium,
   saveChapter,
   saveSong,
+  saveVideo,
 } from "@/lib/adminActions";
+import { VIDEO_CATEGORIES } from "@/components/Videos";
 
 const input = "rounded-xl border border-black/10 dark:border-white/15 bg-white dark:bg-slate-800 px-3 py-2 w-full";
 const area = input + " font-mono text-sm";
@@ -49,7 +52,7 @@ type Props = {
   storage: string;
 };
 
-const TABS = ["👥 Users & Premium", "🎁 Gift codes", "📚 Chapters", "🎵 Songs", "👅 Twisters"] as const;
+const TABS = ["👥 Users & Premium", "🎁 Gift codes", "📚 Chapters", "🎬 Videos", "🎵 Songs", "👅 Twisters"] as const;
 
 export function AdminDashboard({ grants, codes, content, storage }: Props) {
   const [tab, setTab] = useState<(typeof TABS)[number]>(TABS[0]);
@@ -96,8 +99,9 @@ export function AdminDashboard({ grants, codes, content, storage }: Props) {
       {tab === TABS[0] && <UsersTab grants={grants} run={run} />}
       {tab === TABS[1] && <CodesTab codes={codes} run={run} />}
       {tab === TABS[2] && <ChaptersTab content={content} run={run} />}
-      {tab === TABS[3] && <SongsTab content={content} run={run} />}
-      {tab === TABS[4] && <TwistersTab content={content} run={run} />}
+      {tab === TABS[3] && <VideosTab content={content} run={run} />}
+      {tab === TABS[4] && <SongsTab content={content} run={run} />}
+      {tab === TABS[5] && <TwistersTab content={content} run={run} />}
     </div>
   );
 }
@@ -367,6 +371,118 @@ function ChaptersTab({ content, run }: { content: CustomContent; run: Run }) {
               Edit
             </button>
             <button className="text-xs text-rose-500" onClick={() => confirm(`Delete “${c.title}”?`) && run(() => deleteChapter(c.id))}>
+              Delete
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Videos ---------------- */
+
+function parseTime(t: string) {
+  const parts = t.trim().split(":").map(Number);
+  if (parts.some((n) => Number.isNaN(n))) return NaN;
+  return parts.reduce((acc, n) => acc * 60 + n, 0);
+}
+
+function parseSubs(text: string) {
+  return text
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      const i = l.indexOf("|");
+      if (i < 0) return null;
+      const start = parseTime(l.slice(0, i));
+      const t = l.slice(i + 1).trim();
+      return Number.isFinite(start) && t ? { start, text: t } : null;
+    })
+    .filter((x): x is { start: number; text: string } => !!x);
+}
+
+function VideosTab({ content, run }: { content: CustomContent; run: Run }) {
+  const empty = { id: "", url: "", title: "", category: "travel" as VideoCategory, chapterId: "", subs: "" };
+  const [f, setF] = useState(empty);
+  const set = (k: keyof typeof empty) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value });
+  const allChapters = [...chapters, ...content.chapters];
+  const parsed = parseSubs(f.subs);
+  const videos = content.videos ?? [];
+
+  return (
+    <div className="grid lg:grid-cols-[1.4fr_1fr] gap-4">
+      <div className="card flex flex-col gap-3">
+        <h2 className="font-bold text-lg">{f.id ? "✏️ Edit video" : "➕ Add a real video"}</h2>
+        <p className="text-sm opacity-70">
+          Paste a YouTube link (the owner must allow embedding), or an https link to your own .mp4 file. Only use videos you are allowed to share.
+        </p>
+        <input className={input} value={f.url} onChange={set("url")} placeholder="https://www.youtube.com/watch?v=… or https://…/video.mp4" />
+        <input className={input} value={f.title} onChange={set("title")} placeholder="Title, e.g. Checking in at a hotel (real conversation)" />
+        <div className="grid sm:grid-cols-2 gap-2">
+          <select className={input} value={f.category} onChange={set("category")}>
+            {VIDEO_CATEGORIES.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+          <select className={input} value={f.chapterId} onChange={set("chapterId")}>
+            <option value="">Not linked to a chapter</option>
+            {allChapters.map((c) => (
+              <option key={c.id} value={c.id}>
+                Ch {c.chapter}: {c.title}
+              </option>
+            ))}
+          </select>
+        </div>
+        <label className="text-sm font-semibold">
+          Subtitles (optional): one line each as <code>time | text</code>, for example <code>0:05 | Good morning, welcome!</code>
+          <textarea className={area} rows={10} value={f.subs} onChange={set("subs")} placeholder={"0:00 | Good morning, how can I help you?\n0:04 | I have a reservation under Silva."} />
+        </label>
+        <p className="text-xs opacity-60">{parsed.length} subtitle lines read.</p>
+        <div className="flex gap-2">
+          <button
+            className="btn-primary"
+            onClick={() =>
+              run(
+                () => saveVideo({ id: f.id || undefined, url: f.url, title: f.title, category: f.category, chapterId: f.chapterId, subtitles: parsed }),
+                () => setF(empty),
+              )
+            }
+          >
+            💾 Save video
+          </button>
+          {f.id && (
+            <button className="btn-ghost" onClick={() => setF(empty)}>
+              Cancel edit
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="card flex flex-col gap-2">
+        <h2 className="font-bold text-lg">Videos ({videos.length})</h2>
+        {videos.map((v) => (
+          <div key={v.id} className="flex items-center gap-2 rounded-xl bg-black/5 dark:bg-white/10 px-3 py-2 text-sm">
+            <span>🎬</span>
+            <span className="flex-1 truncate">{v.title}</span>
+            <button
+              className="text-xs text-sky-600"
+              onClick={() =>
+                setF({
+                  id: v.id,
+                  url: v.youtubeId ? `https://youtu.be/${v.youtubeId}` : v.fileUrl,
+                  title: v.title,
+                  category: v.category,
+                  chapterId: v.chapterId,
+                  subs: v.subtitles.map((s) => `${Math.floor(s.start / 60)}:${String(Math.round(s.start % 60)).padStart(2, "0")} | ${s.text}`).join("\n"),
+                })
+              }
+            >
+              Edit
+            </button>
+            <button className="text-xs text-rose-500" onClick={() => confirm(`Delete “${v.title}”?`) && run(() => deleteVideo(v.id))}>
               Delete
             </button>
           </div>

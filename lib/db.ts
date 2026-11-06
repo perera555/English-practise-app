@@ -1,7 +1,7 @@
 import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
-import type { Lesson, Song } from "./types";
+import type { Lesson, Song, Video } from "./types";
 
 /**
  * Tiny key-value store.
@@ -13,6 +13,7 @@ export type CustomContent = {
   chapters: Lesson[];
   songs: Song[];
   twisters: { group: string; text: string }[];
+  videos: Video[];
 };
 
 export type Grant = { until: string | null; note: string; createdAt: string };
@@ -25,7 +26,7 @@ type Schema = {
 };
 
 const DEFAULTS: Schema = {
-  content: { chapters: [], songs: [], twisters: [] },
+  content: { chapters: [], songs: [], twisters: [], videos: [] },
   grants: {},
   codes: {},
 };
@@ -64,7 +65,8 @@ export async function dbGet<K extends keyof Schema>(key: K): Promise<Schema[K]> 
     return result ? { ...DEFAULTS[key], ...JSON.parse(String(result)) } : structuredClone(DEFAULTS[key]);
   }
   const all = await readFile();
-  return (all[key] as Schema[K]) ?? structuredClone(DEFAULTS[key]);
+  const v = all[key] as Schema[K] | undefined;
+  return v ? ({ ...structuredClone(DEFAULTS[key]), ...v } as Schema[K]) : structuredClone(DEFAULTS[key]);
 }
 
 export async function dbSet<K extends keyof Schema>(key: K, value: Schema[K]) {

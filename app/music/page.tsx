@@ -3,6 +3,7 @@ import { songs } from "@/lib/content";
 import { Scene } from "@/components/Scene";
 import { LockBadge } from "@/components/Premium";
 import { NewSongs } from "@/components/Extra";
+import { FamousSongs } from "@/components/Videos";
 import { FREE } from "@/lib/sessions";
 
 export const metadata = { title: "Music Karaoke · English Practice" };
@@ -39,6 +40,7 @@ export default function MusicPage() {
         ))}
       </div>
       <NewSongs />
+      <FamousSongs />
       <section className="card">
         <h2 className="font-bold text-lg mb-2">📺 Real English music with lyrics</h2>
         <p className="text-sm opacity-70 mb-3">Open YouTube lyric videos — turn on subtitles (CC) and sing along.</p>

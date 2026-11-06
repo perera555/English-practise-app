@@ -8,6 +8,7 @@ import { Karaoke } from "./Karaoke";
 import { Pitch } from "./Pitch";
 import { Scene } from "./Scene";
 import { ChatBox } from "./ChatBox";
+import { ChapterVideos } from "./Videos";
 import { DescribePicture, Dictation, MicWarning, Quiz, RepeatLine, VocabCards } from "./Practice";
 
 const TABS = [
@@ -122,6 +123,8 @@ export function ChapterView({
           </div>
         </section>
       )}
+
+      {tab === "watch" && <ChapterVideos chapterId={lesson.id} />}
 
       {tab === "vocab" && (
         <section className="flex flex-col gap-3">

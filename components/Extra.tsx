@@ -7,6 +7,7 @@ import { ChapterView } from "./ChapterView";
 import { SongPlayer } from "./SongPlayer";
 import { Gate } from "./Premium";
 import { Scene } from "./Scene";
+import { VideoPlayer } from "./VideoPlayer";
 
 /** Shows a chapter or song that the admin added (works offline once downloaded). */
 export function ExtraView() {
@@ -14,6 +15,21 @@ export function ExtraView() {
   const c = useCustomContent();
   const chapterId = params.get("chapter");
   const songId = params.get("song");
+  const videoId = params.get("video");
+
+  if (videoId) {
+    const video = c.videos.find((v) => v.id === videoId);
+    if (!video) return <NotFound />;
+    return (
+      <div className="flex flex-col gap-4">
+        <Link href="/videos" className="text-sm opacity-60 hover:opacity-100">
+          ← All videos
+        </Link>
+        <h1 className="text-2xl sm:text-3xl font-extrabold">🎬 {video.title}</h1>
+        <VideoPlayer video={video} />
+      </div>
+    );
+  }
 
   if (chapterId) {
     const i = c.chapters.findIndex((x) => x.id === chapterId);

@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { ADMIN_COOKIE, adminCookieValue, checkPassword, requireAdmin } from "./adminAuth";
 import { dbGet, dbSet, type CustomContent } from "./db";
 import { validUserId } from "./premiumServer";
-import type { Lesson, Song } from "./types";
+import type { Lesson, Song, Video } from "./types";
 
 type Result = { ok: true; message?: string; codes?: string[] } | { ok: false; error: string };
 
@@ -144,6 +144,40 @@ export async function deleteSong(id: string): Promise<Result> {
     c.songs = c.songs.filter((x) => x.id !== id);
   });
   return { ok: true, message: "Song deleted." };
+}
+
+/** Accepts youtu.be/ID, youtube.com/watch?v=ID, /shorts/ID, /embed/ID or a bare 11-char ID. */
+function youtubeIdFrom(url: string) {
+  const s = url.trim();
+  if (/^[A-Za-z0-9_-]{11}$/.test(s)) return s;
+  const m = s.match(/(?:youtu\.be\/|[?&]v=|\/shorts\/|\/embed\/|\/live\/)([A-Za-z0-9_-]{11})/);
+  return m?.[1] ?? "";
+}
+
+export async function saveVideo(input: Omit<Video, "id" | "youtubeId" | "fileUrl"> & { id?: string; url: string }): Promise<Result> {
+  await requireAdmin();
+  if (!input.title.trim()) return { ok: false, error: "Please give the video a title." };
+  const youtubeId = youtubeIdFrom(input.url);
+  const fileUrl = !youtubeId && /^https:\/\/\S+\.(mp4|webm|m3u8)(\?\S*)?$/i.test(input.url.trim()) ? input.url.trim() : "";
+  if (!youtubeId && !fileUrl) return { ok: false, error: "Paste a YouTube link, or an https link to an .mp4 video file." };
+  const subtitles = [...input.subtitles].filter((s) => s.text.trim()).sort((a, b) => a.start - b.start).slice(0, 500);
+  await updateContent((c) => {
+    c.videos ??= [];
+    const id = input.id || slug(input.title);
+    const v: Video = { id, title: input.title.trim(), youtubeId, fileUrl, category: input.category, chapterId: input.chapterId, subtitles };
+    const i = c.videos.findIndex((x) => x.id === id);
+    if (i >= 0) c.videos[i] = v;
+    else c.videos.push(v);
+  });
+  return { ok: true, message: `Video “${input.title}” saved.` };
+}
+
+export async function deleteVideo(id: string): Promise<Result> {
+  await requireAdmin();
+  await updateContent((c) => {
+    c.videos = (c.videos ?? []).filter((v) => v.id !== id);
+  });
+  return { ok: true, message: "Video deleted." };
 }
 
 export async function addTwisters(text: string): Promise<Result> {

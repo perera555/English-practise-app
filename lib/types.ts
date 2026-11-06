@@ -58,6 +58,22 @@ export type Lesson = {
   opener: string;
 };
 
+export type VideoCategory = "travel" | "sports" | "daily" | "music" | "pte" | "general";
+
+export type Video = {
+  id: string;
+  title: string;
+  /** YouTube video ID, or empty when `fileUrl` is used. */
+  youtubeId: string;
+  /** Direct .mp4 link (your own video), used when there is no YouTube ID. */
+  fileUrl: string;
+  category: VideoCategory;
+  /** Show this video inside a chapter's Watch tab. */
+  chapterId: string;
+  /** Timed subtitles for karaoke highlighting (seconds). */
+  subtitles: { start: number; text: string }[];
+};
+
 export type SongLine = { text: string };
 
 export type Song = {
