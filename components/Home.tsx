@@ -15,10 +15,10 @@ import { Avatar } from "./Avatar";
 import { ADVANCED } from "@/lib/chapters/advancedVersions";
 
 const SECTIONS = [
+  { href: "/notebook", key: "notebook:hero", emoji: "📒", title: "My Notebook", text: "Write notes, print, PDF", color: "from-amber-500/85 to-rose-600/85" },
   { href: "/quiz", key: "home:pte", emoji: "🧠", title: "Quiz: Zero to Hero", text: "1,000 sentences, 50 patterns", color: "from-emerald-500/85 to-teal-700/85" },
   { href: "/dictionary", key: "dict:hero", emoji: "📖", title: "Talking Dictionary", text: "Spell, say & සිංහල meaning", color: "from-cyan-500/85 to-blue-700/85" },
   { href: "/native", key: "native:hero", emoji: "🎓", title: "Native English", text: "1,000 idioms, 1,000 phrasal verbs", color: "from-violet-600/85 to-fuchsia-700/85" },
-  { href: "/notebook", key: "notebook:hero", emoji: "📒", title: "My Notebook", text: "Write notes, print, PDF", color: "from-amber-500/85 to-rose-600/85" },
   { href: "/travel", key: "ch:at-the-gate", emoji: "✈️", title: "Travel English", text: "Airport → hotel → city", color: "from-sky-500/85 to-indigo-700/85" },
   { href: "/daily", key: "home:daily", emoji: "☕", title: "Daily Conversation", text: "30 everyday talks", color: "from-orange-500/85 to-pink-600/85" },
   { href: "/stories", key: "home:stories", emoji: "📖", title: "Stories", text: "30 short & long stories", color: "from-amber-500/85 to-orange-600/85" },
@@ -86,6 +86,12 @@ function Hero({ nextUp, started, children }: { nextUp: (typeof chapters)[number]
             className="inline-flex items-center gap-1.5 rounded-xl bg-white/20 backdrop-blur-md ring-1 ring-white/50 px-5 py-3 font-bold text-white shadow-[0_4px_0_rgba(0,0,0,0.25)] hover:bg-white/30 active:translate-y-1 transition"
           >
             ☕ Today&apos;s talk
+          </Link>
+          <Link
+            href="/notebook"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-linear-to-b from-amber-400 to-orange-500 ring-1 ring-amber-200/70 px-5 py-3 font-bold text-white shadow-[0_4px_0_rgba(154,52,18,0.8)] hover:brightness-110 active:translate-y-1 active:shadow-none transition"
+          >
+            📒 My Notebook
           </Link>
         </div>
         {children}
