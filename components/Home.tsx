@@ -12,6 +12,7 @@ import { usePhoto } from "@/lib/photos";
 import { useProfile } from "@/lib/profile";
 import { isHidden, useCustomContent } from "@/lib/customContent";
 import { Avatar } from "./Avatar";
+import { ADVANCED } from "@/lib/chapters/advancedVersions";
 
 const SECTIONS = [
   { href: "/quiz", key: "home:pte", emoji: "🧠", title: "Quiz: Zero to Hero", text: "1,000 sentences, 50 patterns", color: "from-emerald-500/85 to-teal-700/85" },
@@ -105,7 +106,8 @@ function Hero({ nextUp, started, children }: { nextUp: (typeof chapters)[number]
 export function Home() {
   const progress = useProgress();
   const custom = useCustomContent();
-  const [level, setLevel] = useState<"All" | "Beginner" | "Intermediate">("All");
+  const [level, setLevel] = useState<"All" | "Beginner" | "Intermediate" | "Advanced">("All");
+  const adv = level === "Advanced";
   const completed = chapters.filter((c) => (progress.done[c.id]?.length ?? 0) >= PARTS.length).length;
   const started = chapters.filter((c) => (progress.done[c.id]?.length ?? 0) > 0).length;
   const nextUp = chapters.find((c) => (progress.done[c.id]?.length ?? 0) < PARTS.length) ?? chapters[0];
@@ -133,21 +135,41 @@ export function Home() {
 
       <div className="flex flex-wrap items-center gap-2">
         <h2 className="text-2xl font-extrabold mr-auto">📚 30 Chapters</h2>
-        {(["All", "Beginner", "Intermediate"] as const).map((l) => (
+        {(["All", "Beginner", "Intermediate", "Advanced"] as const).map((l) => (
           <button key={l} className={level === l ? "btn-primary" : "btn-ghost"} onClick={() => setLevel(l)}>
-            {l === "Beginner" ? "🌱 " : l === "Intermediate" ? "🌳 " : ""}
+            {l === "Beginner" ? "🌱 " : l === "Intermediate" ? "🌳 " : l === "Advanced" ? "🎓 " : ""}
             {l}
           </button>
         ))}
       </div>
 
-      <NewChapters />
+      {level === "Advanced" ? (
+        <div className="rounded-3xl bg-linear-to-r from-violet-600 to-fuchsia-600 text-white p-5 shadow-lg">
+          <p className="text-sm font-semibold opacity-90">🎓 Advanced level (C1) · all 30 chapters</p>
+          <h3 className="text-xl font-black">The same situations, spoken the way native speakers really talk</h3>
+          <p className="text-sm opacity-90">Natural idioms and expressions with Sinhala meanings, karaoke and role-play. Chapter 1 is free.</p>
+        </div>
+      ) : (
+        <button
+          onClick={() => setLevel("Advanced")}
+          className="rounded-3xl bg-linear-to-r from-violet-600 to-fuchsia-600 text-white p-4 shadow-lg flex items-center gap-3 text-left hover:-translate-y-0.5 transition"
+        >
+          <span className="text-4xl">🎓</span>
+          <span className="flex-1">
+            <span className="block font-black text-lg">NEW: Advanced level for all 30 chapters</span>
+            <span className="block text-sm opacity-90">Talk like a native speaker in every situation. Tap to see them.</span>
+          </span>
+          <span className="text-2xl">→</span>
+        </button>
+      )}
+
+      {level !== "Advanced" && <NewChapters />}
 
       {units.map((u) => {
         const list = chapters
           .filter((c) => !isHidden(custom, `ch:${c.id}`))
           .map((c) => custom.overrides?.[c.id] ?? c)
-          .filter((c) => c.unit === u.id && (level === "All" || c.level === level));
+          .filter((c) => c.unit === u.id && (level === "All" || c.level === level || (adv && !!ADVANCED[c.id])));
         if (!list.length) return null;
         return (
           <section key={u.id} id={`unit-${u.id}`} className="flex flex-col gap-3 scroll-mt-20">
@@ -161,20 +183,29 @@ export function Home() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {list.map((c) => {
                 const n = progress.done[c.id]?.length ?? 0;
+                const a = adv ? ADVANCED[c.id] : undefined;
                 return (
-                  <Link key={c.id} href={`/chapter/${c.id}`} className="card p-3 flex flex-col gap-2 hover:-translate-y-1 hover:shadow-lg transition">
+                  <Link
+                    key={c.id}
+                    href={a ? `/chapter/${c.id}?tab=advanced` : `/chapter/${c.id}`}
+                    className={`card p-3 flex flex-col gap-2 hover:-translate-y-1 hover:shadow-lg transition ${a ? "ring-2 ring-violet-400/60" : ""}`}
+                  >
                     <Scene scene={c.scene} label={c.title} className="rounded-2xl shadow-none" photoKey={`ch:${c.id}`} />
                     <div className="flex items-start gap-2">
                       <span className="text-2xl">{c.emoji}</span>
                       <div className="flex-1">
-                        <div className="text-xs font-semibold opacity-60">
-                          Chapter {c.chapter} · {c.level}
+                        <div className={`text-xs font-semibold ${a ? "text-violet-600 dark:text-violet-300" : "opacity-60"}`}>
+                          Chapter {c.chapter} · {a ? "🎓 Advanced" : c.level}
                         </div>
                         <div className="font-bold">{c.title}</div>
-                        <div className="text-sm opacity-70">{c.subtitle}</div>
+                        <div className="text-sm opacity-70">{a ? `“${a.lines[1]?.text ?? a.lines[0].text}”` : c.subtitle}</div>
                       </div>
-                      {n >= PARTS.length && <span title="Completed">🏆</span>}
-                      <LockBadge free={c.chapter <= FREE.chapters} />
+                      {a ? (
+                        (progress.done[c.id] ?? []).includes("advanced") && <span title="Completed">🏆</span>
+                      ) : (
+                        n >= PARTS.length && <span title="Completed">🏆</span>
+                      )}
+                      <LockBadge free={a ? c.chapter === 1 : c.chapter <= FREE.chapters} />
                     </div>
                     <div className="h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
                       <div className="h-full bg-linear-to-r from-sky-500 to-emerald-500" style={{ width: `${(n / PARTS.length) * 100}%` }} />
