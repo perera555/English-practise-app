@@ -11,9 +11,12 @@ import { ChatBox } from "./ChatBox";
 import { MicWarning, RepeatLine } from "./Practice";
 import { Scene, photoCredit } from "./Scene";
 import { LockBadge } from "./Premium";
+import { useWordList } from "@/lib/wordlist";
+import { useCustomContent } from "@/lib/customContent";
 
 const TABS = [
   { id: "convos", label: "Native conversations", emoji: "🎬" },
+  { id: "words", label: "1,000 Advanced words", emoji: "📚" },
   { id: "idioms", label: "Idioms", emoji: "💡" },
   { id: "phrasal", label: "Phrasal verbs", emoji: "🔗" },
   { id: "speech", label: "How natives speak", emoji: "🗣️" },
@@ -282,6 +285,67 @@ function Conversations() {
   );
 }
 
+/** The 1,000 most useful Advanced (C1) words from the 5,000-word list. */
+function AdvancedWords() {
+  const { premium } = usePremium();
+  const all = useWordList();
+  const custom = useCustomContent();
+  const [q, setQ] = useState("");
+  const [shown, setShown] = useState(60);
+  const [open, setOpen] = useState<string | null>(null);
+  const list = all.filter((x) => x.l === 5).slice(0, 1000);
+  const filtered = list.filter((x) => !q || x.w.includes(q.toLowerCase()) || x.d.toLowerCase().includes(q.toLowerCase()));
+  const visible = premium ? filtered.slice(0, shown) : filtered.slice(0, 40);
+  if (!all.length) return <p className="card opacity-70">Loading words…</p>;
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="opacity-70 flex-1">
+          The 1,000 most useful advanced words natives use in news, work and university. Tap a word to hear it; open it in the Dictionary for the full entry.
+        </p>
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="🔎 Search"
+          className="rounded-xl border border-black/10 dark:border-white/15 bg-white dark:bg-slate-800 px-3 py-2"
+        />
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+        {visible.map((x) => {
+          const si = custom.si?.[x.w] || x.s;
+          return (
+            <button
+              key={x.w}
+              className={`card p-3 text-left flex flex-col gap-0.5 ${open === x.w ? "ring-2 ring-violet-400" : ""}`}
+              onClick={() => {
+                setOpen(open === x.w ? null : x.w);
+                speak(x.w);
+              }}
+            >
+              <span className="font-black text-lg">🔊 {x.w}</span>
+              {si && <span className="si text-sm opacity-80">{si}</span>}
+              {open === x.w && (
+                <>
+                  {x.d && <span className="text-xs opacity-80">{x.d}</span>}
+                  <Link href={`/dictionary?w=${encodeURIComponent(x.w)}`} className="text-xs text-violet-600 font-semibold mt-1" onClick={(e) => e.stopPropagation()}>
+                    📖 Full entry →
+                  </Link>
+                </>
+              )}
+            </button>
+          );
+        })}
+      </div>
+      {premium && filtered.length > shown && (
+        <button className="btn-ghost self-center" onClick={() => setShown(shown + 60)}>
+          Show more ({filtered.length - shown} left)
+        </button>
+      )}
+      {!premium && <Locked />}
+    </div>
+  );
+}
+
 function NativeHero() {
   const photo = usePhoto("native:hero");
   return (
@@ -323,6 +387,7 @@ export function NativeHub() {
       </nav>
       <MicWarning />
       {tab === "convos" && <Conversations />}
+      {tab === "words" && <AdvancedWords />}
       {tab === "idioms" && <ExprList items={IDIOMS} intro="Idioms are phrases whose meaning is different from the words. Natives use them every day." />}
       {tab === "phrasal" && <ExprList items={PHRASAL} intro="A verb + a small word (up, off, out…) makes a new meaning. They're everywhere in spoken English." />}
       {tab === "speech" && <ConnectedSpeech />}

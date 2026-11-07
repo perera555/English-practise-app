@@ -37,6 +37,7 @@ const TOC = [
   ["robot", "🤖", "Robot chat & 20-minute talks"],
   ["daily", "☕", "Daily conversation"],
   ["videos", "🎬", "Videos & your own videos"],
+  ["quiz", "🧠", "Quiz: Zero to Hero"],
   ["dictionary", "📖", "Talking Dictionary"],
   ["native", "🎓", "Native English (Advanced)"],
   ["more", "🎵", "Music, twisters, listening, PTE"],
@@ -165,6 +166,13 @@ export default function HelpPage() {
           </li>
           <li>Online videos need internet.</li>
         </ul>
+      </Topic>
+
+      <Topic id="quiz" emoji="🧠" title="Quiz: Zero to Hero">
+        <p>
+          50 sentence patterns with 1,000 sentences, from 🌱 Beginner to 🎓 Advanced. For each pattern: 📘 learn the rule (with a Sinhala tip), then practise ✏️ fill
+          the gap, 🧩 build the sentence, 🎧 listen and type, and 🎤 say it. Score 70% or more to complete a pattern and earn ⭐ stars. Works offline.
+        </p>
       </Topic>
 
       <Topic id="dictionary" emoji="📖" title="Talking Dictionary">

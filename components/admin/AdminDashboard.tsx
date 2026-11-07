@@ -31,8 +31,10 @@ import { stories } from "@/lib/stories";
 import { speeches } from "@/lib/motivation";
 import { refreshPremium } from "@/lib/premium";
 import { CustomerView } from "./CustomerView";
+import { DictionaryTab } from "./DictionaryTab";
 import { NATIVE_CONVOS } from "@/lib/advanced";
 import { DICTIONARY } from "@/lib/dictionary";
+import { PATTERNS } from "@/lib/patterns";
 import { PicturesTab, YouTubeFinder } from "./MediaTabs";
 import { AdminGuide } from "./AdminGuide";
 import type { Customer, PhotoInfo } from "@/lib/db";
@@ -72,7 +74,7 @@ type Props = {
   setup: { ai: boolean; payments: boolean };
 };
 
-type TabId = "overview" | "view" | "customers" | "premium" | "codes" | "library" | "pictures" | "videos" | "chapters" | "songs" | "twisters" | "guide";
+type TabId = "overview" | "view" | "dictionary" | "customers" | "premium" | "codes" | "library" | "pictures" | "videos" | "chapters" | "songs" | "twisters" | "guide";
 
 const NAV: { group: string; items: { id: TabId; label: string; emoji: string }[] }[] = [
   {
@@ -94,6 +96,7 @@ const NAV: { group: string; items: { id: TabId; label: string; emoji: string }[]
     group: "Content",
     items: [
       { id: "library", label: "Library", emoji: "🗂️" },
+      { id: "dictionary", label: "Dictionary (Sinhala)", emoji: "📖" },
       { id: "pictures", label: "Pictures", emoji: "🖼️" },
       { id: "videos", label: "Videos", emoji: "🎬" },
       { id: "chapters", label: "Chapters", emoji: "📚" },
@@ -219,6 +222,7 @@ export function AdminDashboard({ grants, codes, content, storage, photos, pexels
         {tab === "view" && <CustomerView />}
         {tab === "codes" && <CodesTab codes={codes} run={run} />}
         {tab === "library" && <LibraryTab content={content} run={run} />}
+        {tab === "dictionary" && <DictionaryTab content={content} run={run} />}
         {tab === "pictures" && <PicturesTab photos={photos} pexels={pexels} run={run} />}
         {tab === "videos" && <VideosTab content={content} run={run} youtube={youtube} />}
         {tab === "chapters" && <ChaptersTab content={content} run={run} />}
@@ -586,6 +590,11 @@ function LibraryTab({ content, run }: { content: CustomContent; run: Run }) {
       title: "🎓 Native English (Advanced)",
       page: "/native",
       items: NATIVE_CONVOS.map((c) => ({ key: "", label: `${c.n}. ${c.emoji} ${c.title}`, href: `/native/${c.id}` })),
+    },
+    {
+      title: "🧠 Quiz: Zero to Hero (50 patterns · 1,000 sentences)",
+      page: "/quiz",
+      items: PATTERNS.map((p, i) => ({ key: "", label: `${i + 1}. ${p.title} (${p.sentences.length})`, href: `/quiz/${p.id}` })),
     },
     {
       title: "📖 Talking Dictionary",

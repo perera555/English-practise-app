@@ -1,0 +1,65 @@
+import { P, type Pattern } from "./types";
+
+/* 🌳 Level 3 (Intermediate, B1) */
+export const LEVEL3: Pattern[] = [
+  P("present-perfect", 3, "I have visited London", "have / has + past participle", "Use it for experiences and past actions connected to now.", "අතීත අත්දැකීම් හා දැනට සම්බන්ධ දේට have/has + past participle.", [
+    "I [have visited|visited have|has visited] London twice.", "She [has finished|have finished|has finish] her homework.", "We [have lost|has lost|have lose] our tickets.", "They [have bought|has bought|have buyed] a new car.", "He [has broken|have broken|has broke] his leg.",
+    "I [have seen|have saw|has seen] this film before.", "[Have you eaten|Has you eaten|Have you ate] yet?", "She [hasn't called|haven't called|hasn't call] me.", "We [have known|have knew|has known] each other for years.", "The flight [has landed|have landed|has land].",
+    "I [have never been|have never went|has never been] to Japan.", "He [has written|has wrote|have written] three books.", "[Have they arrived|Has they arrived|Have they arrive]?", "I [haven't decided|hasn't decided|haven't decide] yet.", "My sister [has lived|have lived|has live] here since 2010.",
+    "We [have done|have did|has done] our best.", "The price [has gone|has went|have gone] up.", "I [have forgotten|have forgot|has forgotten] his name.", "She [has taken|has took|have taken] the bus.", "They [have won|have winned|has won] the cup three times.",
+  ]),
+  P("ever-already-yet", 3, "ever / never / already / yet / just", "Have you ever…? · I've already… · I haven't… yet · I've just…", "Ever (questions), never (no time), already (sooner than expected), yet (questions/negatives), just (very recently).", "ever, never, already, yet, just වචන present perfect සමඟ.", [
+    "Have you [ever|yet|already] eaten durian?", "I have [never|ever|yet] seen snow.", "She has [already|yet|ever] left.", "Have you finished [yet|already|ever]?", "I've [just|yet|ever] arrived.",
+    "We haven't had lunch [yet|already|just].", "He has [already|yet|ever] paid the bill.", "Has the bus come [yet|already|ever]?", "I have [never|ever|yet] been on a plane.", "They've [just|yet|ever] got married!",
+    "Have you [ever|yet|just] met a famous person?", "I've [already|yet|ever] seen that film.", "She hasn't called me [yet|already|just].", "We've [just|yet|ever] finished the match.", "I have [never|ever|already] tried surfing.",
+    "Have you booked the hotel [yet|already|ever]?", "He's [just|yet|ever] gone out.", "Has she [ever|yet|just] been to India?", "I haven't packed [yet|already|just].", "They have [already|yet|ever] started.",
+  ]),
+  P("for-since", 3, "for two years / since 2020", "for + a period of time · since + a point in time", "For two hours. Since Monday.", "කාල පරාසයකට for, නිශ්චිත ආරම්භ ලක්ෂ්‍යයකට since.", [
+    "I've lived here [for|since] five years.", "She has worked here [since|for] 2019.", "We've been friends [for|since] ten years.", "He hasn't eaten [since|for] breakfast.", "I've known her [since|for] school.",
+    "They've waited [for|since] two hours.", "It has rained [since|for] Monday.", "I haven't seen him [for|since] ages.", "She's been ill [since|for] last week.", "We've had this car [for|since] six months.",
+    "He's played cricket [since|for] he was five.", "I've studied English [for|since] three years.", "The shop has been closed [since|for] April.", "We've been married [for|since] twenty years.", "I haven't slept [since|for] yesterday.",
+    "She has taught here [for|since] a long time.", "They've lived in Kandy [since|for] 2015.", "I've been awake [since|for] 5 a.m.", "We've been on the plane [for|since] eight hours.", "He's been the captain [since|for] last season.",
+  ]),
+  P("past-continuous", 3, "I was sleeping when…", "was / were + verb-ing", "An action in progress in the past, often interrupted by another action.", "අතීතයේ සිදුවෙමින් තිබූ ක්‍රියාව: was/were + -ing.", [
+    "I [was sleeping|slept|were sleeping] when you called.", "They [were playing|was playing|played] cricket at five.", "She [was cooking|cooked|were cooking] when the lights went out.", "We [were waiting|was waiting|waited] for the bus.", "It [was raining|rained|were raining] all morning.",
+    "What [were you doing|did you doing|was you doing] at eight?", "He [was driving|drove|were driving] when the phone rang.", "The children [were watching|was watching|watched] TV.", "I [was walking|walked|were walking] home when I saw her.", "You [were talking|was talking|talked] too loudly.",
+    "She [wasn't listening|weren't listening|didn't listening].", "The sun [was shining|shone|were shining].", "We [were having|was having|had] dinner at nine.", "[Were they working|Was they working|Did they working]?", "He [was reading|read|were reading] when I arrived.",
+    "I [was studying|studied|were studying] all night.", "The plane [was flying|flew|were flying] over the sea.", "They [weren't waiting|wasn't waiting|didn't waiting].", "She [was singing|sang|were singing] in the shower.", "We [were dancing|was dancing|danced] all night.",
+  ]),
+  P("first-conditional", 3, "If it rains, I'll stay home", "If + present simple, will + verb", "Real, possible situations in the future.", "අනාගතයේ විය හැකි දේ: If + present, will + verb.", [
+    "If it [rains|will rain|rained], I'll stay home.", "If you study, you [will pass|pass|would pass].", "If she [calls|will call|called], tell her I'm out.", "We'll miss the bus if we [don't hurry|won't hurry|didn't hurry].", "If I [see|will see|saw] him, I'll tell him.",
+    "If you [heat|will heat|heated] ice, it melts.", "They [will be|are|would be] angry if we're late.", "If it's sunny, we [will go|go|would go] to the beach.", "If you [need|will need|needed] help, call me.", "I'll buy it if it [is|will be|was] cheap.",
+    "If he [doesn't come|won't come|didn't come], we'll start without him.", "You'll get wet if you [don't take|won't take|didn't take] an umbrella.", "If we win, we [will celebrate|celebrate|would celebrate].", "If you [press|will press|pressed] this button, it starts.", "I [will call|call|would call] you if I'm late.",
+    "If the flight [is|will be|was] delayed, we'll wait.", "If you [eat|will eat|ate] too much, you'll feel sick.", "She'll be happy if you [visit|will visit|visited] her.", "If I [have|will have|had] time, I'll help.", "What will you do if you [lose|will lose|lost]?",
+  ]),
+  P("should-must", 3, "should / must / have to", "should (advice) · must / have to (necessary) · mustn't (not allowed)", "You should rest. You must wear a seat belt. You don't have to pay (not necessary).", "උපදෙස් should, අනිවාර්ය must/have to, තහනම් mustn't.", [
+    "You [should|must not|don't have to] see a doctor.", "You [must|should not|don't have to] wear a seat belt.", "You [mustn't|don't have to|should] smoke in the hotel.", "It's free. You [don't have to|mustn't|must] pay.", "I [have to|has to|must to] work tomorrow.",
+    "She [has to|have to|must to] wear a uniform.", "You [should|must to|have] try the curry. It's great!", "We [must|mustn't|don't have to] check in two hours early.", "Students [mustn't|don't have to|should] cheat in exams.", "You [shouldn't|should|have to] eat so much sugar.",
+    "Do I [have to|must|should to] fill in this form?", "He [should|shoulds|should to] study harder.", "You [don't have to|mustn't|must] come if you're busy.", "Passengers [must|should not|don't have to] show their passports.", "You [should|must to|have] apologise to her.",
+    "We [had to|must|have to] wait for two hours yesterday.", "You [mustn't|don't have to|should] touch the paintings.", "She [doesn't have to|mustn't|must] cook tonight.", "I think you [should|must to|have] take a break.", "Drivers [must|mustn't|don't have to] stop at red lights.",
+  ]),
+  P("too-enough", 3, "too hot / not old enough", "too + adjective · adjective + enough · enough + noun", "Too = more than you want. Enough = the right amount.", "too = අවශ්‍යයට වඩා, enough = ප්‍රමාණවත්.", [
+    "The tea is [too hot|hot enough|enough hot] to drink.", "He isn't [old enough|enough old|too old] to drive.", "We don't have [enough time|time enough|too time].", "This bag is [too heavy|heavy enough|enough heavy] for me.", "Is the room [big enough|enough big|too big] for four?",
+    "It's [too expensive|expensive enough|enough expensive]. I can't buy it.", "I didn't sleep [enough|too|too much].", "The water is [warm enough|enough warm|too warm] to swim. Let's go!", "She speaks [too fast|fast enough|enough fast]. I can't understand.", "There aren't [enough chairs|chairs enough|too chairs].",
+    "You're [too young|young enough|enough young] to watch this film.", "The bus was [too crowded|crowded enough|enough crowded] to get on.", "Have we got [enough money|money enough|too money]?", "It's [too late|late enough|enough late] to call now.", "He's [tall enough|enough tall|too tall] to reach the shelf. Good.",
+    "The music is [too loud|loud enough|enough loud]. Turn it down!", "My English isn't [good enough|enough good|too good] yet.", "There's [too much|enough many|too many] salt in this soup.", "Is it [warm enough|enough warm|too warm] for a T-shirt?", "I'm [too tired|tired enough|enough tired] to go out.",
+  ]),
+  P("gerund-infinitive", 3, "I enjoy swimming / I want to swim", "enjoy / finish / mind + -ing · want / decide / hope + to + verb", "Some verbs take -ing, others take to + verb.", "සමහර ක්‍රියා පද -ing ගනී, සමහර ඒවා to + ක්‍රියා පදය ගනී.", [
+    "I enjoy [swimming|to swim|swim].", "She wants [to travel|travelling|travel].", "Have you finished [eating|to eat|eat]?", "We decided [to stay|staying|stay] at home.", "Would you mind [opening|to open|open] the window?",
+    "I hope [to see|seeing|see] you soon.", "He stopped [smoking|to smoking|smoke] last year.", "They agreed [to help|helping|help] us.", "She's good at [dancing|to dance|dance].", "I need [to buy|buying|buy] some milk.",
+    "Do you like [cooking|cook|cooks]?", "We plan [to visit|visiting|visit] Kandy.", "He avoids [eating|to eat|eat] sugar.", "I'm looking forward to [meeting|meet|met] you.", "She promised [to call|calling|call] me.",
+    "Keep [practising|to practise|practise] every day.", "They refused [to pay|paying|pay].", "I can't stand [waiting|to wait|wait] in queues.", "We learned [to swim|swimming|swim] as children.", "Thank you for [helping|to help|help] me.",
+  ]),
+  P("relative-clauses", 3, "the man who… / the hotel which…", "who (people) · which / that (things) · where (places)", "Relative clauses give more information about a noun.", "පුද්ගලයන්ට who, දේවලට which/that, ස්ථානවලට where.", [
+    "The man [who|which|where] helped me was very kind.", "This is the hotel [where|who|which] we stayed.", "I lost the bag [which|who|where] you gave me.", "She's the teacher [who|which|where] taught me English.", "That's the café [where|who|which] we met.",
+    "The film [that|who|where] we watched was great.", "Do you know anyone [who|which|where] speaks French?", "The city [where|who|which] I was born is small.", "This is the phone [which|who|where] I bought yesterday.", "The players [who|which|where] won the cup are heroes.",
+    "I like people [who|which|where] are honest.", "The beach [where|who|which] we swam was beautiful.", "Here's the book [that|who|where] I told you about.", "The girl [who|which|where] sings in our band is my cousin.", "The room [which|who|where] has a balcony is more expensive.",
+    "That's the restaurant [where|who|which] they serve the best curry.", "The doctor [who|which|where] treated me was excellent.", "I need a bag [that|who|where] is big enough.", "The airport [where|who|which] we landed was huge.", "Is this the bus [that|who|where] goes to Galle?",
+  ]),
+  P("used-to", 3, "I used to live in Galle", "used to + verb (past habits, not now)", "Things that were true in the past but aren't now.", "අතීතයේ නිතර කළ නමුත් දැන් නොකරන දේ: used to.", [
+    "I [used to|use to|was used to] live in Galle.", "She [used to|use to|used] play the piano.", "We [used to|use to|were used] go to the beach every Sunday.", "He [didn't use to|didn't used to|not used to] like vegetables.", "[Did you use to|Did you used to|Used you to] have long hair?",
+    "There [used to|use to|was used to] be a cinema here.", "My grandfather [used to|use to|using to] be a farmer.", "I [used to|use to|was use to] walk to school.", "They [used to|use to|used] live next door.", "We [didn't use to|didn't used to|not use to] have a TV.",
+    "She [used to|use to|used to be] smoke, but she stopped.", "This town [used to|use to|used] be very quiet.", "I [used to|use to|was used] be afraid of dogs.", "He [used to|use to|used] work at the airport.", "[Did she use to|Did she used to|Used she to] sing?",
+    "My father [used to|use to|was used to] tell us stories.", "We [used to|use to|used to be] play cricket in the street.", "I [didn't use to|didn't used to|not used to] drink coffee.", "People [used to|use to|used] write letters.", "Our team [used to|use to|used] lose every match!",
+  ]),
+];

@@ -14,6 +14,8 @@ export type Entry = {
   si: string; // Sinhala meaning
   examples: string[];
   topic: TopicId;
+  /** 1 Beginner … 5 Advanced (words from the 5,000-word list). */
+  level?: number;
 };
 
 export type TopicId =

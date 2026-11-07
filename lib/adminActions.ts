@@ -153,6 +153,19 @@ export async function saveChapter(lesson: Lesson): Promise<Result> {
   return { ok: true, message: msg };
 }
 
+/** Add or correct the Sinhala meaning of a dictionary word (empty = remove the correction). */
+export async function setDictSinhala(word: string, si: string): Promise<Result> {
+  await requireAdmin();
+  const w = word.trim().toLowerCase();
+  if (!/^[a-z][a-z' -]{0,40}$/.test(w)) return { ok: false, error: "Type an English word." };
+  await updateContent((c) => {
+    c.si ??= {};
+    if (si.trim()) c.si[w] = si.trim().slice(0, 200);
+    else delete c.si[w];
+  });
+  return { ok: true, message: si.trim() ? `Sinhala for “${w}” saved. It reaches every phone the next time it's online.` : `Correction for “${w}” removed.` };
+}
+
 /** Hide (remove) any built-in item: "ch:id", "daily:id", "story:id", "song:id", "speech:id". */
 export async function hideItem(key: string): Promise<Result> {
   await requireAdmin();

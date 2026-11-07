@@ -12,10 +12,12 @@ export type Custom = {
   videos: Video[];
   overrides: Record<string, Lesson>;
   hidden: string[];
+  /** Admin-written Sinhala meanings for dictionary words (lowercase word → Sinhala). */
+  si: Record<string, string>;
 };
 
 const KEY = "erp-custom-content";
-const EMPTY: Custom = { chapters: [], songs: [], twisters: [], videos: [], overrides: {}, hidden: [] };
+const EMPTY: Custom = { chapters: [], songs: [], twisters: [], videos: [], overrides: {}, hidden: [], si: {} };
 
 /** True when the admin removed this built-in item (e.g. "ch:cafe"). */
 export function isHidden(c: Custom, key: string) {

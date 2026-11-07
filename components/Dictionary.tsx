@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { DICTIONARY, TOPICS, externalDictionaries, findWord, searchWords, type Entry, type TopicId } from "@/lib/dictionary";
-import { fullEntry, lookupOnline, type FullEntry, type OnlineEntry } from "@/lib/lookup";
+import { fullEntry, guessSyllables, lookupOnline, toSinhala, type FullEntry, type OnlineEntry } from "@/lib/lookup";
+import { LEVEL_CEFR, LEVEL_EMOJI, LEVEL_NAMES, useWordList, type ListWord } from "@/lib/wordlist";
+import { useCustomContent } from "@/lib/customContent";
 import { speak, splitWords, stopSpeaking } from "@/lib/speech";
 import { getSettings } from "@/lib/settings";
 import { usePhoto } from "@/lib/photos";
@@ -185,17 +187,18 @@ function WordCard({ e, onSearch }: { e: AnyEntry; onSearch: (w: string) => void 
 
       <div className="grid md:grid-cols-2 gap-3">
         <div className="rounded-2xl bg-sky-500/10 p-3">
-          <p className="text-xs font-bold uppercase tracking-wide opacity-60">English meaning</p>
-          <button className="text-left text-lg" onClick={() => speak(e.en)}>
-            🔊 {e.en}
-          </button>
-        </div>
-        <div className="rounded-2xl bg-amber-500/10 p-3">
           <p className="text-xs font-bold uppercase tracking-wide opacity-60">
-            සිංහල තේරුම {online && e.si && <span className="normal-case font-normal">(automatic translation)</span>}
+            English meaning {e.level ? <span className="normal-case font-normal">· {LEVEL_EMOJI[e.level]} {LEVEL_NAMES[e.level]} ({LEVEL_CEFR[e.level]})</span> : null}
           </p>
-          <p className="si text-xl font-semibold">{e.si || "—"}</p>
+          {e.en ? (
+            <button className="text-left text-lg" onClick={() => speak(e.en)}>
+              🔊 {e.en}
+            </button>
+          ) : (
+            <p className="opacity-70">See all meanings in the full entry below 👇</p>
+          )}
         </div>
+        <SinhalaMeaning word={e.word} si={e.si} auto={online} />
       </div>
 
       {e.examples.length > 0 && (
@@ -218,6 +221,74 @@ function WordCard({ e, onSearch }: { e: AnyEntry; onSearch: (w: string) => void 
         ))}
       </div>
     </article>
+  );
+}
+
+/* ---------------- Sinhala meaning: admin correction > built-in > automatic ---------------- */
+
+const SI_CACHE = "erp-si-auto";
+function cachedAutoSi(word: string) {
+  try {
+    return (JSON.parse(localStorage.getItem(SI_CACHE) ?? "{}") as Record<string, string>)[word] ?? "";
+  } catch {
+    return "";
+  }
+}
+function saveAutoSi(word: string, si: string) {
+  try {
+    const c = JSON.parse(localStorage.getItem(SI_CACHE) ?? "{}") as Record<string, string>;
+    c[word] = si;
+    localStorage.setItem(SI_CACHE, JSON.stringify(c));
+  } catch {
+    /* ignore */
+  }
+}
+
+function SinhalaMeaning({ word, si, auto }: { word: string; si: string; auto: boolean }) {
+  const custom = useCustomContent();
+  const admin = custom.si?.[word.toLowerCase()];
+  const [autoSi, setAutoSi] = useState("");
+  const [state, setState] = useState<"" | "loading" | "none">("");
+  const shown = admin || si || autoSi;
+
+  useEffect(() => {
+    if (admin || si) return;
+    const c = cachedAutoSi(word);
+    if (c) {
+      setAutoSi(c); // eslint-disable-line react-hooks/set-state-in-effect
+      return;
+    }
+    let alive = true;
+    setState("loading");
+    toSinhala(word).then(async (t) => {
+      // Fall back to translating the English meaning when the single word has no translation.
+      const res = t || (await fullEntry(word).then((f) => f?.senses[0]?.defs[0]?.si ?? "").catch(() => ""));
+      if (!alive) return;
+      if (res) {
+        setAutoSi(res);
+        saveAutoSi(word, res);
+        setState("");
+      } else setState("none");
+    });
+    return () => {
+      alive = false;
+    };
+  }, [word, admin, si]);
+
+  const isAuto = !admin && (auto || (!si && !!autoSi));
+  return (
+    <div className="rounded-2xl bg-amber-500/10 p-3">
+      <p className="text-xs font-bold uppercase tracking-wide opacity-60">
+        සිංහල තේරුම {isAuto && shown && <span className="normal-case font-normal">(automatic translation)</span>}
+      </p>
+      {shown ? (
+        <p className="si text-xl font-semibold">{shown}</p>
+      ) : state === "loading" ? (
+        <p className="text-sm opacity-60">Translating…</p>
+      ) : (
+        <p className="text-sm opacity-60">No Sinhala yet. Use the Madura or Google links below.</p>
+      )}
+    </div>
   );
 }
 
@@ -451,16 +522,132 @@ function Hero() {
   );
 }
 
+/** A word from the 5,000-word list, shaped like a dictionary entry. */
+function fromList(x: ListWord, adminSi?: Record<string, string>): Entry {
+  return {
+    word: x.w,
+    pos: "",
+    ipa: "",
+    syllables: guessSyllables(x.w),
+    emoji: LEVEL_EMOJI[x.l],
+    en: x.d,
+    si: adminSi?.[x.w] || x.s,
+    examples: [],
+    topic: "verbs",
+    level: x.l,
+  };
+}
+
+const PAGE = 60;
+
+function AllWords({ words, si, onOpen }: { words: ListWord[]; si: Record<string, string>; onOpen: (e: Entry) => void }) {
+  const [level, setLevel] = useState<0 | 1 | 2 | 3 | 4 | 5>(1);
+  const [letter, setLetter] = useState("");
+  const [find, setFind] = useState("");
+  const [shown, setShown] = useState(PAGE);
+  if (!words.length) return <p className="card opacity-70">Loading 5,000 words…</p>;
+  const f = find.trim().toLowerCase();
+  const list = words.filter(
+    (x) =>
+      (!level || x.l === level) &&
+      (!letter || x.w.startsWith(letter)) &&
+      (!f || x.w.includes(f) || (si[x.w] || x.s).includes(find.trim()) || x.d.toLowerCase().includes(f)),
+  );
+  return (
+    <section className="flex flex-col gap-3">
+      <input
+        value={find}
+        onChange={(e) => {
+          setFind(e.target.value);
+          setShown(PAGE);
+        }}
+        placeholder={`🔎 Search ${level ? LEVEL_NAMES[level] : "all"} words (English, meaning or සිංහල)`}
+        className="rounded-2xl border border-black/10 dark:border-white/15 bg-white dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 focus:ring-sky-400"
+      />
+      <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+        {([1, 2, 3, 4, 5] as const).map((l) => (
+          <button
+            key={l}
+            className={`shrink-0 ${level === l ? "btn-primary" : "btn-ghost"}`}
+            onClick={() => {
+              setLevel(l);
+              setShown(PAGE);
+            }}
+          >
+            {LEVEL_EMOJI[l]} {LEVEL_NAMES[l]} <span className="opacity-70 text-xs">{LEVEL_CEFR[l]} · {words.filter((x) => x.l === l).length}</span>
+          </button>
+        ))}
+        <button className={`shrink-0 ${level === 0 ? "btn-primary" : "btn-ghost"}`} onClick={() => setLevel(0)}>
+          All
+        </button>
+      </div>
+      <div className="flex flex-wrap gap-1">
+        {"abcdefghijklmnopqrstuvwxyz".split("").map((c) => (
+          <button
+            key={c}
+            onClick={() => {
+              setLetter(letter === c ? "" : c);
+              setShown(PAGE);
+            }}
+            className={`h-8 w-8 rounded-lg text-sm font-bold uppercase ${letter === c ? "bg-sky-500 text-white" : "bg-black/5 dark:bg-white/10"}`}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+        {list.slice(0, shown).map((x) => (
+          <button key={x.w} onClick={() => onOpen(fromList(x, si))} className="card p-3 text-left flex flex-col gap-0.5 hover:-translate-y-0.5 transition">
+            <span className="font-black text-lg">{x.w}</span>
+            <span className="si text-sm opacity-80 min-h-5">{si[x.w] || x.s}</span>
+            {x.d && <span className="text-[11px] opacity-60 line-clamp-2">{x.d}</span>}
+          </button>
+        ))}
+      </div>
+      {list.length > shown && (
+        <button className="btn-ghost self-center" onClick={() => setShown(shown + PAGE)}>
+          Show more ({list.length - shown} left)
+        </button>
+      )}
+      <p className="text-[11px] opacity-50">
+        Word list: New General Service List & NAWL (Browne, Culligan & Phillips), CC BY-SA 4.0. Some Sinhala from Wiktionary (CC BY-SA). Tap any word for the full
+        entry; missing Sinhala is translated automatically.
+      </p>
+    </section>
+  );
+}
+
 export function DictionaryHub() {
   const [q, setQ] = useState("");
   const [current, setCurrent] = useState<AnyEntry | null>(null);
   const [status, setStatus] = useState<"" | "loading" | "notfound" | "offline">("");
   const [topic, setTopic] = useState<TopicId | "mine">("travel");
-  const [tab, setTab] = useState<"browse" | "quiz">("browse");
+  const [tab, setTab] = useState<"levels" | "browse" | "quiz">("levels");
   const [wordOfDay, setWordOfDay] = useState<Entry | null>(null);
   const mine = useSaved();
   const cardRef = useRef<HTMLDivElement>(null);
-  const suggestions = q.trim() && !current ? searchWords(q, 8) : [];
+  const words = useWordList();
+  const custom = useCustomContent();
+  const curated = q.trim() && !current ? searchWords(q, 6) : [];
+  const fromWords =
+    q.trim().length >= 2 && !current
+      ? words
+          .filter((x) => x.w.startsWith(q.trim().toLowerCase()) && !curated.some((c) => c.word === x.w))
+          .slice(0, 10 - curated.length)
+          .map((x) => fromList(x, custom.si))
+      : [];
+  const suggestions = [...curated, ...fromWords];
+
+  // Open a word passed in the link, e.g. /dictionary?w=analysis
+  const linked = useRef(false);
+  useEffect(() => {
+    if (linked.current || !words.length) return;
+    const w = new URLSearchParams(window.location.search).get("w");
+    if (!w) return;
+    linked.current = true;
+    void search(w);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [words.length]);
 
   useEffect(() => {
     const d = new Date();
@@ -480,6 +667,8 @@ export function DictionaryHub() {
     if (!w) return;
     const local = findWord(w);
     if (local) return open(local);
+    const listed = words.find((x) => x.w === w.toLowerCase());
+    if (listed) return open(fromList(listed, custom.si));
     setCurrent(null);
     setStatus("loading");
     try {
@@ -551,14 +740,19 @@ export function DictionaryHub() {
         </button>
       )}
 
-      <nav className="flex gap-2">
-        <button className={tab === "browse" ? "btn-primary" : "btn-ghost"} onClick={() => setTab("browse")}>
-          📚 Browse words
+      <nav className="flex gap-2 overflow-x-auto no-scrollbar">
+        <button className={`shrink-0 ${tab === "levels" ? "btn-primary" : "btn-ghost"}`} onClick={() => setTab("levels")}>
+          🪜 {words.length ? words.length.toLocaleString() : "5,000"} words by level
         </button>
-        <button className={tab === "quiz" ? "btn-primary" : "btn-ghost"} onClick={() => setTab("quiz")}>
+        <button className={`shrink-0 ${tab === "browse" ? "btn-primary" : "btn-ghost"}`} onClick={() => setTab("browse")}>
+          📚 Topics & My words
+        </button>
+        <button className={`shrink-0 ${tab === "quiz" ? "btn-primary" : "btn-ghost"}`} onClick={() => setTab("quiz")}>
           🧠 Vocabulary quiz
         </button>
       </nav>
+
+      {tab === "levels" && <AllWords words={words} si={custom.si} onOpen={open} />}
 
       {tab === "browse" && (
         <section className="flex flex-col gap-3">

@@ -10,6 +10,7 @@ import { Avatar } from "./Avatar";
 
 const LINKS = [
   { href: "/", label: "Chapters", emoji: "📚" },
+  { href: "/quiz", label: "Quiz", emoji: "🧠" },
   { href: "/dictionary", label: "Dictionary", emoji: "📖" },
   { href: "/native", label: "Native English", emoji: "🎓" },
   { href: "/travel", label: "Travel", emoji: "✈️" },

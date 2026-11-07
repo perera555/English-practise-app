@@ -18,6 +18,8 @@ export type CustomContent = {
   overrides: Record<string, Lesson>;
   /** Built-in items the admin removed, e.g. "ch:cafe", "daily:bank", "story:x", "song:x", "speech:x". */
   hidden: string[];
+  /** Admin-written Sinhala meanings for dictionary words (lowercase word → Sinhala). */
+  si: Record<string, string>;
 };
 
 export type Grant = { until: string | null; note: string; createdAt: string };
@@ -30,7 +32,7 @@ type Schema = {
 };
 
 const DEFAULTS: Schema = {
-  content: { chapters: [], songs: [], twisters: [], videos: [], overrides: {}, hidden: [] },
+  content: { chapters: [], songs: [], twisters: [], videos: [], overrides: {}, hidden: [], si: {} },
   grants: {},
   codes: {},
 };

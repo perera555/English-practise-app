@@ -1,0 +1,11 @@
+# Never upload private or phone-only files to Vercel
+.env
+.env.local
+.env.*.local
+.data
+android
+ios
+.next-mobile
+out
+assets
+scripts/_*

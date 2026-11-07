@@ -14,6 +14,7 @@ import { isHidden, useCustomContent } from "@/lib/customContent";
 import { Avatar } from "./Avatar";
 
 const SECTIONS = [
+  { href: "/quiz", key: "home:pte", emoji: "🧠", title: "Quiz: Zero to Hero", text: "1,000 sentences, 50 patterns", color: "from-emerald-500/85 to-teal-700/85" },
   { href: "/dictionary", key: "dict:hero", emoji: "📖", title: "Talking Dictionary", text: "Spell, say & සිංහල meaning", color: "from-cyan-500/85 to-blue-700/85" },
   { href: "/native", key: "native:hero", emoji: "🎓", title: "Native English", text: "Idioms, slang, real speed", color: "from-violet-600/85 to-fuchsia-700/85" },
   { href: "/travel", key: "ch:at-the-gate", emoji: "✈️", title: "Travel English", text: "Airport → hotel → city", color: "from-sky-500/85 to-indigo-700/85" },
