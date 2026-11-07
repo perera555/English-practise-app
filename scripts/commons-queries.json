@@ -107,5 +107,15 @@
   "speech:mistakes-are-teachers": "teacher classroom",
   "speech:fall-seven-times": "rock climber",
   "speech:the-power-of-thank-you": "smiling elderly woman",
-  "speech:speak-up": "public speaker"
+  "speech:speak-up": "public speaker",
+  "dict:hero": "dictionary open book",
+  "native:hero": "friends talking street cafe",
+  "native:catching-up": "friends coffee cafe talking",
+  "native:office-banter": "coworkers office conversation",
+  "native:restaurant-complaint": "waiter restaurant table",
+  "native:cricket-pub": "pub television sport fans",
+  "native:flatmates": "kitchen apartment young people",
+  "native:job-negotiation": "business meeting handshake",
+  "native:travel-mishap": "airport departure board",
+  "native:giving-opinions": "students discussion seminar"
 }

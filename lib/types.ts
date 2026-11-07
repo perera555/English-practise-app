@@ -31,7 +31,7 @@ export type SceneItem = { e: string; x: number; y: number; s?: number };
 
 export type Scene = { sky: [string, string]; ground: string; items: SceneItem[] };
 
-export type Level = "Beginner" | "Intermediate";
+export type Level = "Beginner" | "Intermediate" | "Advanced";
 
 export type UnitId = "airport" | "hotel" | "city" | "sports";
 

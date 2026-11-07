@@ -20,6 +20,7 @@ for (const m of src.matchAll(/"([a-z]+:[\w-]+)":\s*"([^"]+)"/g)) queries[m[1]] =
 for (const [file, prefix] of [
   ["lib/stories.ts", "story"],
   ["lib/motivation.ts", "speech"],
+  ["lib/advanced.ts", "native"],
 ]) {
   const t = readFileSync(file, "utf8");
   for (const m of t.matchAll(/id: "([\w-]+)",[\s\S]*?photo: "([^"]+)"/g)) queries[`${prefix}:${m[1]}`] = m[2];

@@ -6,8 +6,12 @@
  */
 import { stories } from "./stories";
 import { speeches } from "./motivation";
+import { NATIVE_CONVOS } from "./advanced";
 
 export const PHOTO_QUERIES: Record<string, string> = {
+  ...Object.fromEntries(NATIVE_CONVOS.map((c) => [`native:${c.id}`, c.photo])),
+  "dict:hero": "dictionary book reading study",
+  "native:hero": "friends talking laughing city",
   ...Object.fromEntries(stories.map((s) => [`story:${s.id}`, s.photo])),
   ...Object.fromEntries(speeches.map((s) => [`speech:${s.id}`, s.photo])),
   // Front page

@@ -29,7 +29,13 @@ body {
     radial-gradient(50rem 30rem at 100% 0%, color-mix(in srgb, #d946ef 14%, transparent), transparent),
     var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), var(--font-sinhala), Arial, Helvetica, sans-serif;
+}
+
+/* Sinhala text (සිංහල) */
+.si {
+  font-family: var(--font-sinhala), "Iskoola Pota", "Noto Sans Sinhala", sans-serif;
+  line-height: 1.6;
 }
 
 @layer components {

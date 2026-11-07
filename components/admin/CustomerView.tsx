@@ -4,6 +4,8 @@ import { useState } from "react";
 
 const PAGES = [
   { path: "/", label: "🏠 Home" },
+  { path: "/dictionary", label: "📖 Dictionary" },
+  { path: "/native", label: "🎓 Native English" },
   { path: "/travel", label: "✈️ Travel" },
   { path: "/daily", label: "☕ Daily talk" },
   { path: "/stories", label: "📖 Stories" },

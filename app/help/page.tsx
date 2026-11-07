@@ -37,6 +37,8 @@ const TOC = [
   ["robot", "🤖", "Robot chat & 20-minute talks"],
   ["daily", "☕", "Daily conversation"],
   ["videos", "🎬", "Videos & your own videos"],
+  ["dictionary", "📖", "Talking Dictionary"],
+  ["native", "🎓", "Native English (Advanced)"],
   ["more", "🎵", "Music, twisters, listening, PTE"],
   ["premium", "⭐", "Premium & payment"],
   ["offline", "📶", "Using it offline"],
@@ -163,6 +165,27 @@ export default function HelpPage() {
           </li>
           <li>Online videos need internet.</li>
         </ul>
+      </Topic>
+
+      <Topic id="dictionary" emoji="📖" title="Talking Dictionary">
+        <Step n={1} title="Search any word">
+          Type an English word (or a Sinhala word) and press 🔎. Built-in words work offline; any other English word is looked up online.
+        </Step>
+        <Step n={2} title="Hear it and spell it">
+          🔊 says the word, 🐢 says it slowly by syllable, and 🔤 spells it <b>letter by letter</b> while each letter lights up. 🎤 lets you say it and get a score.
+        </Step>
+        <Step n={3} title="Meaning in English and සිංහල">
+          Read the meaning in English and <span className="si">සිංහල</span>, and tap the example sentences to hear them. Tap ☆ Save to add the word to ⭐ My
+          words, then test yourself in 🧠 Vocabulary quiz.
+        </Step>
+      </Topic>
+
+      <Topic id="native" emoji="🎓" title="Native English (Advanced)">
+        <p>
+          For advanced learners: <b>idioms</b>, <b>phrasal verbs</b>, <b>slang</b>, <b>collocations</b>, <b>formal vs informal</b> English, and{" "}
+          <b>how natives really speak</b> (gonna, wanna, linking). Every expression has a Sinhala meaning and an example. Watch <b>native conversations</b> at
+          real speed, role-play them, then talk to the robot. Choose 🎓 Advanced in ⚙️ Settings so the robot speaks like a native.
+        </p>
       </Topic>
 
       <Topic id="more" emoji="🎵" title="Music, tongue twisters, listening and PTE">

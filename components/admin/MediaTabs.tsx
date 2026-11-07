@@ -30,6 +30,8 @@ function labelFor(key: string) {
   if (kind === "story") return `📖 Story: ${id.replace(/-/g, " ")}`;
   if (kind === "speech") return `💪 Speech: ${id.replace(/-/g, " ")}`;
   if (kind === "home") return `🏠 Front page: ${id}`;
+  if (kind === "native") return `🎓 Native: ${id.replace(/-/g, " ")}`;
+  if (kind === "dict") return `📖 Dictionary: ${id}`;
   return `🎓 PTE image ${id}`;
 }
 

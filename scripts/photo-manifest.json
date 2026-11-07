@@ -1070,5 +1070,85 @@
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Riding_with_calling.jpg",
     "title": "Riding with calling",
     "query": "woman confident city"
+  },
+  "dict:hero": {
+    "src": "/photos/dict-hero.webp",
+    "author": "The original uploader was Mgoutsidou at Greek Wikipedia.",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Oxford_Dictionary_of_National_Biography_volumes.jpg",
+    "title": "Oxford Dictionary of National Biography volumes",
+    "query": "dictionary book"
+  },
+  "native:hero": {
+    "src": "/photos/native-hero.webp",
+    "author": "William Murphy",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:MY_FRIENDS_ARE_MOVING_TO_CHAPELIZOD_(THEY_MISHEARD_THE_NAME_AS_CHAPEL_LIZARD)-272154.jpg",
+    "title": "MY FRIENDS ARE MOVING TO CHAPELIZOD (THEY MISHEARD THE NAME AS CHAPEL LIZARD)-272154",
+    "query": "friends talking street cafe"
+  },
+  "native:catching-up": {
+    "src": "/photos/native-catching-up.webp",
+    "author": "Bambizoe from Dresden, Germany",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Blick_von_Schaftreppe_Pirna_nach_Dresden_aif_Innenstadt_2018.jpg",
+    "title": "Blick von Schaftreppe Pirna nach Dresden aif Innenstadt 2018",
+    "query": "friends coffee cafe talking"
+  },
+  "native:office-banter": {
+    "src": "/photos/native-office-banter.webp",
+    "author": "MonamiThakur",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Coworkers_in_Bangalore_Coworking_Hub.JPG",
+    "title": "Coworkers in Bangalore Coworking Hub",
+    "query": "office coworkers"
+  },
+  "native:restaurant-complaint": {
+    "src": "/photos/native-restaurant-complaint.webp",
+    "author": "Jokromberg",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Our_waiter_in_Zanzibar.jpg",
+    "title": "Our waiter in Zanzibar",
+    "query": "waiter restaurant table"
+  },
+  "native:cricket-pub": {
+    "src": "/photos/native-cricket-pub.webp",
+    "author": "Gareth Williams from Redhill, England",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lords_-_June_2011_-_E_v_SL_-_Ian_Bell_Steers_One_Over_the_Slips_(5858008465).jpg",
+    "title": "Lords - June 2011 - E v SL - Ian Bell Steers One Over the Slips (5858008465)",
+    "query": "friends watching cricket"
+  },
+  "native:flatmates": {
+    "src": "/photos/native-flatmates.webp",
+    "author": "Kate Mereand from Silver Spring, MD (Washington, DC), United States",
+    "license": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fort_Totten_(Washington_Metro)_in_2006.jpg",
+    "title": "Fort Totten (Washington Metro) in 2006",
+    "query": "roommates talking"
+  },
+  "native:job-negotiation": {
+    "src": "/photos/native-job-negotiation.webp",
+    "author": "MC1 Chad J. McNeeley",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chairman_of_the_Joint_Chiefs_of_Staff_Adm._Mike_Mullen,_U.S._Navy,_greets_U.S._Army_Capt._Scott_Leifker_during_the_Chicago_White_Sox_versus_the_Baltimore_Orioles_game_at_U.S._Cellular_Field_on_Aug._25,_2010_100825-N-TT977-539.jpg",
+    "title": "Chairman of the Joint Chiefs of Staff Adm. Mike Mullen, U.S. Navy, greets U.S. Army Capt. Scott Leifker during the Chicago White Sox versus the Baltimore Orioles game at U.S. Cellular Field on Aug. 25, 2010 100825-N-TT977-539",
+    "query": "business meeting handshake"
+  },
+  "native:travel-mishap": {
+    "src": "/photos/native-travel-mishap.webp",
+    "author": "Kgbo",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Flight_departure_board_at_Brisbane_Airport,_December_2022.jpg",
+    "title": "Flight departure board at Brisbane Airport, December 2022",
+    "query": "airport departure board"
+  },
+  "native:giving-opinions": {
+    "src": "/photos/native-giving-opinions.webp",
+    "author": "Lmgdatagroup",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:LMG_Socratic_Seminar_discussion_paddles..jpg",
+    "title": "LMG Socratic Seminar discussion paddles.",
+    "query": "students discussion seminar"
   }
 }

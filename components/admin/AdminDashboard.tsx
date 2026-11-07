@@ -31,6 +31,8 @@ import { stories } from "@/lib/stories";
 import { speeches } from "@/lib/motivation";
 import { refreshPremium } from "@/lib/premium";
 import { CustomerView } from "./CustomerView";
+import { NATIVE_CONVOS } from "@/lib/advanced";
+import { DICTIONARY } from "@/lib/dictionary";
 import { PicturesTab, YouTubeFinder } from "./MediaTabs";
 import { AdminGuide } from "./AdminGuide";
 import type { Customer, PhotoInfo } from "@/lib/db";
@@ -580,6 +582,16 @@ function LibraryTab({ content, run }: { content: CustomContent; run: Run }) {
     { title: "🎤 Speaking sessions", page: "/speaking", items: sessions("speaking", 10, "🎤") },
     { title: "👅 Tongue twister sessions", page: "/twisters", items: sessions("twisters", 12, "👅") },
     { title: "🎓 PTE sessions", page: "/pte", items: sessions("pte", 6, "🎓") },
+    {
+      title: "🎓 Native English (Advanced)",
+      page: "/native",
+      items: NATIVE_CONVOS.map((c) => ({ key: "", label: `${c.n}. ${c.emoji} ${c.title}`, href: `/native/${c.id}` })),
+    },
+    {
+      title: "📖 Talking Dictionary",
+      page: "/dictionary",
+      items: [{ key: "", label: `📖 Dictionary (${DICTIONARY.length} built-in words + online search)`, href: "/dictionary" }],
+    },
     {
       title: "📄 Other pages",
       items: [

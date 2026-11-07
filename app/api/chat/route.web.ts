@@ -38,7 +38,13 @@ async function handle(req: Request): Promise<Response> {
 
   const robot = clip(body.robot, 200) || "a friendly English tutor";
   const topic = clip(body.topic, 200) || "everyday English";
-  const level = body.level === "Intermediate" ? "Intermediate" : "Beginner";
+  const level = body.level === "Advanced" ? "Advanced" : body.level === "Intermediate" ? "Intermediate" : "Beginner";
+  const cefr =
+    level === "Beginner"
+      ? "A1-A2: use very simple words and short sentences"
+      : level === "Intermediate"
+        ? "B1-B2: natural everyday English, some idioms explained briefly"
+        : "C1-C2: speak like a native speaker. Use idioms, phrasal verbs and natural informal expressions, and briefly explain an idiom in brackets the first time you use it";
   const stage = STAGES[clip(body.stage, 20)] ?? "";
 
   const history: Anthropic.Beta.BetaMessageParam[] = (Array.isArray(body.messages) ? body.messages : [])
@@ -53,7 +59,7 @@ async function handle(req: Request): Promise<Response> {
   }
 
   const system = `You are an English speaking-practice partner inside a learning app. You play ${robot}. Topic: "${topic}".
-The learner's level is ${level} (CEFR ${level === "Beginner" ? "A1-A2: use very simple words and short sentences" : "B1-B2: natural everyday English, some idioms explained briefly"}).
+The learner's level is ${level} (CEFR ${cefr}).
 
 Rules:
 - Keep each reply short: 1-3 sentences, then ask ONE question so the learner keeps talking.

@@ -10,10 +10,12 @@ import { Avatar } from "./Avatar";
 
 const LINKS = [
   { href: "/", label: "Chapters", emoji: "📚" },
+  { href: "/dictionary", label: "Dictionary", emoji: "📖" },
+  { href: "/native", label: "Native English", emoji: "🎓" },
   { href: "/travel", label: "Travel", emoji: "✈️" },
   { href: "/daily", label: "Daily Talk", emoji: "☕" },
   { href: "/videos", label: "Videos", emoji: "🎬" },
-  { href: "/stories", label: "Stories", emoji: "📖" },
+  { href: "/stories", label: "Stories", emoji: "📚" },
   { href: "/motivation", label: "Motivation", emoji: "💪" },
   { href: "/listening", label: "Listening", emoji: "🎧" },
   { href: "/speaking", label: "Speaking", emoji: "🎤" },
@@ -78,10 +80,10 @@ export function Nav() {
           <h3 className="font-bold">Settings</h3>
           <div>
             <p className="text-sm font-semibold mb-1">My level</p>
-            <div className="flex gap-2">
-              {(["Beginner", "Intermediate"] as const).map((lv) => (
+            <div className="flex flex-wrap gap-2">
+              {(["Beginner", "Intermediate", "Advanced"] as const).map((lv) => (
                 <button key={lv} className={s.level === lv ? "btn-primary" : "btn-ghost"} onClick={() => updateSettings({ level: lv })}>
-                  {lv === "Beginner" ? "🌱" : "🌳"} {lv}
+                  {lv === "Beginner" ? "🌱" : lv === "Intermediate" ? "🌳" : "🎓"} {lv}
                 </button>
               ))}
             </div>
