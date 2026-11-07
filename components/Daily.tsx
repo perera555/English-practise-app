@@ -101,7 +101,7 @@ export function DailyView({ talk }: { talk: DailyTalk }) {
 }
 
 function DailyViewInner({ talk }: { talk: DailyTalk }) {
-  const [tab, setTab] = useUrlTab<(typeof TABS)[number]["id"]>("listen");
+  const [tab, setTab] = useUrlTab<(typeof TABS)[number]["id"]>("listen", TABS.map((t) => t.id));
   const [mins, setMins] = useState(0);
   const i = dailyTalks.findIndex((x) => x.id === talk.id);
   const prev = dailyTalks[i - 1];

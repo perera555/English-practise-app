@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { speak, useVoices } from "@/lib/speech";
 import { updateSettings, useSettings } from "@/lib/settings";
 import { useProfile } from "@/lib/profile";
 import { Avatar } from "./Avatar";
-import { NAV_EVENT } from "@/lib/useUrlTab";
+import { NAV_EVENT, tabStepper } from "@/lib/useUrlTab";
 
 const LINKS = [
   { href: "/", label: "Chapters", emoji: "📚" },
@@ -57,22 +57,7 @@ export function Nav() {
         <Link href="/premium" className="md:hidden shrink-0 rounded-full bg-linear-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1.5 shadow">
           ⭐ Premium
         </Link>
-        <nav className="hidden md:flex gap-1 overflow-x-auto flex-1 no-scrollbar">
-          {LINKS.map((l) => {
-            const active = l.href === "/" ? path === "/" || path.startsWith("/chapter") : path.startsWith(l.href);
-            return (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={`shrink-0 rounded-full px-3 py-1.5 text-sm font-semibold transition ${
-                  active ? "bg-sky-500 text-white" : "hover:bg-black/5 dark:hover:bg-white/10"
-                }`}
-              >
-                {l.emoji} <span className="hidden md:inline">{l.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
+        <NavStrip path={path} />
         <ProfileButton />
         <button className="rounded-full h-9 w-9 grid place-items-center hover:bg-black/5 dark:hover:bg-white/10 shrink-0" onClick={() => setOpen((o) => !o)} aria-label="Settings">
           ⚙️
@@ -186,7 +171,9 @@ function BackForward() {
   }, [path]);
 
   const canBack = hist.idx > 0 || path !== "/";
-  const canForward = hist.idx >= 0 && hist.idx < hist.entries.length - 1;
+  const histForward = hist.idx >= 0 && hist.idx < hist.entries.length - 1;
+  const step = tabStepper();
+  const canForward = histForward || !!step?.hasNext();
 
   const back = () => {
     if (hist.idx > 0) {
@@ -199,9 +186,10 @@ function BackForward() {
     }
   };
   const forward = () => {
-    if (!canForward) return;
-    hist.pending = 1;
-    window.history.forward();
+    if (histForward) {
+      hist.pending = 1;
+      window.history.forward();
+    } else step?.next(); // no forward step yet: open the page's next tab
   };
 
   const btn =
@@ -214,6 +202,84 @@ function BackForward() {
       <button type="button" className={btn} onClick={forward} disabled={!canForward} aria-label="Forward" title="Forward">
         ›
       </button>
+    </div>
+  );
+}
+
+/* ---------------- Top menu: scrolls sideways with ‹ › arrows so no item is hidden ---------------- */
+
+function NavStrip({ path }: { path: string }) {
+  const ref = useRef<HTMLElement>(null);
+  const [edge, setEdge] = useState({ left: false, right: false });
+
+  const update = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    setEdge({ left: el.scrollLeft > 4, right: el.scrollLeft + el.clientWidth < el.scrollWidth - 4 });
+  }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    update();
+    // Mouse wheel (up/down) scrolls the menu sideways.
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && el.scrollWidth > el.clientWidth) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      }
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    el.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      el.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [update]);
+
+  // Keep the current page's item visible.
+  useEffect(() => {
+    ref.current?.querySelector<HTMLElement>("[data-active='true']")?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [path]);
+
+  const slide = (dir: -1 | 1) => {
+    const el = ref.current;
+    if (el) el.scrollBy({ left: dir * Math.max(200, el.clientWidth * 0.7), behavior: "smooth" });
+  };
+  const arrow =
+    "absolute top-1/2 -translate-y-1/2 z-10 grid place-items-center h-8 w-8 rounded-full bg-white dark:bg-slate-700 shadow-md text-xl font-black hover:scale-110 transition";
+
+  return (
+    <div className="relative hidden md:block flex-1 min-w-0">
+      {edge.left && (
+        <button type="button" className={`${arrow} left-0`} onClick={() => slide(-1)} aria-label="More menu items to the left">
+          ‹
+        </button>
+      )}
+      <nav ref={ref} className="flex gap-1 overflow-x-auto no-scrollbar scroll-smooth px-9">
+        {LINKS.map((l) => {
+          const active = l.href === "/" ? path === "/" || path.startsWith("/chapter") : path.startsWith(l.href);
+          return (
+            <Link
+              key={l.href}
+              href={l.href}
+              data-active={active}
+              className={`shrink-0 rounded-full px-3 py-1.5 text-sm font-semibold transition ${
+                active ? "bg-sky-500 text-white" : "hover:bg-black/5 dark:hover:bg-white/10"
+              }`}
+            >
+              {l.emoji} {l.label}
+            </Link>
+          );
+        })}
+      </nav>
+      {edge.right && (
+        <button type="button" className={`${arrow} right-0`} onClick={() => slide(1)} aria-label="More menu items to the right">
+          ›
+        </button>
+      )}
     </div>
   );
 }

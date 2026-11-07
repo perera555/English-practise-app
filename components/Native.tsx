@@ -375,7 +375,7 @@ function NativeHero() {
 }
 
 export function NativeHub() {
-  const [tab, setTab] = useUrlTab<Tab>("convos");
+  const [tab, setTab] = useUrlTab<Tab>("convos", TABS.map((t) => t.id));
   return (
     <div className="flex flex-col gap-5">
       <NativeHero />

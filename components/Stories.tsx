@@ -84,7 +84,7 @@ export function StoryView({ story }: { story: Story }) {
 }
 
 function StoryViewInner({ story }: { story: Story }) {
-  const [tab, setTab] = useUrlTab<(typeof TABS)[number]["id"]>("read");
+  const [tab, setTab] = useUrlTab<(typeof TABS)[number]["id"]>("read", TABS.map((t) => t.id));
   const i = stories.findIndex((x) => x.id === story.id);
   const prev = stories[i - 1];
   const next = stories[i + 1];

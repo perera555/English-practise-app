@@ -47,7 +47,7 @@ function ChapterViewInner({
   next?: Lesson;
   hrefFor?: (l: Lesson) => string;
 }) {
-  const [tab, setTab] = useUrlTab<Tab>("watch");
+  const [tab, setTab] = useUrlTab<Tab>("watch", TABS.map((t) => t.id));
   const [lineIdx, setLineIdx] = useState(-1);
   const [tick, setTick] = useState(0);
   const [talkMode, setTalkMode] = useState<"quick" | "session">("session");
@@ -151,6 +151,24 @@ function ChapterViewInner({
         <Gate free={lesson.chapter === 1} what={`The Advanced version of “${lesson.title}”`}>
           <AdvancedTab lesson={lesson} adv={ADVANCED[lesson.id]} onDone={() => mark("advanced")} />
         </Gate>
+      )}
+      {tab === "advanced" && (
+        <section className="flex flex-col gap-2">
+          <ChapterVideos chapterId={lesson.id} />
+          <a
+            className="card p-4 flex items-center gap-3 hover:-translate-y-0.5 transition"
+            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(`${lesson.watch} native English conversation advanced`)}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span className="text-3xl">📺</span>
+            <span className="flex-1">
+              <span className="block font-bold">Watch native-speed videos about “{lesson.title}”</span>
+              <span className="block text-sm opacity-70">Opens YouTube. Turn on CC subtitles and listen for today&apos;s expressions.</span>
+            </span>
+            <span className="text-xl">→</span>
+          </a>
+        </section>
       )}
       {tab === "advanced" && !ADVANCED[lesson.id] && (
         <p className="card opacity-70">This chapter has no Advanced version yet.</p>

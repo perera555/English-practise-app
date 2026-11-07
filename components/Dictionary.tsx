@@ -623,7 +623,7 @@ export function DictionaryHub() {
   const [current, setCurrent] = useState<AnyEntry | null>(null);
   const [status, setStatus] = useState<"" | "loading" | "notfound" | "offline">("");
   const [topic, setTopic] = useState<TopicId | "mine">("travel");
-  const [tab, setTab] = useUrlTab<"levels" | "browse" | "quiz">("levels");
+  const [tab, setTab] = useUrlTab<"levels" | "browse" | "quiz">("levels", ["levels", "browse", "quiz"]);
   const [wordOfDay, setWordOfDay] = useState<Entry | null>(null);
   const mine = useSaved();
   const cardRef = useRef<HTMLDivElement>(null);
