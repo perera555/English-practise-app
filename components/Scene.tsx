@@ -33,9 +33,26 @@ export function Scene({ scene, label, className = "", photoKey }: { scene: Scene
         <figcaption className="absolute top-1.5 right-2 max-w-[70%] truncate rounded-full bg-black/40 px-2 py-0.5 text-[9px] text-white/85 backdrop-blur">
 
           📷{" "}
-          <a href={photo.pageUrl} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
+          {/* Not an <a>: the picture is often inside a card link, and a link may not contain another link. */}
+          <span
+            role="link"
+            tabIndex={0}
+            className="cursor-pointer hover:underline"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              window.open(photo.pageUrl, "_blank", "noreferrer");
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                e.stopPropagation();
+                window.open(photo.pageUrl, "_blank", "noreferrer");
+              }
+            }}
+          >
             {photoCredit(photo)}
-          </a>
+          </span>
         </figcaption>
       </figure>
     );

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { speak, useVoices } from "@/lib/speech";
 import { updateSettings, useSettings } from "@/lib/settings";
 import { useProfile } from "@/lib/profile";
@@ -45,11 +45,12 @@ export function Nav() {
   return (
     <>
     <header className="app-top sticky top-0 z-30 backdrop-blur-md bg-(--background)/80 border-b border-black/5 dark:border-white/10">
-      <div className="mx-auto max-w-6xl px-4 h-14 flex items-center gap-3">
+      <div className="mx-auto max-w-6xl px-3 sm:px-4 h-14 flex items-center gap-2 sm:gap-3">
+        <BackForward />
         <Link href="/" className="font-black text-base sm:text-lg flex items-center gap-2 min-w-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="" width={34} height={34} className="rounded-xl shadow-md shrink-0" />
-          <span className="truncate bg-linear-to-r from-sky-500 to-fuchsia-500 bg-clip-text text-transparent">SpeakUp English</span>
+          <span className="hidden min-[400px]:inline truncate bg-linear-to-r from-sky-500 to-fuchsia-500 bg-clip-text text-transparent">SpeakUp English</span>
         </Link>
         <span className="flex-1 md:hidden" />
         <Link href="/premium" className="md:hidden shrink-0 rounded-full bg-linear-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1.5 shadow">
@@ -126,6 +127,74 @@ export function Nav() {
     </header>
     <BottomTabs path={path} />
     </>
+  );
+}
+
+/* ---------------- Back / forward buttons (like a browser, also inside the phone app) ---------------- */
+
+// The app keeps its own list of visited pages, so the buttons know when back / forward is possible
+// (and still work when a page was opened directly from a link, where the browser has no history).
+const hist = { entries: [] as string[], idx: -1, pending: 0 as -1 | 0 | 1, popped: false };
+
+function BackForward() {
+  const router = useRouter();
+  const path = usePathname();
+  const [, force] = useState(0);
+
+  useEffect(() => {
+    const onPop = () => {
+      hist.popped = true;
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  useEffect(() => {
+    const h = hist;
+    if (h.entries[h.idx] !== path) {
+      if (h.pending && h.entries[h.idx + h.pending] === path) h.idx += h.pending;
+      else if (h.popped && h.entries[h.idx - 1] === path) h.idx -= 1;
+      else if (h.popped && h.entries[h.idx + 1] === path) h.idx += 1;
+      else {
+        h.entries = [...h.entries.slice(0, h.idx + 1), path];
+        h.idx = h.entries.length - 1;
+      }
+    }
+    h.pending = 0;
+    h.popped = false;
+    force((n) => n + 1);
+  }, [path]);
+
+  const canBack = hist.idx > 0 || path !== "/";
+  const canForward = hist.idx >= 0 && hist.idx < hist.entries.length - 1;
+
+  const back = () => {
+    if (hist.idx > 0) {
+      hist.pending = -1;
+      window.history.back();
+    } else if (path !== "/") {
+      // Opened straight on this page: go up one level (e.g. /quiz/abc → /quiz), or home.
+      const up = path.replace(/\/$/, "").split("/").slice(0, -1).join("/") || "/";
+      router.push(up);
+    }
+  };
+  const forward = () => {
+    if (!canForward) return;
+    hist.pending = 1;
+    window.history.forward();
+  };
+
+  const btn =
+    "grid place-items-center h-9 w-9 shrink-0 rounded-full bg-white/80 dark:bg-white/10 shadow-[0_3px_0_rgba(0,0,0,0.15)] active:translate-y-0.5 hover:bg-white dark:hover:bg-white/20 text-2xl leading-none font-black disabled:opacity-30 disabled:pointer-events-none";
+  return (
+    <div className="flex items-center gap-1 shrink-0">
+      <button type="button" className={btn} onClick={back} disabled={!canBack} aria-label="Back" title="Back">
+        ‹
+      </button>
+      <button type="button" className={btn} onClick={forward} disabled={!canForward} aria-label="Forward" title="Forward">
+        ›
+      </button>
+    </div>
   );
 }
 

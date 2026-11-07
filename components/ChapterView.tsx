@@ -12,6 +12,9 @@ import { ChapterVideos } from "./Videos";
 import { isHidden, useCustomContent } from "@/lib/customContent";
 import { RemovedNotice } from "./HideIf";
 import { DescribePicture, Dictation, MicWarning, Quiz, RepeatLine, VocabCards } from "./Practice";
+import { Gate } from "./Premium";
+import { speak } from "@/lib/speech";
+import { ADVANCED, type AdvancedVersion } from "@/lib/chapters/advancedVersions";
 
 const TABS = [
   { id: "watch", label: "Watch & Read", emoji: "🎬" },
@@ -19,6 +22,7 @@ const TABS = [
   { id: "listen", label: "Listening", emoji: "🎧" },
   { id: "speak", label: "Speaking", emoji: "🎤" },
   { id: "talk", label: "Conversation", emoji: "🤖" },
+  { id: "advanced", label: "Advanced", emoji: "🎓" },
 ] as const;
 
 type Tab = (typeof TABS)[number]["id"];
@@ -142,6 +146,15 @@ function ChapterViewInner({
 
       {tab === "watch" && <ChapterVideos chapterId={lesson.id} />}
 
+      {tab === "advanced" && ADVANCED[lesson.id] && (
+        <Gate free={lesson.chapter === 1} what={`The Advanced version of “${lesson.title}”`}>
+          <AdvancedTab lesson={lesson} adv={ADVANCED[lesson.id]} onDone={() => mark("advanced")} />
+        </Gate>
+      )}
+      {tab === "advanced" && !ADVANCED[lesson.id] && (
+        <p className="card opacity-70">This chapter has no Advanced version yet.</p>
+      )}
+
       {tab === "vocab" && (
         <section className="flex flex-col gap-3">
           <p className="opacity-70">Tap a picture card to hear the word and see its meaning. Then press 🎤 to say it.</p>
@@ -232,5 +245,74 @@ function ChapterViewInner({
         )}
       </footer>
     </div>
+  );
+}
+
+/* ---------------- 🎓 Advanced version: same situation, native-speaker English ---------------- */
+
+function AdvancedTab({ lesson, adv, onDone }: { lesson: Lesson; adv: AdvancedVersion; onDone: () => void }) {
+  const [mode, setMode] = useState<"listen" | "roleplay">("listen");
+  const [lineIdx, setLineIdx] = useState(-1);
+  const [tick, setTick] = useState(0);
+  const speakers = [...new Set(adv.lines.map((l) => l.speaker))];
+  const learner = speakers.includes(lesson.learnerRole) ? lesson.learnerRole : (speakers[1] ?? speakers[0]);
+  const onLine = useCallback((i: number) => {
+    setLineIdx(i);
+    setTick((t) => t + 1);
+  }, []);
+  const action = lineIdx >= 0 ? adv.lines[lineIdx]?.action : undefined;
+
+  return (
+    <section className="flex flex-col gap-5">
+      <div className="rounded-3xl bg-linear-to-r from-violet-600 to-fuchsia-600 text-white p-5 shadow-lg">
+        <p className="text-sm font-semibold opacity-90">🎓 Advanced level (C1)</p>
+        <h2 className="text-xl font-black">{lesson.title}: the way native speakers really say it</h2>
+        <p className="text-sm opacity-90">The same situation, with natural idioms and expressions. Listen first, then take a role.</p>
+      </div>
+
+      <div className="grid lg:grid-cols-[1fr_1.1fr] gap-5">
+        <div className="flex flex-col gap-3">
+          {lesson.sport ? (
+            <Pitch sport={lesson.sport} action={action} tick={tick} />
+          ) : (
+            <Scene scene={lesson.scene} label={lesson.title} photoKey={`ch:${lesson.id}`} />
+          )}
+          <div className="flex flex-wrap gap-2">
+            <button className={mode === "listen" ? "btn-primary" : "btn-ghost"} onClick={() => setMode("listen")}>
+              🎧 Listen with karaoke
+            </button>
+            <button className={mode === "roleplay" ? "btn-primary" : "btn-ghost"} onClick={() => setMode("roleplay")}>
+              🎭 Role-play as {learner}
+            </button>
+          </div>
+        </div>
+        <div className="card flex flex-col gap-3">
+          {mode === "roleplay" && <MicWarning />}
+          <Karaoke
+            key={mode}
+            lines={adv.lines}
+            learnerRole={learner}
+            allowRolePlay={mode === "roleplay"}
+            startRolePlay={mode === "roleplay"}
+            onLine={onLine}
+            onFinish={onDone}
+          />
+        </div>
+      </div>
+
+      <div className="card flex flex-col gap-3">
+        <h3 className="font-bold text-lg">💡 Native expressions in this chapter</h3>
+        {adv.expressions.map((x) => (
+          <div key={x.en} className="rounded-2xl bg-violet-50 dark:bg-violet-500/10 p-3 flex flex-col gap-2">
+            <button className="text-left" onClick={() => speak(x.en)}>
+              <span className="text-lg font-bold">🔊 {x.en}</span>
+              <span className="block text-sm opacity-80">{x.meaning}</span>
+              <span className="block text-sm si opacity-80">{x.si}</span>
+            </button>
+            <RepeatLine text={x.en} />
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
