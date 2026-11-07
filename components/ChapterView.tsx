@@ -1,5 +1,6 @@
 "use client";
 
+import { useUrlTab } from "@/lib/useUrlTab";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import type { Lesson, Line } from "@/lib/types";
@@ -46,7 +47,7 @@ function ChapterViewInner({
   next?: Lesson;
   hrefFor?: (l: Lesson) => string;
 }) {
-  const [tab, setTab] = useState<Tab>("watch");
+  const [tab, setTab] = useUrlTab<Tab>("watch");
   const [lineIdx, setLineIdx] = useState(-1);
   const [tick, setTick] = useState(0);
   const [talkMode, setTalkMode] = useState<"quick" | "session">("session");

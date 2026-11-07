@@ -7,6 +7,7 @@ import { speak, useVoices } from "@/lib/speech";
 import { updateSettings, useSettings } from "@/lib/settings";
 import { useProfile } from "@/lib/profile";
 import { Avatar } from "./Avatar";
+import { NAV_EVENT } from "@/lib/useUrlTab";
 
 const LINKS = [
   { href: "/", label: "Chapters", emoji: "📚" },
@@ -134,7 +135,9 @@ export function Nav() {
 
 // The app keeps its own list of visited pages, so the buttons know when back / forward is possible
 // (and still work when a page was opened directly from a link, where the browser has no history).
-const hist = { entries: [] as string[], idx: -1, pending: 0 as -1 | 0 | 1, popped: false };
+// Every step (page or tab) is "path?query", e.g. "/chapter/cafe?tab=vocab".
+const hist = { entries: [] as string[], idx: -1, pending: 0 as -1 | 0 | 1 };
+const here = () => window.location.pathname + window.location.search;
 
 function BackForward() {
   const router = useRouter();
@@ -142,26 +145,43 @@ function BackForward() {
   const [, force] = useState(0);
 
   useEffect(() => {
-    const onPop = () => {
-      hist.popped = true;
-    };
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
-  }, []);
-
-  useEffect(() => {
     const h = hist;
-    if (h.entries[h.idx] !== path) {
-      if (h.pending && h.entries[h.idx + h.pending] === path) h.idx += h.pending;
-      else if (h.popped && h.entries[h.idx - 1] === path) h.idx -= 1;
-      else if (h.popped && h.entries[h.idx + 1] === path) h.idx += 1;
-      else {
-        h.entries = [...h.entries.slice(0, h.idx + 1), path];
+    const push = () => {
+      const key = here();
+      if (h.entries[h.idx] === key) return;
+      h.entries = [...h.entries.slice(0, h.idx + 1), key];
+      h.idx = h.entries.length - 1;
+      force((n) => n + 1);
+    };
+    const onPop = () => {
+      // The browser moved back or forward: find where we are now.
+      const key = here();
+      if (h.pending && h.entries[h.idx + h.pending] === key) h.idx += h.pending;
+      else if (h.entries[h.idx - 1] === key) h.idx -= 1;
+      else if (h.entries[h.idx + 1] === key) h.idx += 1;
+      else if (h.entries[h.idx] !== key) {
+        h.entries = [...h.entries.slice(0, h.idx + 1), key];
         h.idx = h.entries.length - 1;
       }
+      h.pending = 0;
+      force((n) => n + 1);
+    };
+    window.addEventListener("popstate", onPop);
+    window.addEventListener(NAV_EVENT, push);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      window.removeEventListener(NAV_EVENT, push);
+    };
+  }, []);
+
+  // A link was clicked (new page): add it to the list.
+  useEffect(() => {
+    const h = hist;
+    const key = here();
+    if (h.entries[h.idx] !== key) {
+      h.entries = [...h.entries.slice(0, h.idx + 1), key];
+      h.idx = h.entries.length - 1;
     }
-    h.pending = 0;
-    h.popped = false;
     force((n) => n + 1);
   }, [path]);
 

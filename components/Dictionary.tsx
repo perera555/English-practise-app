@@ -1,5 +1,6 @@
 "use client";
 
+import { useUrlTab } from "@/lib/useUrlTab";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { DICTIONARY, TOPICS, externalDictionaries, findWord, searchWords, type Entry, type TopicId } from "@/lib/dictionary";
 import { fullEntry, guessSyllables, lookupOnline, toSinhala, type FullEntry, type OnlineEntry } from "@/lib/lookup";
@@ -622,7 +623,7 @@ export function DictionaryHub() {
   const [current, setCurrent] = useState<AnyEntry | null>(null);
   const [status, setStatus] = useState<"" | "loading" | "notfound" | "offline">("");
   const [topic, setTopic] = useState<TopicId | "mine">("travel");
-  const [tab, setTab] = useState<"levels" | "browse" | "quiz">("levels");
+  const [tab, setTab] = useUrlTab<"levels" | "browse" | "quiz">("levels");
   const [wordOfDay, setWordOfDay] = useState<Entry | null>(null);
   const mine = useSaved();
   const cardRef = useRef<HTMLDivElement>(null);

@@ -1,5 +1,6 @@
 "use client";
 
+import { useUrlTab } from "@/lib/useUrlTab";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { COLLOCATIONS, CONNECTED, FREE_NATIVE, IDIOMS, NATIVE_CONVOS, PHRASAL, REGISTER, SLANG, type Expr, type NativeConvo } from "@/lib/advanced";
@@ -374,7 +375,7 @@ function NativeHero() {
 }
 
 export function NativeHub() {
-  const [tab, setTab] = useState<Tab>("convos");
+  const [tab, setTab] = useUrlTab<Tab>("convos");
   return (
     <div className="flex flex-col gap-5">
       <NativeHero />

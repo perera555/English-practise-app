@@ -1,5 +1,6 @@
 "use client";
 
+import { useUrlTab } from "@/lib/useUrlTab";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { PATTERNS, FREE_PATTERNS, fourOptions, parseGap, type Pattern } from "@/lib/patterns";
@@ -342,7 +343,7 @@ const MODES = [
 ] as const;
 
 export function PatternView({ p }: { p: Pattern }) {
-  const [mode, setMode] = useState<(typeof MODES)[number]["id"]>("fill");
+  const [mode, setMode] = useUrlTab<(typeof MODES)[number]["id"]>("fill");
   const [run, setRun] = useState(0);
   // The quiz shuffles questions, so it only starts in the browser (pages are pre-built without it).
   const [ready, setReady] = useState(false);

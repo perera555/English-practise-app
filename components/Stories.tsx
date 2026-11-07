@@ -1,5 +1,6 @@
 "use client";
 
+import { useUrlTab } from "@/lib/useUrlTab";
 import Link from "next/link";
 import { useState } from "react";
 import { stories, FREE_STORIES, type Story } from "@/lib/stories";
@@ -83,7 +84,7 @@ export function StoryView({ story }: { story: Story }) {
 }
 
 function StoryViewInner({ story }: { story: Story }) {
-  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("read");
+  const [tab, setTab] = useUrlTab<(typeof TABS)[number]["id"]>("read");
   const i = stories.findIndex((x) => x.id === story.id);
   const prev = stories[i - 1];
   const next = stories[i + 1];

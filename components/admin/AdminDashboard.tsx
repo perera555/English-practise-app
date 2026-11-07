@@ -1,5 +1,6 @@
 "use client";
 
+import { useUrlTab } from "@/lib/useUrlTab";
 import { useActionState, useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { CustomContent, GiftCode, Grant } from "@/lib/db";
@@ -108,7 +109,7 @@ const NAV: { group: string; items: { id: TabId; label: string; emoji: string }[]
 ];
 
 export function AdminDashboard({ grants, codes, content, storage, photos, pexels, youtube, customers, seen, setup }: Props) {
-  const [tab, setTab] = useState<TabId>("overview");
+  const [tab, setTab] = useUrlTab<TabId>("overview");
   const [prefill, setPrefill] = useState("");
   const [msg, setMsg] = useState("");
   const [pending, start] = useTransition();

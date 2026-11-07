@@ -1,5 +1,6 @@
 "use client";
 
+import { useUrlTab } from "@/lib/useUrlTab";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { dailyTalks, FREE_DAILY, type DailyTalk } from "@/lib/daily";
@@ -100,7 +101,7 @@ export function DailyView({ talk }: { talk: DailyTalk }) {
 }
 
 function DailyViewInner({ talk }: { talk: DailyTalk }) {
-  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("listen");
+  const [tab, setTab] = useUrlTab<(typeof TABS)[number]["id"]>("listen");
   const [mins, setMins] = useState(0);
   const i = dailyTalks.findIndex((x) => x.id === talk.id);
   const prev = dailyTalks[i - 1];
