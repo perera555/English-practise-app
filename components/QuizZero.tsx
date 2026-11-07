@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PATTERNS, FREE_PATTERNS, fourOptions, parseGap, type Pattern } from "@/lib/patterns";
 import { saveSessionScore, useProgress } from "@/lib/settings";
 import { speak, splitWords } from "@/lib/speech";
@@ -23,6 +23,7 @@ export function QuizHub() {
   const best = (id: string) => progress.sessions?.[`quiz-${id}`];
   const done = PATTERNS.filter((p) => (best(p.id) ?? 0) >= 70).length;
   const [test, setTest] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
+  const nextPattern = PATTERNS.find((p) => (best(p.id) ?? 0) < 70) ?? PATTERNS[0];
 
   return (
     <div className="flex flex-col gap-6">
@@ -33,6 +34,18 @@ export function QuizHub() {
           50 sentence patterns · 1,000 sentences · from 🌱 Beginner to 🎓 Advanced. Learn each pattern, then practise: fill the gap, build the sentence, listen and type,
           and say it. Works offline.
         </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Link href={`/quiz/${nextPattern.id}`} className="rounded-2xl bg-white text-emerald-700 font-black text-lg px-6 py-3 shadow-[0_5px_0_rgba(0,0,0,0.2)] active:translate-y-1">
+            ▶ Start quiz: {nextPattern.title}
+          </Link>
+          <button
+            onClick={() => setTest(1)}
+            className="rounded-2xl bg-white/15 ring-1 ring-white/40 font-bold px-5 py-3 backdrop-blur hover:bg-white/25"
+          >
+            📝 Quick test: 20 questions
+          </button>
+        </div>
+        <p className="mt-2 text-sm opacity-90">Each question: 1 sentence · 4 answers (A, B, C, D) · 1 mark for every correct answer.</p>
         <div className="mt-4 max-w-md">
           <div className="flex justify-between text-sm font-semibold">
             <span>Your journey</span>
@@ -321,18 +334,21 @@ function Result({
 /* ---------------- One pattern page ---------------- */
 
 const MODES = [
-  { id: "learn", label: "Learn", emoji: "📘" },
-  { id: "fill", label: "Fill the gap", emoji: "✏️" },
+  { id: "fill", label: "Quiz: 4 answers", emoji: "✏️" },
+  { id: "learn", label: "Learn the rule", emoji: "📘" },
   { id: "build", label: "Build the sentence", emoji: "🧩" },
   { id: "listen", label: "Listen & type", emoji: "🎧" },
   { id: "say", label: "Say it", emoji: "🎤" },
 ] as const;
 
 export function PatternView({ p }: { p: Pattern }) {
-  const [mode, setMode] = useState<(typeof MODES)[number]["id"]>("learn");
+  const [mode, setMode] = useState<(typeof MODES)[number]["id"]>("fill");
   const [run, setRun] = useState(0);
+  // The quiz shuffles questions, so it only starts in the browser (pages are pre-built without it).
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []); // eslint-disable-line react-hooks/set-state-in-effect
   const progress = useProgress();
-  const i = PATTERNS.indexOf(p);
+  const i = PATTERNS.findIndex((x) => x.id === p.id);
   const next = PATTERNS[i + 1];
   const examples = p.sentences.slice(0, 5).map((s) => parseGap(s));
   // First set is fixed (pages are pre-built); after each round a new random set is picked.
@@ -342,7 +358,6 @@ export function PatternView({ p }: { p: Pattern }) {
   const finish = (pct: number) => {
     saveSessionScore(`quiz-${p.id}`, pct);
     setRun((r) => r + 1);
-    setMode("learn");
   };
 
   return (
@@ -384,7 +399,12 @@ export function PatternView({ p }: { p: Pattern }) {
             </button>
           </div>
         )}
-        {mode === "fill" && <FillGap key={`f${run}`} items={p.sentences.map((s) => ({ p, s }))} onDone={finish} />}
+        {mode === "fill" &&
+          (ready ? (
+            <FillGap key={`f${run}`} items={p.sentences.map((s) => ({ p, s }))} onDone={finish} />
+          ) : (
+            <p className="opacity-60">Loading quiz…</p>
+          ))}
         {mode === "build" && <BuildSentence key={`b${run}`} p={p} onDone={finish} />}
         {mode === "listen" && (
           <div className="flex flex-col gap-3">

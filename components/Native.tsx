@@ -403,7 +403,7 @@ export function NativeHub() {
 
 export function NativeConvoView({ convo }: { convo: NativeConvo }) {
   const [mode, setMode] = useState<"listen" | "roleplay" | "talk">("listen");
-  const i = NATIVE_CONVOS.indexOf(convo);
+  const i = NATIVE_CONVOS.findIndex((x) => x.id === convo.id);
   const next = NATIVE_CONVOS[i + 1];
   return (
     <div className="flex flex-col gap-5">

@@ -81,7 +81,7 @@ export function MotivationHub() {
 
 export function SpeechView({ speech }: { speech: Speech }) {
   const { videos } = useCustomContent();
-  const i = speeches.indexOf(speech);
+  const i = speeches.findIndex((x) => x.id === speech.id);
   const next = speeches[i + 1];
   const lines = speech.sentences.map((text) => ({ speaker: speech.speaker, text }));
   const related = videos.filter((v) => v.category === "motivation").slice(0, 1);

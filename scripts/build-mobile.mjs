@@ -14,5 +14,9 @@ const env = { ...process.env, MOBILE_BUILD: "1" };
 execSync("npx next build", { stdio: "inherit", env });
 execSync("npx cap sync", { stdio: "inherit", env });
 // The static export leaves phone settings in .next; remove it so `npm start` never serves the website with them.
-rmSync(".next", { recursive: true, force: true });
+try {
+  rmSync(".next", { recursive: true, force: true, maxRetries: 5, retryDelay: 300 });
+} catch {
+  console.warn("Note: could not fully remove .next. Run `npm run build` before `npm start`.");
+}
 console.log("\n✅ Phone app updated. Open it with:  npx cap open android   (or on your Mac: npx cap open ios)\n");

@@ -84,7 +84,7 @@ export function StoryView({ story }: { story: Story }) {
 
 function StoryViewInner({ story }: { story: Story }) {
   const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("read");
-  const i = stories.indexOf(story);
+  const i = stories.findIndex((x) => x.id === story.id);
   const prev = stories[i - 1];
   const next = stories[i + 1];
   const lines = story.sentences.map((text) => ({ speaker: "Narrator", text }));
