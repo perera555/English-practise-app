@@ -351,6 +351,76 @@ body {
   }
 }
 
+/* ---------- 📒 Notebook: lined paper + print / PDF sheet ---------- */
+.notebook-paper {
+  background-image: repeating-linear-gradient(transparent, transparent 1.6rem, rgb(56 189 248 / 0.25) 1.6rem, rgb(56 189 248 / 0.25) calc(1.6rem + 1px));
+  line-height: 1.6rem;
+}
+.print-sheet {
+  display: none;
+}
+@media print {
+  body.printing > :not(.print-sheet) {
+    display: none !important;
+  }
+  body.printing {
+    background: #fff !important;
+  }
+  .print-sheet {
+    display: block !important;
+    color: #000;
+    background: #fff;
+    font-size: 11pt;
+    padding: 0 4mm;
+  }
+  .print-sheet h1 {
+    font-size: 20pt;
+    font-weight: 800;
+    margin: 0;
+  }
+  .print-sheet h2 {
+    font-size: 14pt;
+    font-weight: 700;
+    margin: 0;
+  }
+  .print-sheet .sub {
+    color: #555;
+    font-size: 9pt;
+    margin: 2pt 0 8pt;
+  }
+  .print-sheet ol {
+    padding-left: 18pt;
+    columns: 2;
+    column-gap: 14pt;
+  }
+  .print-sheet li {
+    break-inside: avoid;
+    margin-bottom: 7pt;
+  }
+  .print-sheet .si {
+    font-family: var(--font-sinhala), sans-serif;
+    color: #7c2d12;
+  }
+  .print-sheet .ex {
+    font-style: italic;
+    color: #333;
+  }
+  .print-sheet .note {
+    break-inside: avoid;
+    border-top: 1px solid #ccc;
+    padding-top: 6pt;
+    margin-top: 10pt;
+  }
+  .print-sheet .note .body {
+    white-space: pre-wrap;
+    font-family: var(--font-sinhala), sans-serif;
+    line-height: 1.5;
+  }
+  @page {
+    margin: 14mm 12mm;
+  }
+}
+
 /* ---------- Native app feel ---------- */
 html {
   -webkit-tap-highlight-color: transparent;

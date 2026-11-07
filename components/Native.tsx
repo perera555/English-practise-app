@@ -3,7 +3,10 @@
 import { useUrlTab } from "@/lib/useUrlTab";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { COLLOCATIONS, CONNECTED, FREE_NATIVE, IDIOMS, NATIVE_CONVOS, PHRASAL, REGISTER, SLANG, type Expr, type NativeConvo } from "@/lib/advanced";
+import { COLLOCATIONS, CONNECTED, FREE_NATIVE, NATIVE_CONVOS, REGISTER, SLANG, type Expr, type NativeConvo } from "@/lib/advanced";
+import { ALL_IDIOMS } from "@/lib/idioms";
+import { ALL_PHRASAL } from "@/lib/phrasal";
+import { isSaved, toggleSaved, useNotebook } from "@/lib/notebook";
 import { usePremium } from "@/lib/premium";
 import { speak, splitWords } from "@/lib/speech";
 import { usePhoto } from "@/lib/photos";
@@ -55,8 +58,10 @@ function Locked() {
   );
 }
 
-function ExprCard({ x }: { x: Expr }) {
+function ExprCard({ x }: { x: Expr & { topic?: string } }) {
   const [practise, setPractise] = useState(false);
+  const book = useNotebook();
+  const saved = isSaved(book, x);
   return (
     <div className="card flex flex-col gap-2">
       <div className="flex items-start gap-2">
@@ -71,37 +76,82 @@ function ExprCard({ x }: { x: Expr }) {
         </div>
       </div>
       <SayLine text={x.example} className="rounded-2xl bg-black/5 dark:bg-white/10 px-3 py-2 italic" />
-      <button className="text-xs opacity-60 hover:opacity-100 self-start" onClick={() => setPractise((p) => !p)}>
-        🎤 Practise saying it
-      </button>
+      <div className="flex flex-wrap gap-3">
+        <button className="text-xs opacity-60 hover:opacity-100" onClick={() => setPractise((p) => !p)}>
+          🎤 Practise saying it
+        </button>
+        <button
+          className={`text-xs font-semibold ${saved ? "text-amber-600 dark:text-amber-300" : "opacity-60 hover:opacity-100"}`}
+          onClick={() => toggleSaved({ en: x.en, meaning: x.meaning, si: x.si, example: x.example, kind: x.topic ?? "Native English" })}
+        >
+          {saved ? "⭐ Saved in notebook" : "📒 Save to notebook"}
+        </button>
+      </div>
       {practise && <RepeatLine text={x.example} />}
     </div>
   );
 }
 
-function ExprList({ items, intro }: { items: Expr[]; intro: string }) {
+function ExprList({ items, intro }: { items: (Expr & { topic?: string })[]; intro: string }) {
   const { premium } = usePremium();
   const [q, setQ] = useState("");
-  const shown = items.filter((x) => !q || `${x.en} ${x.meaning} ${x.si}`.toLowerCase().includes(q.toLowerCase()));
-  const visible = premium ? shown : shown.slice(0, FREE_NATIVE);
+  const [topic, setTopic] = useState("All");
+  const [limit, setLimit] = useState(40);
+  const topics = useMemo(() => {
+    const m = new Map<string, { emoji: string; n: number }>();
+    for (const x of items) if (x.topic) m.set(x.topic, { emoji: m.get(x.topic)?.emoji ?? x.emoji, n: (m.get(x.topic)?.n ?? 0) + 1 });
+    return [...m.entries()];
+  }, [items]);
+  const shown = items.filter(
+    (x) => (topic === "All" || x.topic === topic) && (!q || `${x.en} ${x.meaning} ${x.si}`.toLowerCase().includes(q.toLowerCase())),
+  );
+  const visible = premium ? shown.slice(0, limit) : shown.slice(0, FREE_NATIVE);
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
         <p className="opacity-70 flex-1">{intro}</p>
         <input
           value={q}
-          onChange={(e) => setQ(e.target.value)}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setLimit(40);
+          }}
           placeholder="🔎 Search"
           className="rounded-xl border border-black/10 dark:border-white/15 bg-white dark:bg-slate-800 px-3 py-2"
         />
       </div>
+      {topics.length > 1 && (
+        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+          {[["All", { emoji: "🌐", n: items.length }] as const, ...topics].map(([t, v]) => (
+            <button
+              key={t}
+              data-active={topic === t}
+              className="pill3d"
+              onClick={() => {
+                setTopic(t);
+                setLimit(40);
+              }}
+            >
+              <span className="icon3d">{v.emoji}</span>
+              {t} <span className="opacity-60 text-xs">{v.n}</span>
+            </button>
+          ))}
+        </div>
+      )}
       <div className="grid md:grid-cols-2 gap-3">
         {visible.map((x) => (
-          <ExprCard key={x.en} x={x} />
+          <ExprCard key={`${x.en}|${x.meaning}`} x={x} />
         ))}
       </div>
+      {premium && shown.length > limit && (
+        <button className="btn-ghost self-center" onClick={() => setLimit((l) => l + 40)}>
+          Show more ({shown.length - limit} left)
+        </button>
+      )}
       {!premium && shown.length > FREE_NATIVE && <Locked />}
-      <p className="text-xs opacity-60">{items.length} expressions</p>
+      <p className="text-xs opacity-60">
+        {shown.length === items.length ? `${items.length} expressions` : `${shown.length} of ${items.length} expressions`}
+      </p>
     </div>
   );
 }
@@ -167,7 +217,7 @@ function Register() {
 
 function NativeQuiz() {
   const [round, setRound] = useState(0);
-  const pool = useMemo(() => [...IDIOMS, ...PHRASAL, ...SLANG], []);
+  const pool = useMemo(() => [...ALL_IDIOMS, ...ALL_PHRASAL, ...SLANG], []);
   const qs = useMemo(() => {
     if (!round) return [];
     return [...pool]
@@ -389,8 +439,10 @@ export function NativeHub() {
       <MicWarning />
       {tab === "convos" && <Conversations />}
       {tab === "words" && <AdvancedWords />}
-      {tab === "idioms" && <ExprList items={IDIOMS} intro="Idioms are phrases whose meaning is different from the words. Natives use them every day." />}
-      {tab === "phrasal" && <ExprList items={PHRASAL} intro="A verb + a small word (up, off, out…) makes a new meaning. They're everywhere in spoken English." />}
+      {tab === "idioms" && <ExprList items={ALL_IDIOMS} intro="1,000 idioms: phrases whose meaning is different from the words. Natives use them every day. Choose a topic or search." />}
+      {tab === "phrasal" && (
+        <ExprList items={ALL_PHRASAL} intro="1,000 phrasal verbs: a verb + a small word (up, off, out…) makes a new meaning. They're everywhere in spoken English. Choose a verb or search." />
+      )}
       {tab === "speech" && <ConnectedSpeech />}
       {tab === "slang" && <ExprList items={SLANG} intro="Casual words natives use with friends. The badge shows where they're used most." />}
       {tab === "colloc" && <ExprList items={COLLOCATIONS} intro="Words that naturally go together. Natives say “make a mistake”, never “do a mistake”." />}

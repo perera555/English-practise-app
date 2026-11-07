@@ -14,6 +14,7 @@ const LINKS = [
   { href: "/quiz", label: "Quiz", emoji: "🧠" },
   { href: "/dictionary", label: "Dictionary", emoji: "📖" },
   { href: "/native", label: "Native English", emoji: "🎓" },
+  { href: "/notebook", label: "Notebook", emoji: "📒" },
   { href: "/travel", label: "Travel", emoji: "✈️" },
   { href: "/daily", label: "Daily Talk", emoji: "☕" },
   { href: "/videos", label: "Videos", emoji: "🎬" },
