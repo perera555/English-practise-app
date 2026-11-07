@@ -141,7 +141,7 @@ export function AdminDashboard({ grants, codes, content, storage, photos, pexels
   return (
     <div className="grid md:grid-cols-[15rem_1fr] gap-5 items-start">
       {/* Sidebar */}
-      <aside className="md:sticky md:top-20 rounded-3xl bg-linear-to-b from-slate-900 to-indigo-950 text-white p-3 shadow-xl flex md:flex-col gap-1 overflow-x-auto no-scrollbar">
+      <aside className="side3d md:sticky md:top-20 rounded-3xl text-white p-3 pb-4 flex md:flex-col gap-1.5 overflow-x-auto no-scrollbar">
         <div className="hidden md:flex items-center gap-2 px-2 py-2 mb-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="" width={36} height={36} className="rounded-xl" />
@@ -157,11 +157,10 @@ export function AdminDashboard({ grants, codes, content, storage, photos, pexels
               <button
                 key={i.id}
                 onClick={() => go(i.id)}
-                className={`shrink-0 md:w-full flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition ${
-                  tab === i.id ? "bg-white text-indigo-900 shadow-[0_3px_0_rgba(0,0,0,0.3)]" : "hover:bg-white/10"
-                }`}
+                data-active={tab === i.id}
+                className="side3d-item md:w-full"
               >
-                <span>{i.emoji}</span>
+                <span className="icon3d">{i.emoji}</span>
                 {i.label}
                 {i.id === "customers" && onlineCount > 0 && (
                   <span className="ml-auto rounded-full bg-emerald-500 text-white text-[10px] px-1.5">{onlineCount}</span>
@@ -174,15 +173,15 @@ export function AdminDashboard({ grants, codes, content, storage, photos, pexels
           href="/"
           target="_blank"
           rel="noreferrer"
-          className="shrink-0 md:mt-4 md:w-full flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold hover:bg-white/10"
+          className="side3d-item md:mt-4 md:w-full"
         >
-          👁️ View app (as admin: everything unlocked)
+          <span className="icon3d">👁️</span> View app (as admin: everything unlocked)
         </a>
         <button
-          className="shrink-0 md:w-full flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold hover:bg-white/10 opacity-80"
+          className="side3d-item md:w-full opacity-80"
           onClick={() => start(async () => { await adminLogout(); router.refresh(); })}
         >
-          🚪 Log out
+          <span className="icon3d">🚪</span> Log out
         </button>
       </aside>
 

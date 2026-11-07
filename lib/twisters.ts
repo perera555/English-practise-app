@@ -1,3 +1,5 @@
+import { MORE_ITEMS, NEW_GROUPS } from "./twistersMore";
+
 export type TwisterGroup = { id: string; sound: string; emoji: string; tip: string; items: string[] };
 
 export const twisterGroups: TwisterGroup[] = [
@@ -202,6 +204,14 @@ export const twisterGroups: TwisterGroup[] = [
     ],
   },
 ];
+
+// Add the 100 extra twisters (skipping any that are already in the list).
+{
+  const seen = new Set(twisterGroups.flatMap((g) => g.items.map((t) => t.toLowerCase())));
+  const fresh = (items: string[]) => items.filter((t) => !seen.has(t.toLowerCase()) && (seen.add(t.toLowerCase()), true));
+  for (const g of twisterGroups) g.items.push(...fresh(MORE_ITEMS[g.id] ?? []));
+  for (const g of NEW_GROUPS) twisterGroups.push({ ...g, items: fresh(g.items) });
+}
 
 export const allTwisters = twisterGroups.flatMap((g) => g.items.map((text) => ({ text, group: g })));
 

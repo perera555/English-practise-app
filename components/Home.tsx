@@ -26,7 +26,7 @@ const SECTIONS = [
   { href: "/chat", key: "home:chat", emoji: "🤖", title: "Robot Chat", text: "AI talks + 20-min sessions", color: "from-violet-500/85 to-fuchsia-700/85" },
   { href: "/listening", key: "home:listening", emoji: "🎧", title: "Listening", text: "Dictation & tests", color: "from-sky-500/85 to-cyan-700/85" },
   { href: "/speaking", key: "home:speaking", emoji: "🎤", title: "Speaking", text: "Repeat & get a score", color: "from-orange-500/85 to-rose-600/85" },
-  { href: "/twisters", key: "home:twisters", emoji: "👅", title: "Tongue Twisters", text: "112 twisters, karaoke", color: "from-fuchsia-500/85 to-pink-700/85" },
+  { href: "/twisters", key: "home:twisters", emoji: "👅", title: "Tongue Twisters", text: "213 twisters, karaoke", color: "from-fuchsia-500/85 to-pink-700/85" },
   { href: "/music", key: "home:music", emoji: "🎵", title: "Music Karaoke", text: "20 sing-along songs", color: "from-purple-500/85 to-indigo-700/85" },
   { href: "/pte", key: "home:pte", emoji: "🎓", title: "PTE Practice", text: "Tasks + 6 sessions", color: "from-emerald-500/85 to-teal-700/85" },
 ];

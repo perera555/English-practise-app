@@ -113,6 +113,244 @@ body {
   }
 }
 
+/* ---------- 3D navigation bars (customer top bar, bottom tabs, admin sidebar) ---------- */
+.nav3d {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.92), rgb(241 245 249 / 0.88));
+  box-shadow:
+    0 1px 0 #fff inset,
+    0 -1px 0 rgb(148 163 184 / 0.35) inset,
+    0 6px 0 -2px rgb(148 163 184 / 0.35),
+    0 12px 24px -10px rgb(15 23 42 / 0.25);
+}
+.nav3d::after {
+  /* coloured glow line under the bar */
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, #38bdf8, #a855f7, #f472b6, #f59e0b);
+  opacity: 0.85;
+}
+.pill3d {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  border-radius: 0.9rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: rgb(30 41 59);
+  background: linear-gradient(180deg, #fff, rgb(226 232 240));
+  box-shadow:
+    0 1px 0 #fff inset,
+    0 3px 0 rgb(148 163 184 / 0.75),
+    0 5px 8px -3px rgb(15 23 42 / 0.2);
+  transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
+}
+.pill3d:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 #fff inset,
+    0 5px 0 rgb(148 163 184 / 0.75),
+    0 9px 12px -4px rgb(15 23 42 / 0.25);
+}
+.pill3d:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #fff inset, 0 0 0 rgb(148 163 184 / 0.75);
+}
+.pill3d[data-active="true"] {
+  color: #fff;
+  background: linear-gradient(180deg, #38bdf8, #6366f1 60%, #7c3aed);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.45) inset,
+    0 3px 0 #4c1d95,
+    0 6px 14px -3px rgb(99 102 241 / 0.6);
+}
+.icon3d {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  line-height: 1;
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.95), rgb(203 213 225 / 0.9));
+  box-shadow:
+    0 1px 0 #fff inset,
+    0 -2px 0 rgb(0 0 0 / 0.08) inset,
+    0 2px 3px rgb(15 23 42 / 0.2);
+}
+.pill3d[data-active="true"] .icon3d {
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.35), rgb(255 255 255 / 0.1));
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.5) inset, 0 2px 3px rgb(0 0 0 / 0.25);
+}
+.round3d {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  font-weight: 900;
+  color: rgb(30 41 59);
+  background: linear-gradient(180deg, #fff, rgb(226 232 240));
+  box-shadow:
+    0 1px 0 #fff inset,
+    0 3px 0 rgb(148 163 184 / 0.8),
+    0 5px 8px -3px rgb(15 23 42 / 0.25);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.round3d:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+.round3d:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #fff inset;
+}
+.round3d:disabled {
+  opacity: 0.35;
+}
+.tabs3d {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.9), rgb(241 245 249 / 0.95));
+  box-shadow:
+    0 -1px 0 rgb(148 163 184 / 0.35),
+    0 -10px 24px -12px rgb(15 23 42 / 0.3);
+}
+.tab3d-icon {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.1rem;
+  border-radius: 0.9rem;
+  font-size: 1.35rem;
+  transition: transform 0.15s;
+}
+.tab3d-on .tab3d-icon {
+  transform: translateY(-6px);
+  background: linear-gradient(180deg, #38bdf8, #6366f1 60%, #7c3aed);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.45) inset,
+    0 3px 0 #4c1d95,
+    0 8px 14px -4px rgb(99 102 241 / 0.7);
+}
+/* Log in / Premium buttons in the top bar */
+.login3d,
+.premium3d {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fff;
+  transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
+}
+.login3d {
+  padding: 0.25rem 0.85rem 0.25rem 0.25rem;
+  background: linear-gradient(180deg, #34d399, #10b981 50%, #0d9488);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.5) inset,
+    0 3px 0 #115e59,
+    0 6px 12px -3px rgb(16 185 129 / 0.6);
+}
+.login3d .icon3d {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 9999px;
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.45), rgb(255 255 255 / 0.15));
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 2px 3px rgb(0 0 0 / 0.2);
+}
+.premium3d {
+  padding: 0.4rem 0.8rem;
+  background: linear-gradient(180deg, #fcd34d, #f59e0b 50%, #ea580c);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.55) inset,
+    0 3px 0 #9a3412,
+    0 6px 12px -3px rgb(245 158 11 / 0.6);
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.2);
+}
+.login3d:hover,
+.premium3d:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+.login3d:active,
+.premium3d:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.4) inset;
+}
+
+/* admin sidebar */
+.side3d {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.08), rgb(255 255 255 / 0) 30%),
+    linear-gradient(180deg, #0f172a, #1e1b4b);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.12) inset,
+    0 6px 0 #0b0a24,
+    0 18px 34px -12px rgb(30 27 75 / 0.8);
+}
+.side3d-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  border-radius: 0.9rem;
+  padding: 0.4rem 0.75rem 0.4rem 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: rgb(226 232 240);
+  transition: transform 0.1s, background 0.1s, box-shadow 0.1s;
+}
+.side3d-item .icon3d {
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.18), rgb(255 255 255 / 0.04));
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.2) inset, 0 2px 4px rgb(0 0 0 / 0.4);
+}
+.side3d-item:hover {
+  background: rgb(255 255 255 / 0.08);
+  transform: translateX(2px);
+}
+.side3d-item[data-active="true"] {
+  color: #fff;
+  background: linear-gradient(180deg, #38bdf8, #6366f1 60%, #7c3aed);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.4) inset,
+    0 4px 0 #2e1065,
+    0 8px 16px -4px rgb(99 102 241 / 0.7);
+}
+.side3d-item:active {
+  transform: translateY(3px);
+}
+@media (prefers-color-scheme: dark) {
+  .nav3d {
+    background: linear-gradient(180deg, rgb(30 41 59 / 0.92), rgb(15 23 42 / 0.9));
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.08) inset,
+      0 6px 0 -2px rgb(0 0 0 / 0.5),
+      0 12px 24px -10px rgb(0 0 0 / 0.7);
+  }
+  .pill3d,
+  .round3d {
+    color: rgb(241 245 249);
+    background: linear-gradient(180deg, rgb(71 85 105), rgb(51 65 85));
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.15) inset,
+      0 3px 0 rgb(15 23 42),
+      0 5px 8px -3px rgb(0 0 0 / 0.5);
+  }
+  .icon3d {
+    background: linear-gradient(160deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.05));
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.2) inset, 0 2px 3px rgb(0 0 0 / 0.4);
+  }
+  .tabs3d {
+    background: linear-gradient(180deg, rgb(30 41 59 / 0.95), rgb(15 23 42 / 0.98));
+    box-shadow: 0 -1px 0 rgb(255 255 255 / 0.08), 0 -10px 24px -12px rgb(0 0 0 / 0.7);
+  }
+}
+
 /* ---------- Native app feel ---------- */
 html {
   -webkit-tap-highlight-color: transparent;

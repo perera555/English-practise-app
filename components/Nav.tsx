@@ -45,21 +45,21 @@ export function Nav() {
 
   return (
     <>
-    <header className="app-top sticky top-0 z-30 backdrop-blur-md bg-(--background)/80 border-b border-black/5 dark:border-white/10">
-      <div className="mx-auto max-w-6xl px-3 sm:px-4 h-14 flex items-center gap-2 sm:gap-3">
+    <header className="app-top nav3d sticky top-0 z-30 backdrop-blur-md">
+      <div className="mx-auto max-w-6xl px-3 sm:px-4 h-16 flex items-center gap-2 sm:gap-3">
         <BackForward />
         <Link href="/" className="font-black text-base sm:text-lg flex items-center gap-2 min-w-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" alt="" width={34} height={34} className="rounded-xl shadow-md shrink-0" />
+          <img src="/logo.svg" alt="" width={38} height={38} className="rounded-xl shrink-0 shadow-[0_3px_0_rgba(76,29,149,0.6),0_6px_12px_-3px_rgba(99,102,241,0.6)]" />
           <span className="hidden min-[400px]:inline truncate bg-linear-to-r from-sky-500 to-fuchsia-500 bg-clip-text text-transparent">SpeakUp English</span>
         </Link>
         <span className="flex-1 md:hidden" />
-        <Link href="/premium" className="md:hidden shrink-0 rounded-full bg-linear-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1.5 shadow">
+        <Link href="/premium" className="premium3d md:hidden">
           ⭐ Premium
         </Link>
         <NavStrip path={path} />
         <ProfileButton />
-        <button className="rounded-full h-9 w-9 grid place-items-center hover:bg-black/5 dark:hover:bg-white/10 shrink-0" onClick={() => setOpen((o) => !o)} aria-label="Settings">
+        <button className="round3d" onClick={() => setOpen((o) => !o)} aria-label="Settings">
           ⚙️
         </button>
       </div>
@@ -192,8 +192,7 @@ function BackForward() {
     } else step?.next(); // no forward step yet: open the page's next tab
   };
 
-  const btn =
-    "grid place-items-center h-9 w-9 shrink-0 rounded-full bg-white/80 dark:bg-white/10 shadow-[0_3px_0_rgba(0,0,0,0.15)] active:translate-y-0.5 hover:bg-white dark:hover:bg-white/20 text-2xl leading-none font-black disabled:opacity-30 disabled:pointer-events-none";
+  const btn = "round3d text-2xl leading-none disabled:pointer-events-none";
   return (
     <div className="flex items-center gap-1 shrink-0">
       <button type="button" className={btn} onClick={back} disabled={!canBack} aria-label="Back" title="Back">
@@ -248,8 +247,7 @@ function NavStrip({ path }: { path: string }) {
     const el = ref.current;
     if (el) el.scrollBy({ left: dir * Math.max(200, el.clientWidth * 0.7), behavior: "smooth" });
   };
-  const arrow =
-    "absolute top-1/2 -translate-y-1/2 z-10 grid place-items-center h-8 w-8 rounded-full bg-white dark:bg-slate-700 shadow-md text-xl font-black hover:scale-110 transition";
+  const arrow = "round3d absolute top-1/2 -translate-y-1/2 z-10 h-8! w-8! text-xl";
 
   return (
     <div className="relative hidden md:block flex-1 min-w-0">
@@ -258,19 +256,13 @@ function NavStrip({ path }: { path: string }) {
           ‹
         </button>
       )}
-      <nav ref={ref} className="flex gap-1 overflow-x-auto no-scrollbar scroll-smooth px-9">
+      <nav ref={ref} className="flex gap-2 overflow-x-auto no-scrollbar scroll-smooth px-10 pt-1.5 pb-2.5">
         {LINKS.map((l) => {
           const active = l.href === "/" ? path === "/" || path.startsWith("/chapter") : path.startsWith(l.href);
           return (
-            <Link
-              key={l.href}
-              href={l.href}
-              data-active={active}
-              className={`shrink-0 rounded-full px-3 py-1.5 text-sm font-semibold transition ${
-                active ? "bg-sky-500 text-white" : "hover:bg-black/5 dark:hover:bg-white/10"
-              }`}
-            >
-              {l.emoji} {l.label}
+            <Link key={l.href} href={l.href} data-active={active} className="pill3d">
+              <span className="icon3d">{l.emoji}</span>
+              {l.label}
             </Link>
           );
         })}
@@ -290,8 +282,9 @@ function ProfileButton() {
   const { profile, online } = useProfile();
   if (!profile) {
     return (
-      <Link href="/login" className="shrink-0 rounded-full bg-sky-500 text-white text-xs font-bold px-3 py-1.5 shadow">
-        👤 Log in
+      <Link href="/login" className="login3d">
+        <span className="icon3d">👤</span>
+        <span className="hidden min-[360px]:inline">Log in</span>
       </Link>
     );
   }
@@ -339,20 +332,20 @@ function BottomTabs({ path }: { path: string }) {
           </div>
         </div>
       )}
-      <nav className="app-tabs md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-black/5 dark:border-white/10 bg-(--background)/90 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
+      <nav className="app-tabs tabs3d md:hidden fixed inset-x-0 bottom-0 z-50 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
         <div className="grid grid-cols-5 h-16">
           {TABS.map((t) => {
             const active = t.match(path);
             return (
-              <Link key={t.href} href={t.href} onClick={() => setMore(false)} className="flex flex-col items-center justify-center gap-0.5">
-                <span className={`text-2xl transition-transform ${active ? "scale-115 -translate-y-0.5" : "opacity-70"}`}>{t.emoji}</span>
-                <span className={`text-[11px] font-semibold ${active ? "text-sky-500" : "opacity-60"}`}>{t.label}</span>
+              <Link key={t.href} href={t.href} onClick={() => setMore(false)} className={`flex flex-col items-center justify-center gap-0.5 ${active ? "tab3d-on" : ""}`}>
+                <span className={`tab3d-icon ${active ? "" : "opacity-75"}`}>{t.emoji}</span>
+                <span className={`text-[11px] font-bold ${active ? "text-indigo-600 dark:text-indigo-300 -mt-1" : "opacity-60"}`}>{t.label}</span>
               </Link>
             );
           })}
-          <button onClick={() => setMore((m) => !m)} className="flex flex-col items-center justify-center gap-0.5">
-            <span className={`text-2xl ${more || moreActive ? "" : "opacity-70"}`}>☰</span>
-            <span className={`text-[11px] font-semibold ${more || moreActive ? "text-sky-500" : "opacity-60"}`}>More</span>
+          <button onClick={() => setMore((m) => !m)} className={`flex flex-col items-center justify-center gap-0.5 ${more || moreActive ? "tab3d-on" : ""}`}>
+            <span className={`tab3d-icon ${more || moreActive ? "text-white" : "opacity-75"}`}>☰</span>
+            <span className={`text-[11px] font-bold ${more || moreActive ? "text-indigo-600 dark:text-indigo-300 -mt-1" : "opacity-60"}`}>More</span>
           </button>
         </div>
       </nav>

@@ -156,7 +156,7 @@ function Pager({ i, n, set }: { i: number; n: number; set: (i: number) => void }
   );
 }
 
-function BarChart({ chart }: { chart: Chart }) {
+export function BarChart({ chart }: { chart: Chart }) {
   const max = Math.max(...chart.bars.map((b) => b.value));
   const w = 360;
   const h = 200;
