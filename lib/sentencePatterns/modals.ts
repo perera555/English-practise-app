@@ -7,8 +7,8 @@ function simple(word: string, siRule: ModalRule["si"], options: ModalRule["optio
   const W = word.charAt(0).toUpperCase() + word.slice(1);
   return {
     en: (form: Form, S, s, v) =>
-      form === "pos" ? [`${S} `, word, ` ${v}.`] : form === "neg" ? [`${S} `, `${word} not`, ` ${v}.`] : form === "q" ? ["", W, ` ${s} ${v}?`] : ["", `${W}n't`, ` ${s} ${v}?`],
-    options,
+      form === "pos" ? [`${S} `, word, ` ${v}.`] : form === "neg" ? [`${S} `, `${word} not`, ` ${v}.`] : form === "q" ? ["", W, ` ${s} ${v}?`] : ["", W, ` ${s} not ${v}?`],
+    options: { ...options, nq: options.q },
     si: siRule,
   };
 }
@@ -43,19 +43,19 @@ const SHOULD_HAVE: ModalRule = {
         ? [`${S} `, "shouldn't have", ` ${v}.`]
         : form === "q"
           ? ["", "Should", ` ${s} have ${v}?`]
-          : ["", "Shouldn't", ` ${s} have ${v}?`],
+          : ["", "Should", ` ${s} not have ${v}?`],
   options: {
     pos: ["should have", "should has", "should of", "should had"],
     neg: ["shouldn't have", "shouldn't has", "shouldn't of", "shouldn't had"],
     q: ["Should", "Shoulds", "Did should", "Do should"],
-    nq: ["Shouldn't", "Didn't should", "Don't should", "Shouldn't to"],
+    nq: ["Should", "Shoulds", "Did should", "Do should"],
   },
   si: (f, S, v) => (f === "pos" ? `${S} ${v} තිබුණා.` : f === "neg" ? `${S} ${v} තිබුණේ නැහැ.` : f === "q" ? `${S} ${v} තිබුණාද?` : `${S} ${v} තිබුණේ නැද්ද?`),
 };
 
 const WOULD_Q = {
   q: ["Would", "Woulds", "Would to", "Does would"],
-  nq: ["Wouldn't", "Wouldn't to", "Don't would", "Not would"],
+  nq: ["Would", "Woulds", "Would to", "Does would"],
 };
 
 /** would like to / would love to (the negative is always "wouldn't like to"). */
@@ -68,7 +68,7 @@ function wouldVerb(verb: "like" | "love", si: [string, string, string, string]):
           ? [`${S} `, `wouldn't like`, ` to ${v}.`]
           : form === "q"
             ? ["", "Would", ` ${s} ${verb} to ${v}?`]
-            : ["", "Wouldn't", ` ${s} ${verb} to ${v}?`],
+            : ["", "Would", ` ${s} not ${verb} to ${v}?`],
     options: {
       pos: [`would ${verb}`, `would ${verb}s`, `would ${verb.replace(/e$/, "")}ing`, `will ${verb}s`],
       neg: ["wouldn't like", "wouldn't likes", "won't likes", "wouldn't liking"],
@@ -89,7 +89,7 @@ const WOULD_RATHER: ModalRule = {
         ? [`${S} `, "would rather not", ` ${v}.`]
         : form === "q"
           ? ["", "Would", ` ${s} rather ${v}?`]
-          : ["", "Wouldn't", ` ${s} rather ${v}?`],
+          : ["", "Would", ` ${s} not rather ${v}?`],
   options: {
     pos: ["would rather", "would rather to", "would rathers", "will rather to"],
     neg: ["would rather not", "wouldn't rather to", "would rather not to", "would not rather to"],
@@ -200,7 +200,7 @@ const MUST_F = {
   pos: "Subject + must + verb",
   neg: "Subject + must not (mustn't) + verb",
   q: "Must + subject + verb …?",
-  nq: "Mustn't + subject + verb …?",
+  nq: "Must + subject + not + verb …?",
 };
 const MUST_TIP = "Must = it is necessary (a strong rule). Must not = it is not allowed. The verb after must has no 'to' and no 's'.";
 const MUST_SI = "Must = අනිවාර්යයෙන්ම කළ යුතුයි. Must not = කිසිසේත්ම නොකළ යුතුයි. must පසු ක්‍රියාපදයට 'to' හෝ 's' එකතු නොවේ.";
@@ -314,7 +314,7 @@ const SHOULD_F = {
   pos: "Subject + should + verb",
   neg: "Subject + should not (shouldn't) + verb",
   q: "Should + subject + verb …?",
-  nq: "Shouldn't + subject + verb …?",
+  nq: "Should + subject + not + verb …?",
 };
 const SHOULD_TIP = "Should = good advice (a good idea). It is softer than must. The verb after should has no 'to' and no 's'.";
 const SHOULD_SI = "Should = කරන එක හොඳයි / කළ යුතුයි (උපදෙසක්). Must වලට වඩා මෘදුයි. should පසු ක්‍රියාපදයට 'to' හෝ 's' නැත.";
@@ -334,7 +334,7 @@ export const SHOULD_BOOK: Book = {
     modalLevel(
       {
         title: "🎓 Advanced: should have + done",
-        formula: { pos: "Subject + should have + past participle", neg: "Subject + shouldn't have + past participle", q: "Should + subject + have + past participle …?", nq: "Shouldn't + subject + have + past participle …?" },
+        formula: { pos: "Subject + should have + past participle", neg: "Subject + shouldn't have + past participle", q: "Should + subject + have + past participle …?", nq: "Should + subject + not have + past participle …?" },
         tip: "Should have done = it was a good idea, but it did not happen (a regret about the past).",
         tipSi: "Should have done = කරන්න තිබුණා, නමුත් කළේ නැහැ (අතීතය ගැන පසුතැවීම).",
       },
@@ -436,7 +436,7 @@ const W_LIKE = {
   pos: "Subject + would like to + verb",
   neg: "Subject + wouldn't like to + verb",
   q: "Would + subject + like to + verb …?",
-  nq: "Wouldn't + subject + like to + verb …?",
+  nq: "Would + subject + not like to + verb …?",
 };
 
 export const WOULD_BOOK: Book = {
@@ -462,7 +462,7 @@ export const WOULD_BOOK: Book = {
     modalLevel(
       {
         title: "🌳 Intermediate: would love to",
-        formula: { pos: "Subject + would love to + verb", neg: "Subject + wouldn't like to + verb", q: "Would + subject + love to + verb …?", nq: "Wouldn't + subject + love to + verb …?" },
+        formula: { pos: "Subject + would love to + verb", neg: "Subject + wouldn't like to + verb", q: "Would + subject + love to + verb …?", nq: "Would + subject + not love to + verb …?" },
         tip: "Would love to = would like to, very much. Use it for dreams and happy plans.",
         tipSi: "Would love to = හරිම ආසයි (සිහින සහ සතුටු සැලසුම් ගැන).",
       },
@@ -473,7 +473,7 @@ export const WOULD_BOOK: Book = {
     modalLevel(
       {
         title: "🚀 Upper-intermediate: would rather",
-        formula: { pos: "Subject + would rather + verb", neg: "Subject + would rather not + verb", q: "Would + subject + rather + verb …?", nq: "Wouldn't + subject + rather + verb …?" },
+        formula: { pos: "Subject + would rather + verb", neg: "Subject + would rather not + verb", q: "Would + subject + rather + verb …?", nq: "Would + subject + not rather + verb …?" },
         tip: "Would rather = prefer. No 'to' after would rather. The negative is would rather not.",
         tipSi: "Would rather = වඩා කැමතියි. would rather පසු 'to' නැත. නිෂේධනය would rather not.",
       },
@@ -484,7 +484,7 @@ export const WOULD_BOOK: Book = {
     modalLevel(
       {
         title: "🎓 Advanced: would (imagined situations)",
-        formula: { pos: "Subject + would + verb", neg: "Subject + would not (wouldn't) + verb", q: "Would + subject + verb …?", nq: "Wouldn't + subject + verb …?" },
+        formula: { pos: "Subject + would + verb", neg: "Subject + would not (wouldn't) + verb", q: "Would + subject + verb …?", nq: "Would + subject + not + verb …?" },
         tip: "Would + verb talks about an imagined situation: what you would do (not what you will do).",
         tipSi: "Would + verb = සිතාගත් තත්ත්වයක කරන දේ (ඇත්තටම කරන දේ නොවේ).",
       },

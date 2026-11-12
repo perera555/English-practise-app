@@ -93,7 +93,7 @@ const WERE_F = {
   pos: "If + subject + were + …, subject + would + verb",
   neg: "If + subject + were + …, subject + wouldn't + verb",
   q: "If + subject + were + …, would + subject + verb?",
-  nq: "If + subject + were + …, wouldn't + subject + verb?",
+  nq: "If + subject + were + …, would + subject + not + verb?",
 };
 const WERE_TIP = "If I were … talks about something that is NOT true now (imagined). Use were for every person (If I were, If she were), and would in the other half.";
 const WERE_SI = "If I were … = දැනට ඇත්ත නොවන (සිතාගත්) තත්ත්වයක්. හැම පුද්ගලයෙකුටම were (If I were, If she were), අනෙක් කොටසට would.";
@@ -214,7 +214,7 @@ const COULD_F = {
   pos: "If + subject + could + verb, subject + would + verb",
   neg: "If + subject + could + verb, subject + wouldn't + verb",
   q: "If + subject + could + verb, would + subject + verb?",
-  nq: "If + subject + could + verb, wouldn't + subject + verb?",
+  nq: "If + subject + could + verb, would + subject + not + verb?",
 };
 const COULD_TIP = "If I could … = imagine you had this ability or chance (you don't now). Use could in the if-part and would in the other part. No 'to' after could.";
 const COULD_SI = "If I could … = මට ... පුළුවන් නම් (දැනට බැහැ, සිතාගන්න). if කොටසට could, අනෙක් කොටසට would. could පසු 'to' නැත.";

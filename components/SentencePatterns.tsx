@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { BOOKS, FORMS, bookCount, getBook, type Form, type Sentence } from "@/lib/sentencePatterns";
+import { BE_PATTERN_NAMES, BOOKS, FORMS, bookCount, getBook, type Form, type Sentence } from "@/lib/sentencePatterns";
 import { speak } from "@/lib/speech";
 import { saveSessionScore, useProgress } from "@/lib/settings";
 import { useUrlTab } from "@/lib/useUrlTab";
@@ -18,6 +18,7 @@ const FORM_STYLE: Record<Form, string> = {
   nq: "bg-violet-500/15 text-violet-700 dark:text-violet-300",
 };
 const formOf = (f: Form) => FORMS.find((x) => x.id === f)!;
+const BE_NAMES_SI: Record<string, string> = Object.fromEntries(BE_PATTERN_NAMES.map((p) => [p.name, p.si]));
 
 /* ---------------- Hub ---------------- */
 
@@ -132,7 +133,9 @@ function LevelView({ bookId, levelNo }: { bookId: string; levelNo: number }) {
   const level = getBook(bookId)!.levels[levelNo - 1];
   const [form, setForm] = useState<Form | "all">("all");
   const [q, setQ] = useState("");
-  const [limit, setLimit] = useState(30);
+  const isBe = level.sentences.some((s) => s.p);
+  const step = isBe ? 2 : 10; // groups per page (a Be group has 48 sentences)
+  const [limit, setLimit] = useState(step);
   const [quiz, setQuiz] = useState(0); // 0 = closed, n = quiz run number
   const [say, setSay] = useState<string | null>(null);
 
@@ -140,6 +143,11 @@ function LevelView({ bookId, levelNo }: { bookId: string; levelNo: number }) {
     const t = q.trim().toLowerCase();
     return level.sentences.filter((s) => (form === "all" || s.form === form) && (!t || s.en.toLowerCase().includes(t) || s.si.includes(q.trim())));
   }, [level, form, q]);
+  const groups = useMemo(() => {
+    const m = new Map<number, Sentence[]>();
+    for (const s of list) m.set(s.g, [...(m.get(s.g) ?? []), s]);
+    return [...m.entries()];
+  }, [list]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -157,6 +165,15 @@ function LevelView({ bookId, levelNo }: { bookId: string; levelNo: number }) {
             </div>
           ))}
         </div>
+        {isBe && (
+          <div className="flex flex-wrap gap-1.5">
+            {BE_PATTERN_NAMES.map((p, i) => (
+              <span key={p.name} className="rounded-full bg-indigo-500/10 px-2.5 py-1 text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                {i + 1}. {p.name} <span className="si font-semibold opacity-70">{p.si}</span>
+              </span>
+            ))}
+          </div>
+        )}
         <div className="flex flex-wrap gap-2">
           <button className="btn-primary" onClick={() => setQuiz((n) => n + 1)}>
             📝 Quiz: 20 questions (A B C D)
@@ -202,7 +219,7 @@ function LevelView({ bookId, levelNo }: { bookId: string; levelNo: number }) {
                 className={`rounded-full px-3 py-1.5 text-sm font-bold ring-1 ring-black/10 dark:ring-white/15 ${form === f.id ? "bg-indigo-600 text-white" : "bg-white dark:bg-white/5"}`}
                 onClick={() => {
                   setForm(f.id);
-                  setLimit(30);
+                  setLimit(step);
                 }}
               >
                 {f.emoji} {f.label} <span className="opacity-70">{n}</span>
@@ -214,23 +231,23 @@ function LevelView({ bookId, levelNo }: { bookId: string; levelNo: number }) {
           value={q}
           onChange={(e) => {
             setQ(e.target.value);
-            setLimit(30);
+            setLimit(step);
           }}
           placeholder="🔎 Search English or සිංහල…"
           className="rounded-2xl border border-black/10 dark:border-white/15 bg-white dark:bg-white/5 px-4 py-2.5"
         />
         <p className="text-sm opacity-60">
-          {list.length} sentences · tap a sentence to hear it · 🎤 to practise saying it
+          {list.length} sentences in {groups.length} groups · tap a sentence to hear it · 🎤 to practise saying it
         </p>
         {say && <MicWarning />}
-        <div className="flex flex-col gap-2">
-          {list.slice(0, limit).map((s, i) => (
-            <Row key={s.en} s={s} n={i + 1} saying={say === s.en} onSay={() => setSay(say === s.en ? null : s.en)} />
+        <div className="flex flex-col gap-4">
+          {groups.slice(0, limit).map(([g, rows]) => (
+            <Group key={g} g={g} rows={rows} say={say} setSay={setSay} />
           ))}
         </div>
-        {list.length > limit && (
-          <button className="btn-ghost self-center" onClick={() => setLimit((l) => l + 30)}>
-            Show more ({list.length - limit} left)
+        {groups.length > limit && (
+          <button className="btn-ghost self-center" onClick={() => setLimit((l) => l + step)}>
+            Show more ({groups.length - limit} more groups)
           </button>
         )}
       </section>
@@ -238,28 +255,85 @@ function LevelView({ bookId, levelNo }: { bookId: string; levelNo: number }) {
   );
 }
 
-function Row({ s, n, saying, onSay }: { s: Sentence; n: number; saying: boolean; onSay: () => void }) {
+/** Stops "Play all" when another one starts or the card closes. */
+let playToken = 0;
+
+/** One base sentence with all its forms (and, for Be, all 12 patterns). */
+function Group({ g, rows, say, setSay }: { g: number; rows: Sentence[]; say: string | null; setSay: (s: string | null) => void }) {
+  const [playing, setPlaying] = useState(false);
+  // Split into pattern blocks (Be verb) — other books have one block.
+  const blocks: [string | undefined, Sentence[]][] = [];
+  for (const s of rows) {
+    const last = blocks[blocks.length - 1];
+    if (last && last[0] === s.p) last[1].push(s);
+    else blocks.push([s.p, [s]]);
+  }
+  const head = rows.find((s) => s.form === "pos") ?? rows[0];
+
+  async function playAll() {
+    const me = ++playToken;
+    setPlaying(true);
+    for (const s of rows) {
+      if (me !== playToken) break;
+      await speak(s.en, { rate: 0.95 });
+    }
+    if (me === playToken) setPlaying(false);
+  }
+
+  return (
+    <div className="card p-4 flex flex-col gap-3">
+      <div className="flex items-center gap-3">
+        <span className="grid place-items-center h-9 w-9 shrink-0 rounded-full bg-linear-to-br from-indigo-500 to-fuchsia-600 text-white font-black shadow-[0_3px_0_rgba(0,0,0,0.2)]">{g}</span>
+        <p className="flex-1 font-bold">{head.en}</p>
+        <button
+          className="btn-ghost text-sm"
+          onClick={() => {
+            if (playing) {
+              playToken++;
+              setPlaying(false);
+            } else playAll();
+          }}
+        >
+          {playing ? "⏹ Stop" : "▶ Play all"}
+        </button>
+      </div>
+      <div className={blocks.length > 1 ? "grid lg:grid-cols-2 gap-3" : "flex flex-col gap-2"}>
+        {blocks.map(([p, list], bi) => (
+          <div key={bi} className={p ? "rounded-2xl bg-black/3 dark:bg-white/5 p-3 flex flex-col gap-1.5" : "flex flex-col gap-2"}>
+            {p && (
+              <p className="text-xs font-black uppercase tracking-wide text-indigo-600 dark:text-indigo-300">
+                {bi + 1}. {p} <span className="si normal-case font-semibold opacity-70">· {BE_NAMES_SI[p] ?? ""}</span>
+              </p>
+            )}
+            {list.map((s) => (
+              <Row key={s.en} s={s} saying={say === s.en} onSay={() => setSay(say === s.en ? null : s.en)} />
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Row({ s, saying, onSay }: { s: Sentence; saying: boolean; onSay: () => void }) {
   const f = formOf(s.form);
   return (
-    <div className="card p-3 flex flex-col gap-2">
-      <div className="flex items-start gap-3">
-        <span className="text-xs font-bold opacity-50 w-7 pt-1.5 text-right shrink-0">{n}</span>
+    <div className="flex flex-col gap-2">
+      <div className="flex items-start gap-2">
+        <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold shrink-0 mt-1 ${FORM_STYLE[s.form]}`} title={f.label}>
+          {f.emoji}
+        </span>
         <button className="flex-1 text-left" onClick={() => speak(s.en, { rate: 0.95 })}>
-          <p className="text-lg font-semibold">
-            🔊 {s.before}
+          <p className="font-semibold">
+            {s.before}
             <b className="text-indigo-600 dark:text-indigo-300">{s.answer}</b>
             {s.after}
           </p>
-          <p className="si text-amber-700 dark:text-amber-300">{s.si}</p>
+          <p className="si text-sm text-amber-700 dark:text-amber-300">{s.si}</p>
         </button>
-        <div className="flex flex-col items-end gap-1 shrink-0">
-          <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${FORM_STYLE[s.form]}`} title={f.label}>
-            {f.emoji} <span className="hidden sm:inline">{f.label}</span>
-          </span>
-          <button className="btn-ghost px-2 py-1 text-sm" onClick={onSay} aria-label="Practise saying it">
-            🎤
-          </button>
-        </div>
+        <button className="btn-ghost px-2 py-1 text-sm shrink-0" onClick={onSay} aria-label="Practise saying it">
+          🎤
+        </button>
       </div>
       {saying && <RepeatLine text={s.en} />}
     </div>

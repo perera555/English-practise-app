@@ -51,7 +51,7 @@ function PrintSheet({ sheet, onDone }: { sheet: Sheet; onDone: () => void }) {
       <header>
         <h1>{sheet.title}</h1>
         {sheet.subtitle && <p className="sub">{sheet.subtitle}</p>}
-        <p className="sub">SpeakUp English · {fmtDate(Date.now())}</p>
+        <p className="sub">SpeakUp English · {fmtDate(Date.now())} · © 2026 Porage Thamara Dhanushka Perera</p>
       </header>
       {sheet.rows && (
         <ol>
