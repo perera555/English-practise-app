@@ -12,6 +12,7 @@ import { NAV_EVENT, tabStepper } from "@/lib/useUrlTab";
 const LINKS = [
   { href: "/", label: "Chapters", emoji: "📚" },
   { href: "/notebook", label: "Notebook", emoji: "📒" },
+  { href: "/patterns", label: "Patterns", emoji: "🧩" },
   { href: "/quiz", label: "Quiz", emoji: "🧠" },
   { href: "/dictionary", label: "Dictionary", emoji: "📖" },
   { href: "/native", label: "Native English", emoji: "🎓" },

@@ -16,6 +16,7 @@ import { ADVANCED } from "@/lib/chapters/advancedVersions";
 
 const SECTIONS = [
   { href: "/notebook", key: "notebook:hero", emoji: "📒", title: "My Notebook", text: "Write notes, print, PDF", color: "from-amber-500/85 to-rose-600/85" },
+  { href: "/patterns", key: "patterns:hero", emoji: "🧩", title: "Sentence Patterns", text: "9,000 sentences · සිංහල", color: "from-indigo-500/85 to-fuchsia-700/85" },
   { href: "/quiz", key: "home:pte", emoji: "🧠", title: "Quiz: Zero to Hero", text: "1,000 sentences, 50 patterns", color: "from-emerald-500/85 to-teal-700/85" },
   { href: "/dictionary", key: "dict:hero", emoji: "📖", title: "Talking Dictionary", text: "Spell, say & සිංහල meaning", color: "from-cyan-500/85 to-blue-700/85" },
   { href: "/native", key: "native:hero", emoji: "🎓", title: "Native English", text: "1,000 idioms, 1,000 phrasal verbs", color: "from-violet-600/85 to-fuchsia-700/85" },
@@ -92,6 +93,12 @@ function Hero({ nextUp, started, children }: { nextUp: (typeof chapters)[number]
             className="inline-flex items-center gap-1.5 rounded-xl bg-linear-to-b from-amber-400 to-orange-500 ring-1 ring-amber-200/70 px-5 py-3 font-bold text-white shadow-[0_4px_0_rgba(154,52,18,0.8)] hover:brightness-110 active:translate-y-1 active:shadow-none transition"
           >
             📒 My Notebook
+          </Link>
+          <Link
+            href="/patterns"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-linear-to-b from-violet-500 to-fuchsia-600 ring-1 ring-fuchsia-200/70 px-5 py-3 font-bold text-white shadow-[0_4px_0_rgba(112,26,117,0.8)] hover:brightness-110 active:translate-y-1 active:shadow-none transition"
+          >
+            🧩 Sentence Patterns
           </Link>
         </div>
         {children}
