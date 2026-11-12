@@ -69,7 +69,11 @@ export function Overview({
   const recent = ids.sort((a, b) => (seen[b] ?? 0) - (seen[a] ?? 0)).slice(0, 6);
 
   const checklist = [
-    { ok: storage === "upstash", label: "Online database (Upstash)", tip: "Vercel → Storage → Upstash Redis" },
+    {
+      ok: storage !== "local-file",
+      label: storage === "postgres" ? "Online database (PostgreSQL)" : storage === "upstash" ? "Online database (Upstash)" : "Online database (PostgreSQL)",
+      tip: "DATABASE_URL (Vercel → Storage → Neon Postgres)",
+    },
     { ok: setup.ai, label: "AI robot (Anthropic key)", tip: "ANTHROPIC_API_KEY" },
     { ok: setup.payments, label: "Payments (RevenueCat)", tip: "REVENUECAT_SECRET_KEY" },
     { ok: youtube, label: "YouTube video search", tip: "YOUTUBE_API_KEY" },

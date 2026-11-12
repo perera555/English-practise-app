@@ -36,7 +36,10 @@ export function AdminGuide({ pexels, youtube, storage }: { pexels: boolean; yout
         <h2 className="text-2xl font-extrabold">📖 Admin guide</h2>
         <p className="opacity-80">Everything you need to run SpeakUp English as a business. Tap a topic to open it.</p>
         <div className="flex flex-wrap gap-2">
-          <Status ok={storage === "upstash"} label={storage === "upstash" ? "Online database connected" : "Local test database"} />
+          <Status
+            ok={storage !== "local-file"}
+            label={storage === "postgres" ? "PostgreSQL database connected" : storage === "upstash" ? "Online database connected (Upstash)" : "Local test database (set DATABASE_URL)"}
+          />
           <Status ok={pexels} label={pexels ? "Real pictures ON" : "Real pictures OFF (no Pexels key)"} />
           <Status ok={youtube} label={youtube ? "YouTube search ON" : "YouTube search OFF (no key)"} />
         </div>

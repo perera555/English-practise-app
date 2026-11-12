@@ -7,6 +7,7 @@ import { logOut, saveProfile, toAvatar, useProfile } from "@/lib/profile";
 import { usePremium } from "@/lib/premium";
 import { streak, useProgress } from "@/lib/settings";
 import { Avatar } from "./Avatar";
+import { CloudBackupCard } from "./CloudBackup";
 
 export function ProfilePage() {
   const { profile, online } = useProfile();
@@ -117,9 +118,7 @@ export function ProfilePage() {
             🚪 Log out
           </button>
         </div>
-        <p className="text-center text-xs opacity-60">
-          User ID: <code className="select-all">{userId}</code>
-        </p>
+        <CloudBackupCard userId={userId} />
       </div>
     );
   }
@@ -199,6 +198,7 @@ export function ProfilePage() {
           .
         </p>
       </div>
+      {!profile && <CloudBackupCard userId={userId} />}
     </div>
   );
 }

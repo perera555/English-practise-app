@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans_Sinhala } from "next/font/google";
 import { Nav } from "@/components/Nav";
 import { CameraBubble } from "@/components/SelfCam";
+import { InstallBanner } from "@/components/InstallBanner";
+import { CloudSync } from "@/components/CloudBackup";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -50,8 +52,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${sinhala.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        <InstallBanner />
         <Nav />
         <CameraBubble />
+        <CloudSync />
         <main className="app-main mx-auto w-full max-w-6xl px-4 py-5 md:py-6 flex-1">{children}</main>
         <footer className="text-center text-xs opacity-70 px-4 pt-4 pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-6 flex flex-col gap-1">
           <p>

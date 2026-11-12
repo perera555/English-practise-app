@@ -29,5 +29,7 @@
       "type": "image/svg+xml"
     }
   ],
-  "orientation": "portrait"
+  "id": "/",
+  "scope": "/",
+  "orientation": "any"
 }
