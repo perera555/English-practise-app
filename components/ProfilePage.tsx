@@ -8,6 +8,8 @@ import { usePremium } from "@/lib/premium";
 import { streak, useProgress } from "@/lib/settings";
 import { Avatar } from "./Avatar";
 import { CloudBackupCard } from "./CloudBackup";
+import { adminSignIn, adminSignOut, openWebAdmin, useAdmin } from "@/lib/adminClient";
+import { isNativeApp } from "@/lib/native";
 
 export function ProfilePage() {
   const { profile, online } = useProfile();
@@ -119,6 +121,7 @@ export function ProfilePage() {
           </button>
         </div>
         <CloudBackupCard userId={userId} />
+        <AdminAccess />
       </div>
     );
   }
@@ -199,6 +202,87 @@ export function ProfilePage() {
         </p>
       </div>
       {!profile && <CloudBackupCard userId={userId} />}
+      <AdminAccess />
     </div>
+  );
+}
+
+/* ---------------- Admin sign-in (same login page; only the admin password opens the admin panel) ---------------- */
+
+function AdminAccess() {
+  const { checked, enabled, admin } = useAdmin();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [pw, setPw] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  if (!checked || !enabled) return null;
+
+  if (admin) {
+    return (
+      <div className="card flex flex-wrap items-center gap-2 bg-emerald-500/10">
+        <p className="font-bold mr-auto">🛡️ You are signed in as admin</p>
+        <Link href="/admin" className="btn-primary">
+          Open admin panel
+        </Link>
+        <button className="btn-ghost" onClick={() => void adminSignOut()}>
+          Admin log out
+        </button>
+      </div>
+    );
+  }
+
+  if (isNativeApp()) {
+    return (
+      <button className="text-xs opacity-60 underline mx-auto" onClick={openWebAdmin}>
+        🔐 Admin? Sign in on the website
+      </button>
+    );
+  }
+
+  if (!open) {
+    return (
+      <button className="text-xs opacity-60 underline mx-auto" onClick={() => setOpen(true)}>
+        🔐 Admin sign in
+      </button>
+    );
+  }
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setErr("");
+    const r = await adminSignIn(pw);
+    setBusy(false);
+    if (!r.ok) return setErr(r.error);
+    setPw("");
+    router.push("/admin");
+  }
+
+  return (
+    <form onSubmit={submit} className="card flex flex-col gap-3">
+      <h2 className="font-bold">🔐 Admin sign in</h2>
+      <p className="text-xs opacity-70">Only for the app owner. Learners don&apos;t need this.</p>
+      <input
+        type="password"
+        value={pw}
+        onChange={(e) => setPw(e.target.value)}
+        placeholder="Admin password"
+        autoComplete="current-password"
+        className="rounded-xl border border-black/10 dark:border-white/15 bg-white dark:bg-slate-800 px-3 py-2.5 w-full"
+        autoFocus
+        required
+      />
+      {err && <p className="text-sm text-rose-500">{err}</p>}
+      <div className="flex gap-2">
+        <button className="btn-primary flex-1" disabled={busy}>
+          {busy ? "Checking…" : "Sign in as admin"}
+        </button>
+        <button type="button" className="btn-ghost" onClick={() => setOpen(false)}>
+          Cancel
+        </button>
+      </div>
+    </form>
   );
 }

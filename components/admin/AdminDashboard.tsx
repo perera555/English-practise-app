@@ -1,16 +1,16 @@
 "use client";
 
 import { useUrlTab } from "@/lib/useUrlTab";
-import { useActionState, useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { adminSignOut } from "@/lib/adminClient";
 import type { CustomContent, GiftCode, Grant } from "@/lib/db";
 import type { Lesson, Level, Song, UnitId, VideoCategory } from "@/lib/types";
 import { chapters, songs as builtInSongs } from "@/lib/content";
 import { getUserId } from "@/lib/premium";
 import {
   addTwisters,
-  adminLogin,
-  adminLogout,
   createCodes,
   deleteChapter,
   deleteCode,
@@ -44,21 +44,16 @@ import { CustomersTab, ONLINE_MS, Overview } from "./PeopleTabs";
 const input = "rounded-xl border border-black/10 dark:border-white/15 bg-white dark:bg-slate-800 px-3 py-2 w-full";
 const area = input + " font-mono text-sm";
 
+/** Not signed in as admin: everyone uses the same login page, where the admin password unlocks this panel. */
 export function AdminLogin() {
-  const [state, action, pending] = useActionState(adminLogin, null);
-  const router = useRouter();
-  useEffect(() => {
-    if (state?.ok) router.refresh();
-  }, [state, router]);
   return (
-    <form action={action} className="card max-w-sm mx-auto flex flex-col gap-3">
-      <h1 className="text-2xl font-bold">🔐 Admin login</h1>
-      <input name="password" type="password" placeholder="Admin password" className={input} autoFocus required />
-      <button className="btn-primary" disabled={pending}>
-        {pending ? "Checking…" : "Log in"}
-      </button>
-      {state && !state.ok && <p className="text-rose-500 text-sm">{state.error}</p>}
-    </form>
+    <div className="card max-w-sm mx-auto flex flex-col gap-3 text-center">
+      <h1 className="text-2xl font-bold">🔐 Admins only</h1>
+      <p className="opacity-75 text-sm">This area is only for the app owner. Sign in with the admin password on the login page.</p>
+      <Link href="/login" className="btn-primary">
+        Go to login
+      </Link>
+    </div>
   );
 }
 
@@ -179,7 +174,7 @@ export function AdminDashboard({ grants, codes, content, storage, photos, pexels
         </a>
         <button
           className="side3d-item md:w-full opacity-80"
-          onClick={() => start(async () => { await adminLogout(); router.refresh(); })}
+          onClick={() => start(async () => { await adminSignOut(); router.push("/login"); })}
         >
           <span className="icon3d">🚪</span> Log out
         </button>

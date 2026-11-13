@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { speak, useVoices } from "@/lib/speech";
 import { updateSettings, useSettings } from "@/lib/settings";
 import { useProfile } from "@/lib/profile";
+import { useAdmin } from "@/lib/adminClient";
 import { Avatar } from "./Avatar";
 import { NAV_EVENT, tabStepper } from "@/lib/useUrlTab";
 
@@ -60,6 +61,7 @@ export function Nav() {
           ⭐ Premium
         </Link>
         <NavStrip path={path} />
+        <AdminButton />
         <ProfileButton />
         <button className="round3d" onClick={() => setOpen((o) => !o)} aria-label="Settings">
           ⚙️
@@ -275,6 +277,18 @@ function NavStrip({ path }: { path: string }) {
         </button>
       )}
     </div>
+  );
+}
+
+/* ---------------- Admin shortcut: only shown to someone signed in as admin ---------------- */
+
+function AdminButton() {
+  const { admin } = useAdmin();
+  if (!admin) return null;
+  return (
+    <Link href="/admin" className="round3d shrink-0" title="Admin panel" aria-label="Admin panel">
+      🛡️
+    </Link>
   );
 }
 
