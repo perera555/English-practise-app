@@ -65,6 +65,9 @@ export async function adminSignOut() {
   set({ admin: false });
 }
 
+/** Fired by the "Admin login" footer button so the login page opens its password box (also when already on /login). */
+export const OPEN_ADMIN_EVENT = "speakup-open-admin";
+
 /** Phone app: open the admin panel on the hosted website. */
 export function openWebAdmin() {
   window.open(apiUrl("/admin"), "_blank");

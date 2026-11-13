@@ -8,7 +8,7 @@ import { usePremium } from "@/lib/premium";
 import { streak, useProgress } from "@/lib/settings";
 import { Avatar } from "./Avatar";
 import { CloudBackupCard } from "./CloudBackup";
-import { adminSignIn, adminSignOut, openWebAdmin, useAdmin } from "@/lib/adminClient";
+import { OPEN_ADMIN_EVENT, adminSignIn, adminSignOut, openWebAdmin, useAdmin } from "@/lib/adminClient";
 import { isNativeApp } from "@/lib/native";
 
 export function ProfilePage() {
@@ -218,25 +218,18 @@ function AdminAccess() {
   const [busy, setBusy] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
 
-  // Opened from the menu's "Admin" button (/login?admin=1): show the password box straight away.
+  // Opened from the "Admin login" button at the bottom of the page: show the password box straight away.
   useEffect(() => {
-    if (!checked || !new URLSearchParams(window.location.search).has("admin")) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setOpen(true);
-    setTimeout(() => boxRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
-  }, [checked]);
+    const show = () => {
+      setOpen(true);
+      setTimeout(() => boxRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+    };
+    if (new URLSearchParams(window.location.search).has("admin")) show();
+    window.addEventListener(OPEN_ADMIN_EVENT, show);
+    return () => window.removeEventListener(OPEN_ADMIN_EVENT, show);
+  }, []);
 
-  if (!checked) return null;
-
-  if (!enabled) {
-    return (
-      <div ref={boxRef} className="card text-sm opacity-80">
-        🔐 Admin sign in is not set up yet. Add <code>ADMIN_PASSWORD</code> (at least 8 characters) to the website settings.
-      </div>
-    );
-  }
-
-  if (admin) {
+  if (checked && admin) {
     return (
       <div className="card flex flex-wrap items-center gap-2 bg-emerald-500/10">
         <p className="font-bold mr-auto">🛡️ You are signed in as admin</p>
@@ -282,6 +275,11 @@ function AdminAccess() {
       <div ref={boxRef} />
       <h2 className="font-bold">🔐 Admin sign in</h2>
       <p className="text-xs opacity-70">Only for the app owner. Learners don&apos;t need this.</p>
+      {checked && !enabled && (
+        <p className="text-xs rounded-lg bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-200 px-2 py-1">
+          Admin password is not set on this website yet. Add <code>ADMIN_PASSWORD</code> in Vercel → Settings → Environment Variables, then redeploy.
+        </p>
+      )}
       <input
         type="password"
         value={pw}

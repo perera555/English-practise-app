@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans_Sinhala } from "next/font/google";
-import Link from "next/link";
+import { AdminFooterLink } from "@/components/AdminFooterLink";
 import { Nav } from "@/components/Nav";
 import { CameraBubble } from "@/components/SelfCam";
 import { InstallBanner } from "@/components/InstallBanner";
@@ -66,9 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             </a>
           </p>
           <p className="my-1">
-            <Link href="/login?admin=1" className="inline-flex items-center gap-1 rounded-full border border-black/15 dark:border-white/20 px-3 py-1 font-semibold">
-              🔐 Admin login
-            </Link>
+            <AdminFooterLink />
           </p>
           <p className="font-semibold">© {COPYRIGHT_YEAR} Porage Thamara Dhanushka Perera. All rights reserved.</p>
         </footer>
