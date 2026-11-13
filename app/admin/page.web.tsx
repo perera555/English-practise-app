@@ -10,7 +10,7 @@ export const metadata = { title: "Admin · SpeakUp English", robots: { index: fa
 async function AdminInner() {
   // Read the password setting at request time, not at build time.
   await connection();
-  if (!adminEnabled()) {
+  if (!(await adminEnabled())) {
     return (
       <div className="card max-w-xl mx-auto">
         <h1 className="text-2xl font-bold mb-2">🔐 Admin is not set up yet</h1>

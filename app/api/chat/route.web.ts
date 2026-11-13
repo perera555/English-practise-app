@@ -32,7 +32,7 @@ async function handle(req: Request): Promise<Response> {
   }
 
   // The AI robot costs money per reply, so it is a Premium feature (unless FREE_AI=true).
-  if (process.env.FREE_AI !== "true" && !isAdminRequest(req) && !(await isPremiumUser(body.userId))) {
+  if (process.env.FREE_AI !== "true" && !(await isAdminRequest(req)) && !(await isPremiumUser(body.userId))) {
     return Response.json({ offline: true, locked: true }, { status: 503 });
   }
 

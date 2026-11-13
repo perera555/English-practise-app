@@ -17,11 +17,11 @@ type Result = { ok: true; message?: string; codes?: string[] } | { ok: false; er
 
 export async function adminLogin(_: unknown, form: FormData): Promise<Result> {
   const pw = String(form.get("password") ?? "");
-  if (!checkPassword(pw)) {
+  if (!(await checkPassword(pw))) {
     await new Promise((r) => setTimeout(r, 900)); // slow down guessing
     return { ok: false, error: "Wrong password." };
   }
-  (await cookies()).set(ADMIN_COOKIE, adminCookieValue(), {
+  (await cookies()).set(ADMIN_COOKIE, await adminCookieValue(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",

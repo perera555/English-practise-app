@@ -175,6 +175,78 @@ export function AdminGuide({ pexels, youtube, storage }: { pexels: boolean; yout
         </ul>
       </Section>
 
+      <Section emoji="🔐" title="Admin login & password">
+        <ol>
+          <li>
+            Everyone uses the <b>same login page</b>. Learners make their profile there. You press <b>🔐 Admin login</b> at the bottom of any page (or{" "}
+            <b>🔐 Admin sign in</b> on the login page), type the admin password, and press <b>Sign in as admin</b>.
+          </li>
+          <li>
+            <b>Only the admin can get in.</b> Learners who press the button see the password box, but without the password they cannot open the admin panel.
+          </li>
+          <li>When you are signed in, a <b>🛡️</b> button appears in the top bar. It opens this panel. Use <b>🚪 Log out</b> here when you finish.</li>
+          <li>
+            <b>Forgot the password?</b> On the admin sign-in box press <b>Forgot password? Create new password</b> → <b>📩 Send code</b>. A 6-digit code goes to
+            the admin email (and phone, if set up). Type the code and your new password twice → <b>💾 Save new password</b>. The code works for 10 minutes and 5 tries.
+          </li>
+          <li>After you make a new password, the old <code>ADMIN_PASSWORD</code> stops working, and every other admin session is signed out.</li>
+          <li>
+            <b>In the phone app</b> the admin button opens this website, because the admin panel lives on the website.
+          </li>
+        </ol>
+        <p className="font-semibold mt-1">Set up “Send code” (one time):</p>
+        <ol>
+          <li>
+            <b>Database:</b> Vercel → your project → <b>Storage</b> → create a free <b>Postgres (Neon)</b> database and connect it. New passwords and codes are
+            saved there.
+          </li>
+          <li>
+            <b>Email (free):</b> sign up at <b>resend.com</b> with your admin email → <b>API Keys</b> → <b>Create API key</b>. In Vercel add{" "}
+            <code>RESEND_API_KEY</code> = that key and <code>ADMIN_EMAIL</code> = your email.
+          </li>
+          <li>
+            <b>Phone text message (optional, paid):</b> sign up at <b>twilio.com</b> and buy a number. Add <code>TWILIO_ACCOUNT_SID</code>,{" "}
+            <code>TWILIO_AUTH_TOKEN</code>, <code>TWILIO_FROM</code> (your Twilio number) and <code>ADMIN_PHONE</code> (e.g. <code>+94…</code>).
+          </li>
+          <li>Redeploy the website. The “Send code” button then works.</li>
+        </ol>
+        <Warn>Never tell anyone the admin password or a security code. We will never ask you for them.</Warn>
+      </Section>
+
+      <Section emoji="🧑‍🎓" title="User guide (what learners see)">
+        <p>
+          Learners have their own step-by-step guide in the app under <b>❓ Guide</b>.{" "}
+          <a href="/help" target="_blank" rel="noreferrer" className="underline font-semibold">
+            Open the user guide ↗
+          </a>{" "}
+          to see exactly what they read, or use <b>📱 Customer view</b> to try the app as a learner.
+        </p>
+        <ol>
+          <li>
+            <b>Log in:</b> tap <b>👤 Log in</b> → type a name (email is optional) → <b>🚀 Start learning</b>. No password is needed. Their progress stays on their phone.
+          </li>
+          <li>
+            <b>Settings ⚙️:</b> choose a level (Beginner, Intermediate, Advanced), an accent (UK, US, AU, IN), a voice and a speed.
+          </li>
+          <li>
+            <b>Chapters:</b> each one has 5 steps: 🎬 Watch &amp; Read → 🖼️ Words → 🎧 Listening → 🎤 Speaking → 🤖 Conversation.
+          </li>
+          <li>
+            <b>Practice hubs:</b> Daily Talk, Videos, Stories, Motivation, Listening, Speaking, Twisters, Music, Quiz, Dictionary, Patterns and PTE.
+          </li>
+          <li>
+            <b>Robot Chat 🤖:</b> they speak or type, and the robot replies and corrects mistakes.
+          </li>
+          <li>
+            <b>Premium ⭐:</b> they subscribe in the app store, or type a gift code you made. Their user ID (<code>u_…</code>) is at the bottom of the Premium page, for
+            when you give Premium by hand.
+          </li>
+          <li>
+            <b>Microphone:</b> on a computer it works best in Google Chrome or Microsoft Edge. They must allow the microphone when asked.
+          </li>
+        </ol>
+      </Section>
+
       <Section emoji="🧭" title="Using this admin panel">
         <ul>
           <li>
@@ -281,7 +353,14 @@ export function AdminGuide({ pexels, youtube, storage }: { pexels: boolean; yout
         <p>Set these in Vercel → Project → Settings → Environment Variables, then redeploy. The file <code>.env.example</code> lists them all.</p>
         <ul>
           <li>
-            <code>ADMIN_PASSWORD</code>: your admin password (at least 8 characters). Change it here if it ever leaks.
+            <code>ADMIN_PASSWORD</code>: your first admin password (at least 8 characters). After you use “Forgot password”, the new password replaces it.
+          </li>
+          <li>
+            <code>ADMIN_EMAIL</code> + <code>RESEND_API_KEY</code>: where the “Forgot password” security code is emailed. <code>ADMIN_PHONE</code> +{" "}
+            <code>TWILIO_ACCOUNT_SID</code>, <code>TWILIO_AUTH_TOKEN</code>, <code>TWILIO_FROM</code>: send it by text message too (optional).
+          </li>
+          <li>
+            <code>DATABASE_URL</code> (or <code>POSTGRES_URL</code>): the PostgreSQL database (Vercel → Storage → Postgres).
           </li>
           <li>
             <code>ANTHROPIC_API_KEY</code>: the AI robot (console.anthropic.com).
@@ -299,7 +378,7 @@ export function AdminGuide({ pexels, youtube, storage }: { pexels: boolean; yout
             <code>NEXT_PUBLIC_API_BASE</code>: your website address (needed for the phone app). <code>NEXT_PUBLIC_SUPPORT_EMAIL</code>: your support email.
           </li>
         </ul>
-        <Warn>Secret keys (ANTHROPIC, REVENUECAT_SECRET, PEXELS, YOUTUBE, UPSTASH, ADMIN_PASSWORD) must never be put in the code or sent to anyone.</Warn>
+        <Warn>Secret keys (ANTHROPIC, REVENUECAT_SECRET, PEXELS, YOUTUBE, UPSTASH, ADMIN_PASSWORD, RESEND, TWILIO) must never be put in the code or sent to anyone.</Warn>
       </Section>
 
       <Section emoji="🚀" title="Updating the app">

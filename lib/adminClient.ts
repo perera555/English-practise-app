@@ -9,8 +9,8 @@ import { isNativeApp } from "./native";
  * Only someone with the ADMIN_PASSWORD becomes admin: the server checks it and sets a secure cookie.
  * In the phone app the admin panel lives on the website, so it opens there instead.
  */
-type State = { checked: boolean; enabled: boolean; admin: boolean };
-let state: State = { checked: false, enabled: false, admin: false };
+type State = { checked: boolean; enabled: boolean; admin: boolean; recovery: boolean; email: string };
+let state: State = { checked: false, enabled: false, admin: false, recovery: false, email: "" };
 const SERVER: State = state;
 const listeners = new Set<() => void>();
 const set = (s: Partial<State>) => {
@@ -30,7 +30,7 @@ async function check() {
   try {
     const r = await fetch("/api/admin", { cache: "no-store" });
     const j = r.ok ? await r.json() : {};
-    set({ checked: true, enabled: !!j.enabled, admin: !!j.admin });
+    set({ checked: true, enabled: !!j.enabled, admin: !!j.admin, recovery: !!j.recovery, email: typeof j.email === "string" ? j.email : "" });
   } catch {
     set({ checked: true });
   }
@@ -58,6 +58,26 @@ export async function adminSignIn(password: string): Promise<{ ok: true } | { ok
   } catch {
     return { ok: false, error: "No internet connection." };
   }
+}
+
+async function postAdmin(body: object): Promise<{ ok: true; email?: string } | { ok: false; error: string }> {
+  try {
+    const r = await fetch("/api/admin", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    return r.ok ? { ok: true, email: j.email } : { ok: false, error: j.error ?? "Something went wrong." };
+  } catch {
+    return { ok: false, error: "No internet connection." };
+  }
+}
+
+/** Forgot password, step 1: send a 6-digit security code to the admin's email / phone. */
+export const sendAdminCode = () => postAdmin({ action: "send-code" });
+
+/** Forgot password, step 2: create the new password with that code (signs in as admin). */
+export async function resetAdminPassword(code: string, password: string) {
+  const r = await postAdmin({ action: "reset", code, password });
+  if (r.ok) set({ admin: true, enabled: true });
+  return r;
 }
 
 export async function adminSignOut() {

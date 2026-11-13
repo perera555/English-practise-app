@@ -27,16 +27,29 @@ export type CustomContent = {
 export type Grant = { until: string | null; note: string; createdAt: string };
 export type GiftCode = { createdAt: string; days: number | null; usedBy?: string; usedAt?: string };
 
+/**
+ * Admin password made with "Forgot password" (scrypt hash). When set, it replaces ADMIN_PASSWORD.
+ * `reset` is the emailed security code that is waiting to be used (hashed, short-lived).
+ */
+export type AdminSecret = {
+  hash?: string;
+  salt?: string;
+  updatedAt?: string;
+  reset?: { codeHash: string; expires: number; tries: number; sentAt: number };
+};
+
 type Schema = {
   content: CustomContent;
   grants: Record<string, Grant>;
   codes: Record<string, GiftCode>;
+  admin: AdminSecret;
 };
 
 const DEFAULTS: Schema = {
   content: { chapters: [], songs: [], twisters: [], videos: [], overrides: {}, hidden: [], si: {} },
   grants: {},
   codes: {},
+  admin: {},
 };
 
 const REST_URL = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;

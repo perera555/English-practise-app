@@ -8,7 +8,7 @@ import { usePremium } from "@/lib/premium";
 import { streak, useProgress } from "@/lib/settings";
 import { Avatar } from "./Avatar";
 import { CloudBackupCard } from "./CloudBackup";
-import { OPEN_ADMIN_EVENT, adminSignIn, adminSignOut, openWebAdmin, useAdmin } from "@/lib/adminClient";
+import { OPEN_ADMIN_EVENT, adminSignIn, adminSignOut, openWebAdmin, resetAdminPassword, sendAdminCode, useAdmin } from "@/lib/adminClient";
 import { isNativeApp } from "@/lib/native";
 
 export function ProfilePage() {
@@ -216,6 +216,7 @@ function AdminAccess() {
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const [forgot, setForgot] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
 
   // Opened from the "Admin login" button at the bottom of the page: show the password box straight away.
@@ -259,6 +260,14 @@ function AdminAccess() {
     );
   }
 
+  if (forgot) {
+    return (
+      <div ref={boxRef}>
+        <ForgotPassword onBack={() => setForgot(false)} onDone={() => router.push("/admin")} />
+      </div>
+    );
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -299,6 +308,83 @@ function AdminAccess() {
           Cancel
         </button>
       </div>
+      <button type="button" className="text-sm text-indigo-600 dark:text-indigo-300 underline self-center" onClick={() => setForgot(true)}>
+        Forgot password? Create new password
+      </button>
+    </form>
+  );
+}
+
+/* ---------------- Forgot password: security code by email / phone → new password ---------------- */
+
+function ForgotPassword({ onBack, onDone }: { onBack: () => void; onDone: () => void }) {
+  const { checked, recovery, email } = useAdmin();
+  const [sentTo, setSentTo] = useState("");
+  const [code, setCode] = useState("");
+  const [pw, setPw] = useState("");
+  const [pw2, setPw2] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  const field = "rounded-xl border border-black/10 dark:border-white/15 bg-white dark:bg-slate-800 px-3 py-2.5 w-full";
+
+  async function send() {
+    setBusy(true);
+    setErr("");
+    const r = await sendAdminCode();
+    setBusy(false);
+    if (!r.ok) return setErr(r.error);
+    setSentTo(r.email || email || "your email");
+  }
+
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    if (pw !== pw2) return setErr("The two passwords are not the same.");
+    setBusy(true);
+    setErr("");
+    const r = await resetAdminPassword(code, pw);
+    setBusy(false);
+    if (!r.ok) return setErr(r.error);
+    onDone();
+  }
+
+  return (
+    <form onSubmit={save} className="card flex flex-col gap-3 ring-2 ring-indigo-400/60">
+      <h2 className="font-bold">🔑 Create a new admin password</h2>
+      {checked && !recovery ? (
+        <p className="text-sm rounded-lg bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-200 px-2 py-1.5">
+          Sending a security code is not set up on this website yet. See <b>Admin guide → Admin login &amp; password</b>, or ask your developer to add{" "}
+          <code>RESEND_API_KEY</code> and <code>ADMIN_EMAIL</code> in Vercel.
+        </p>
+      ) : !sentTo ? (
+        <>
+          <p className="text-sm opacity-80">
+            We will send a 6-digit security code to {email ? <b>{email}</b> : "the admin's email"}. Only the owner of that email (or phone) can make a new password.
+          </p>
+          {err && <p className="text-sm text-rose-500">{err}</p>}
+          <button type="button" className="btn-primary" disabled={busy} onClick={send}>
+            {busy ? "Sending…" : "📩 Send code"}
+          </button>
+        </>
+      ) : (
+        <>
+          <p className="text-sm rounded-lg bg-emerald-100 text-emerald-900 dark:bg-emerald-500/20 dark:text-emerald-100 px-2 py-1.5">
+            ✅ Code sent to <b>{sentTo}</b>. It works for 10 minutes. Check your spam folder too.
+          </p>
+          <input className={field} inputMode="numeric" autoComplete="one-time-code" maxLength={6} placeholder="6-digit code" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} required />
+          <input className={field} type="password" autoComplete="new-password" placeholder="New password (at least 8 characters)" minLength={8} value={pw} onChange={(e) => setPw(e.target.value)} required />
+          <input className={field} type="password" autoComplete="new-password" placeholder="Type the new password again" minLength={8} value={pw2} onChange={(e) => setPw2(e.target.value)} required />
+          {err && <p className="text-sm text-rose-500">{err}</p>}
+          <button className="btn-primary" disabled={busy || code.length !== 6}>
+            {busy ? "Saving…" : "💾 Save new password"}
+          </button>
+          <button type="button" className="text-xs underline opacity-70 self-center" disabled={busy} onClick={send}>
+            Didn&apos;t get it? Send a new code
+          </button>
+        </>
+      )}
+      <button type="button" className="btn-ghost" onClick={onBack}>
+        ← Back to admin sign in
+      </button>
     </form>
   );
 }

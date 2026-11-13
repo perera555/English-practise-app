@@ -33,6 +33,6 @@ export async function POST(req: Request) {
   }
 
   // Admins never need a subscription.
-  const until = isAdminRequest(req) ? "lifetime" : await premiumUntil(userId);
+  const until = (await isAdminRequest(req)) ? "lifetime" : await premiumUntil(userId);
   return cors(req, Response.json({ premium: !!until, until }));
 }
