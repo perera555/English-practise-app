@@ -216,8 +216,25 @@ function AdminAccess() {
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const boxRef = useRef<HTMLDivElement>(null);
 
-  if (!checked || !enabled) return null;
+  // Opened from the menu's "Admin" button (/login?admin=1): show the password box straight away.
+  useEffect(() => {
+    if (!checked || !new URLSearchParams(window.location.search).has("admin")) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setOpen(true);
+    setTimeout(() => boxRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+  }, [checked]);
+
+  if (!checked) return null;
+
+  if (!enabled) {
+    return (
+      <div ref={boxRef} className="card text-sm opacity-80">
+        🔐 Admin sign in is not set up yet. Add <code>ADMIN_PASSWORD</code> (at least 8 characters) to the website settings.
+      </div>
+    );
+  }
 
   if (admin) {
     return (
@@ -235,15 +252,15 @@ function AdminAccess() {
 
   if (isNativeApp()) {
     return (
-      <button className="text-xs opacity-60 underline mx-auto" onClick={openWebAdmin}>
-        🔐 Admin? Sign in on the website
+      <button className="btn-ghost" onClick={openWebAdmin}>
+        🔐 Admin sign in (opens the website)
       </button>
     );
   }
 
   if (!open) {
     return (
-      <button className="text-xs opacity-60 underline mx-auto" onClick={() => setOpen(true)}>
+      <button className="btn-ghost" onClick={() => setOpen(true)}>
         🔐 Admin sign in
       </button>
     );
@@ -261,7 +278,8 @@ function AdminAccess() {
   }
 
   return (
-    <form onSubmit={submit} className="card flex flex-col gap-3">
+    <form onSubmit={submit} className="card flex flex-col gap-3 ring-2 ring-indigo-400/60">
+      <div ref={boxRef} />
       <h2 className="font-bold">🔐 Admin sign in</h2>
       <p className="text-xs opacity-70">Only for the app owner. Learners don&apos;t need this.</p>
       <input
